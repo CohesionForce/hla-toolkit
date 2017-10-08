@@ -1,0 +1,2018 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<objectModel xsi:schemaLocation="http://standards.ieee.org/IEEE1516-2010 http://standards.ieee.org/downloads/1516/1516.2-2010/IEEE1516-DIF-2010.xsd" xmlns="http://standards.ieee.org/IEEE1516-2010" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelIdentification>
+        <name>RPR2 Physical FOM Module</name>
+        <type>FOM</type>
+        <version>1.0.1r5</version>
+        <modificationDate>2014-05-23</modificationDate>
+        <securityClassification>Unclassified</securityClassification>
+        <purpose>Representation of Physical Objects in Virtual World.</purpose>
+        <applicationDomain></applicationDomain>
+        <description>FOM Module representing Physical Entities including Platforms, Lifeforms, Munitions etc. Compatible with RPR-FOM v2.0 D17 encodings.
+
+The AFMSTT Federation makes several changes:
+1) Changes Marking Struct to a variable length to match NCTE.
+2) Adds a several AWSIM attributes to the Aircraft class in the RPR2 Physical module.  
+3) Adds the JLVC AirDefense and SPArtillery sub-classes to GroundVehicle.
+4) Changes publication and subscription flags to match actual use in the AFMSTT Federation.
+</description>
+        <useLimitation></useLimitation>
+        <useHistory>v1.0.1 Release Notes
+
+- The RPR2 Physical FOM Module was derived from RPR-FOM v2.0 D17. It includes all Physical Entity object classes and all attributes are on-the wire encoding compatible with RPR-FOM v2.0 D17.
+- Datatype names have been made more readable than previous auto-generated naming.
+</useHistory>
+        <useHistory>v1.0.1r1 - Release Note - Replaced cardinality '0+' with 'Dynamic'</useHistory>
+        <useHistory>v1.0.1r2 - Release Note - Renamed enumerated data type Boolean to RPRboolean</useHistory>
+        <useHistory>v1.0.1r3 Release Note - 
+Move many of the AFMSTT specific attributes from Aircraft to Flight including 
+IsSleath, ATOIdentifier, MissionNumber, AircraftPerformanceData, FuelCurrent.</useHistory>
+        <useHistory>v1.0.1r4 Release Notes -
+Add ATOIdentifier and MissionNumber back into Aircraft as a deprecated attributes.
+To help AWSIMwith transition.</useHistory>
+        <useHistory>v1.0.1r5 - Add Force DDM dimension to all sub-classes of BaseEntity.</useHistory>
+        <reference>
+            <type>Dependency</type>
+            <identification>RPR2 Base FOM Module</identification>
+        </reference>
+        <other></other>
+    </modelIdentification>
+    <objects>
+        <objectClass>
+            <name>HLAobjectRoot</name>
+            <objectClass>
+                <name>BaseEntity</name>
+                <objectClass>
+                    <name>PhysicalEntity</name>
+                    <sharing>Subscribe</sharing>
+                    <semantics>A base class of all discrete platform scenario domain participants. Entities that can be treated as discrete simulation participants are derived from the PhysicalEntity object class.  This object class tailors the behavior of the BaseEntity to include both articulated parts and several status attributes.  The status attributes describe the current condition for those capabilities and states generally available to a large variety of physical entities. Articulated parts are attached components of the entity that may exhibit independent motion (such as landing gear or gun turrets).  All of the attributes shall be treated as optional fields for federates updating instance attributes  of this object class or its subclasses.</semantics>
+                    <attribute notes="rpr2physical_7">
+                        <name>AcousticSignatureIndex</name>
+                        <dataType>Integer16</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Index used to obtain the acoustics (sound through air) signature state of the entity. Index pointer to a data table to define the acoustic signature state for the entity.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_1">
+                        <name>AlternateEntityType</name>
+                        <dataType>EntityTypeStruct</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition>N/A</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The category of entity to be used when viewed by entities on the 'opposite' side. Guise function.  Allows both sides of an engagement to see their own team members as 'friendly force' and their opponents as hostile.  The force ID field is used to determine team membership.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_3">
+                        <name>ArticulatedParametersArray</name>
+                        <dataType>ArticulatedParameterStructArray</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Identification of the visible parts, and their states, of the entity which are capable of independent motion. The specification of articulation parameters for moveable parts and attached parts of an entity.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_6">
+                        <name>CamouflageType</name>
+                        <dataType>CamouflageEnum32</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The type of camouflage in use (if any). Describes the type of camouflage used on the entity.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_4">
+                        <name>DamageState</name>
+                        <dataType>DamageStatusEnum32</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The state of damage of the entity. Describes the damaged appearance of an entity.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>EngineSmokeOn</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity's engine is generating smoke or not. True if entity is creating engine smoke.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>FirePowerDisabled</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity's main weapon system has been disabled or not. True if an entity's fire power has been disabled.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>FlamesPresent</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity is on fire (with visible flames) or not. True if entity is aflame.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_5">
+                        <name>ForceIdentifier</name>
+                        <dataType>ForceIdentifierEnum8</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The identification of the force that the entity belongs to. Enumeration distinguishing the different teams or sides in an exercise.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>HasAmmunitionSupplyCap</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition>N/A</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity has the capability to supply other entities with ammunition.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>HasFuelSupplyCap</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition>N/A</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity has the capability to supply other entities with fuel or not.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>HasRecoveryCap</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition>N/A</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity has the capability to recover other entities or not.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>HasRepairCap</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition>N/A</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity has the capability to repair other entities or not.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>Immobilized</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity is immobilized or not. True if the entity has been immobilized (mobility kill).</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_7">
+                        <name>InfraredSignatureIndex</name>
+                        <dataType>Integer16</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Index used to obtain the infra-red signature state of the entity. Index pointer to a data table to define the infrared signature state for the entity.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>IsConcealed</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity is concealed or not. True if entity is concealed.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_7">
+                        <name>LiveEntityMeasuredSpeed</name>
+                        <dataType>Velocity_dm_per_second_Integer16</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The entity's own measurement of speed (e.g. air speed for aircraft).</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_3">
+                        <name>Marking</name>
+                        <dataType>MarkingStruct</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>A unique marking or combination of characters used to distinguish the entity from other entities. Character set and the string of characters used to provide display identification for this entity.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>PowerPlantOn</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity's power plant is on or not. True if entity's power plant is on.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_8">
+                        <name>PropulsionSystemsData</name>
+                        <dataType>PropulsionSystemDataStructArray</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The basic operating data of the propulsion systems aboard the entity.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_7">
+                        <name>RadarCrossSectionSignatureIndex</name>
+                        <dataType>Integer16</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Index used to obtain the radar cross section signature state of the entity. Index pointer to a data table to define the radar cross-section signature state for the entity.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>SmokePlumePresent</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity is generating smoke or not (intentional or unintentional). True if entity is creating a smoke plume.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>TentDeployed</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity has deployed tent or not. True if entity's tent is deployed.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_2">
+                        <name>TrailingEffectsCode</name>
+                        <dataType>TrailingEffectsCodeEnum32</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The type and size of any trail that the entity is making. True if entity is creating a smoke trail.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2physical_8">
+                        <name>VectoringNozzleSystemData</name>
+                        <dataType>VectoringNozzleSystemDataStructArray</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The basic operational data for the vectoring nozzle systems aboard the entity.</semantics>
+                    </attribute>
+                    <objectClass>
+                        <name>Platform</name>
+                        <sharing>Subscribe</sharing>
+                        <semantics>A physical object under the control of armed forces upon which sensor, communication, or weapon systems may be mounted. The Platform object class is a specialization of PhysicalEntity used to describe status information for vehicles, ships, and aircraft.  All of its attributes are derived from the DIS EntityStatePDU (see Section 5.3.3.1 of IEEE 1278.1-1995).  All of the attributes shall be treated as optional fields for federates updating instance attributes of this object class or its subclasses.</semantics>
+                        <attribute notes="rpr2physical_2 rpr2physical_9 rpr2physical_15">
+                            <name>AfterburnerOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's afterburner is on or not. True if entity's afterburner is on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2 rpr2physical_9 rpr2physical_15">
+                            <name>AntiCollisionLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's anti-collision lights are on or not. True if anti-collision lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2 rpr2physical_10 rpr2physical_11 rpr2physical_15">
+                            <name>BlackOutBrakeLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's black out brake lights are on or not. True if blackout brake lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2 rpr2physical_10 rpr2physical_11 rpr2physical_15">
+                            <name>BlackOutLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's black out lights are on or not. True if blackout lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2 rpr2physical_10 rpr2physical_11 rpr2physical_15">
+                            <name>BrakeLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's brake lights are on or not. True if brake lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2 rpr2physical_9 rpr2physical_15">
+                            <name>FormationLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's formation lights are on or not. True if formation lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_16 rpr2physical_10 rpr2physical_11 rpr2physical_14 rpr2physical_15">
+                            <name>HatchState</name>
+                            <dataType>HatchStateEnum32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>The state of the entity's (main) hatch. Describes the state of the primary hatch.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2 rpr2physical_10 rpr2physical_11 rpr2physical_15">
+                            <name>HeadLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's headlights are on or not. True if headlights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2 rpr2physical_9 rpr2physical_10 rpr2physical_11 rpr2physical_13 rpr2physical_15">
+                            <name>InteriorLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's internal lights are on or not. True if interior lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2 rpr2physical_9 rpr2physical_15">
+                            <name>LandingLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's landing lights are on or not. True if landing lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2 rpr2physical_15">
+                            <name>LauncherRaised</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's weapon launcher is in the raised position. True if entity's launcher is raised.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2 rpr2physical_9 rpr2physical_15">
+                            <name>NavigationLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's navigation lights are on or not. True if navigation lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2 rpr2physical_15">
+                            <name>RampDeployed</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity has deployed a ramp or not. True if entity's ramp is deployed.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_10 rpr2physical_13 rpr2physical_14 rpr2physical_15">
+                            <name>RunningLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's running lights are on or not. True if running lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2 rpr2physical_9 rpr2physical_10 rpr2physical_11 rpr2physical_13 rpr2physical_15">
+                            <name>SpotLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's spotlights are on or not. True if spot lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_10 rpr2physical_11 rpr2physical_15">
+                            <name>TailLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the entity's tail lights are on or not. True if tail lights are on.</semantics>
+                        </attribute>
+                        <objectClass>
+                            <name>Aircraft</name>
+                            <sharing>PublishSubscribe</sharing>
+                            <semantics>A platform entity that operates mainly in the air, such as aircraft, balloons, etc.  This includes the entities when they are on the ground. 
+ 
+This object class provides an attributeless sub-class of Platform used to support DM filtering.  It is equivalent to the DIS Air domain in that it represents platform entities such as airplanes, balloons, etc. that operate mainly in the air, but that include some limited land operations. This object class is publishable because it qualifies as a leaf node of the RPR FOM. 
+ 
+Differs from the RPR-FOM definition in that it includes optional attributes from the AirTaskingOrder.</semantics>
+                            <attribute>
+                                <name>CallSign</name>
+                                <dataType>HLAASCIIstring</dataType>
+                                <updateType>Conditional</updateType>
+                                <updateCondition>On change</updateCondition>
+                                <ownership>DivestAcquire</ownership>
+                                <sharing>PublishSubscribe</sharing>
+                                <dimensions>
+                                    <dimension>Force</dimension>
+                                    <dimension>Latitude</dimension>
+                                    <dimension>Longitude</dimension>
+                                </dimensions>
+                                <transportation>state_consistent</transportation>
+                                <order>Receive</order>
+                                <semantics>The radio call sign for an aircraft (optional). For military air craft, the call sign of the lead aircraft is equivalent to the AIRCRAFT CALL SIGN defined in the MSNACFT set of the USMTF Air Tasking Order (ATO) (ex: HAMMER53).  The call signs of subordinate aircraft have the same prefix as the leader, and sequential numbers (ex: HAMMER54, HAMMER55, etc.). For commercial civilian aircraft, the call sign is usually equivalent to the flight number (ex: SW273 for South West flight 273 from New York to Chicago).  Spaces and other punctuation are not allowed in the call sign.</semantics>
+                            </attribute>
+                            <attribute>
+                                <name>HomeBase</name>
+                                <dataType>HLAASCIIstring</dataType>
+                                <updateType>Conditional</updateType>
+                                <updateCondition>On change</updateCondition>
+                                <ownership>DivestAcquire</ownership>
+                                <sharing>PublishSubscribe</sharing>
+                                <dimensions>
+                                    <dimension>Force</dimension>
+                                    <dimension>Latitude</dimension>
+                                    <dimension>Longitude</dimension>
+                                </dimensions>
+                                <transportation>state_consistent</transportation>
+                                <order>Receive</order>
+                                <semantics>The optional International Civil Aviation Organization (ICAO) code for the air base that owns this aircraft (ex: KBWI for Baltimore–Washington International Airport).</semantics>
+                            </attribute>
+                            <attribute>
+                                <name>Squadron</name>
+                                <dataType>RTIobjectId</dataType>
+                                <updateType>Conditional</updateType>
+                                <updateCondition>On change</updateCondition>
+                                <ownership>DivestAcquire</ownership>
+                                <sharing>PublishSubscribe</sharing>
+                                <dimensions>
+                                    <dimension>Force</dimension>
+                                    <dimension>Latitude</dimension>
+                                    <dimension>Longitude</dimension>
+                                </dimensions>
+                                <transportation>state_consistent</transportation>
+                                <order>Receive</order>
+                                <semantics>Reference to the squadron to which this aircart is currently assigned.  May change if the squadron is split during forward operating location deployment or diversion.  Required for all aircraft that are controlled by AWSIM or ABS.  Optional otherwise.</semantics>
+                            </attribute>
+                            <attribute>
+                                <name>ATOIdentifier</name>
+                                <dataType>HLAASCIIstring</dataType>
+                                <updateType>Conditional</updateType>
+                                <updateCondition>On change</updateCondition>
+                                <ownership>DivestAcquire</ownership>
+                                <sharing>PublishSubscribe</sharing>
+                                <dimensions>
+                                    <dimension>Force</dimension>
+                                    <dimension>Latitude</dimension>
+                                    <dimension>Longitude</dimension>
+                                </dimensions>
+                                <transportation>state_consistent</transportation>
+                                <order>Receive</order>
+                                <semantics>Serial number of the ATO from which this aircraft's current mission was defined (optional).  Equivalent to the FIELD 3 OF SET MSGID (MESSAGE SERIAL NUMBER) in the ATO.  Blank if no mission is currently assigned. 
+ 
+Depreccated: remove in future version.</semantics>
+                            </attribute>
+                            <attribute>
+                                <name>MissionNumber</name>
+                                <dataType>HLAASCIIstring</dataType>
+                                <updateType>Conditional</updateType>
+                                <updateCondition>On change</updateCondition>
+                                <ownership>DivestAcquire</ownership>
+                                <sharing>PublishSubscribe</sharing>
+                                <dimensions>
+                                    <dimension>Force</dimension>
+                                    <dimension>Latitude</dimension>
+                                    <dimension>Longitude</dimension>
+                                </dimensions>
+                                <transportation>state_consistent</transportation>
+                                <order>Receive</order>
+                                <semantics>The identifying number assigned to a specific mission within an approved project, task, operation, or exercise (optional).  May include numbers, letters, spaces, and punctuation (ex:  D123HA).  Equivalent to FIELD 2 OF SET AMSNDAT (MISSION NUMBER) in the ATO.  Blank if no mission is currently assigned. 
+ 
+Depreccated: remove in future version.</semantics>
+                            </attribute>
+                        </objectClass>
+                        <objectClass>
+                            <name>AmphibiousVehicle</name>
+                            <sharing>PublishSubscribe</sharing>
+                            <semantics>A platform entity that can operate both on the land and the sea. 
+ 
+This object class provides an attributeless sub-class of Platform used to support DM filtering.   It is equivalent to a cross between DIS Land and DIS Surface domains.  It represents platforms that can operate both on the land and the sea. This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                        </objectClass>
+                        <objectClass>
+                            <name>GroundVehicle</name>
+                            <sharing>PublishSubscribe</sharing>
+                            <semantics>A platform entity that operates wholy on the surface of the earth. 
+ 
+This object class provides an attributeless sub-class of Platform used to support DM filtering.   It is equivalent to the DIS Land domain in that it represents platforms that operate wholly on the surface of the earth. This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                            <objectClass>
+                                <name>AirDefense</name>
+                                <sharing>PublishSubscribe</sharing>
+                                <semantics>Those entities in the GroundVehicle class that are Air Defense (ie. DIS Category == 28)</semantics>
+                            </objectClass>
+                            <objectClass>
+                                <name>SPArtillery</name>
+                                <sharing>PublishSubscribe</sharing>
+                                <semantics>Those entities in the GroundVehicle class that are Self-propelled Artillery (ie. DIS Category == 4)</semantics>
+                            </objectClass>
+                        </objectClass>
+                        <objectClass>
+                            <name>MultiDomainPlatform</name>
+                            <sharing>Neither</sharing>
+                            <semantics>A platform entity that operates in more than one domain (excluding those combinations explicitly defined as subclasses of the superclass of this class). 
+ 
+This object class provides an attributeless sub-class of Platform used to support DM filtering.  It is equivalent to the DIS Other domain in that it represents platforms that operate in more than one domain (excluding those combinations explicitly defined as other subclasses of the Platform object class). This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                        </objectClass>
+                        <objectClass>
+                            <name>Spacecraft</name>
+                            <sharing>Neither</sharing>
+                            <semantics>A platform entity that operates mainly in space. 
+ 
+This object class provides an attributeless sub-class of Platform used to support DM filtering.  It is equivalent to the DIS Space domain in that it represents platforms that operate mainly in space. This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                        </objectClass>
+                        <objectClass>
+                            <name>SubmersibleVessel</name>
+                            <sharing>PublishSubscribe</sharing>
+                            <semantics>A platform entity that operates either on the surface of the sea, or beneath it. 
+ 
+This object class provides an attributeless sub-class of Platform used to support DM filtering.  It is equivalent to the DIS Subsurface domain in that it represents platforms that operate either on the surface of the sea, or beneath it. This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                        </objectClass>
+                        <objectClass>
+                            <name>SurfaceVessel</name>
+                            <sharing>PublishSubscribe</sharing>
+                            <semantics>A platform entity that operates wholy on the surface of the sea. 
+ 
+This object class provides an attributeless sub-class of Platform used to support DM filtering.  It is equivalent to the DIS Surface domain in that it represents platforms that operate wholly on the surface of the sea. This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                        </objectClass>
+                    </objectClass>
+                    <objectClass>
+                        <name>Lifeform</name>
+                        <sharing>Neither</sharing>
+                        <semantics>A living military platform (human or not). 
+ 
+The Lifeform object class is a specialization of PhysicalEntity used to describe individuals.  This object class represents entities of the life form entity kind in DIS. All Lifeform attributes are derived from the DIS Entity State PDU.  All attributes are optional for federates updating instance attributes of this object class or its subclasses.</semantics>
+                        <attribute notes="rpr2physical_2">
+                            <name>FlashLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the lifeform's flash lights are on or not. True if flash lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_16">
+                            <name>StanceCode</name>
+                            <dataType>StanceCodeEnum32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>The stance of the lifeform. Human behaviors (i.e., running, jumping, etc).</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_17">
+                            <name>PrimaryWeaponState</name>
+                            <dataType>WeaponStateEnum32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>The state of the soldier's primary weapon system. Describes the state of the lifeform's primary weapon.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_17">
+                            <name>SecondaryWeaponState</name>
+                            <dataType>WeaponStateEnum32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>The state of the soldier's secondary weapon system. Describes the state of the lifeform's secondary weapon.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_5">
+                            <name>ComplianceState</name>
+                            <dataType>ComplianceStateEnum32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>The compliance of the lifeform. The compliance of the lifeform.</semantics>
+                        </attribute>
+                        <objectClass>
+                            <name>Human</name>
+                            <sharing>Neither</sharing>
+                            <semantics>A human lifeform. This object class provides an attributeless sub-class of the Lifeform used to support DM filtering.  This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                        </objectClass>
+                        <objectClass>
+                            <name>NonHuman</name>
+                            <sharing>Neither</sharing>
+                            <semantics>An animal or other non-human lifeform. This object class provides an attributeless sub-class of the Lifeform used to support DM filtering.  This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                        </objectClass>
+                    </objectClass>
+                    <objectClass>
+                        <name>CulturalFeature</name>
+                        <sharing>PublishSubscribe</sharing>
+                        <semantics>Engineering and natural effects such as craters, bridges, vehicle tracks, etc. 
+ 
+The CulturalFeature object class is a sub-class of PhysicalEntity used to describe the physical characteristics of engineering and natural effects such as buildings, craters, bridges, and vehicle tracks.  This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                        <attribute notes="rpr2physical_2">
+                            <name>ExternalLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the cultural feature's external lights are on or not. True if exterior lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2">
+                            <name>InternalHeatSourceOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the cultural feature's internal heat source is on or not. True if interior heat source is on (for infrared viewing).</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2">
+                            <name>InternalLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the cultural feature's internal lights are on or not. True if interior lights are on.</semantics>
+                        </attribute>
+                    </objectClass>
+                    <objectClass>
+                        <name>Munition</name>
+                        <sharing>PublishSubscribe</sharing>
+                        <semantics>A complete device charged with explosives, propellants, pyrotechnics, initiating composition, or nuclear, biological or chemical material for use in military operations, including demolitions. 
+ 
+The Munition object class is used to describe the attributes of munitions that act as independent entities.  Capabilities equivalent to the DIS Fire PDU and Detonation PDU are now provided by the WeaponFire and MunitionDetonation interaction classes.  All of the attributes shall be treated as optional fields for federates updating instance attributes of this object class or its subclasses.</semantics>
+                        <attribute>
+                            <name>LauncherFlashPresent</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the flash of the munition being launched is present or not. True if launcher flash is present when munition is fired. 
+ 
+Default Value: False</semantics>
+                        </attribute>
+                    </objectClass>
+                    <objectClass>
+                        <name>Expendables</name>
+                        <sharing>Neither</sharing>
+                        <semantics>Countermeasures devices that are dispensed from another entity.  The devices may be active emitters or passive reflectors of energy. 
+ 
+The Expendables object class is a sub-class of PhysicalEntity used to describe the physical characteristics of countermeasures devices that are dispensed from another entity.  Although those devices may be active emitters or passive reflectors of energy, emissions are handled separately.  It currently has no attributes. This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                    </objectClass>
+                    <objectClass>
+                        <name>Radio</name>
+                        <sharing>Neither</sharing>
+                        <semantics>Electronic devices for the  communication of both audio and data, operated by entities belonging to armed forces. The Radio object class is an attributeless sub-class of PhysicalEntity used to describe the physical characteristics (location, appearance, etc.) of radio installations.  It currently has no attributes. This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                    </objectClass>
+                    <objectClass>
+                        <name>Sensor</name>
+                        <sharing>PublishSubscribe</sharing>
+                        <semantics>Sensors and emitters, such as stand-alone radars, jammers, and detection systems, that are not part of another platform or system described by another Physical Entity, and are operated by armed forces. 
+ 
+The Sensor object class is a sub-class of PhysicalEntity used to describe the physical characteristics (location, appearance, etc.) of sensor installations such as radars.  This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                        <attribute notes="rpr2physical_2">
+                            <name>AntennaRaised</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the sensor/emitter's antenna is raised or not. True if the antenna has been raised.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2">
+                            <name>BlackoutLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the sensor/emitter's blackout lights are on or not. True if blackout lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2">
+                            <name>LightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the sensor/emitter's lights are on or not. True if other lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2">
+                            <name>InteriorLightsOn</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>NoTransfer</ownership>
+                            <sharing>Neither</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the sensor/emitter's interior lights are on or not. True if interior lights are on.</semantics>
+                        </attribute>
+                        <attribute notes="rpr2physical_2">
+                            <name>MissionKill</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Whether the sensor/emitter has sustained damage that will prevent it carrying out its mission or not (ew.g. damaged antenna). True if mission capability is disabled (e.g. damaged antenna).</semantics>
+                        </attribute>
+                    </objectClass>
+                    <objectClass>
+                        <name>Supplies</name>
+                        <sharing>Neither</sharing>
+                        <semantics>Supplies other than munitions, such as fuel, food and personnel. 
+ 
+The Supplies object class is a sub-class of PhysicalEntity used to describe the physical characteristics of supplies other than munitions, such as fuel, food and personnel.  It currently has no attributes. This object class is publishable because it qualifies as a leaf node of the RPR FOM.</semantics>
+                    </objectClass>
+                </objectClass>
+                <objectClass>
+                    <name>CounterMeasures</name>
+                    <sharing>PublishSubscribe</sharing>
+                    <semantics>Simpler counter measure implementation, originated by AWSIM 
+ 
+This class was added to the official RPR-FOM module from the JLVCv6r23 FOM.  Eventually, it should go into a separate module.</semantics>
+                    <attribute>
+                        <name>HostObjectIdentifier</name>
+                        <dataType>RTIobjectId</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition>NA</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>REQUIRED. Entity \"dropping\" counter measures.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>isTowed</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>on change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics></semantics>
+                    </attribute>
+                    <objectClass>
+                        <name>Chaff</name>
+                        <sharing>PublishSubscribe</sharing>
+                        <semantics>Two types of chaff clouds exist, packette and corridor. Packet modeling is defined by a center point from base entity spatial, and a radius. Corridor modeling is a straight cylinder, defined by two points, base entity spatial and EndPoint and a radius. 
+ 
+This class was added to the official RPR-FOM module from the JLVCv6r23 FOM.  Eventually, it should go into a separate module.</semantics>
+                        <attribute>
+                            <name>ChaffIdentifier</name>
+                            <dataType>ChaffIdentifierEnum16</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition>NA</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>REQUIRED. Type of Chaff</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>ChaffType</name>
+                            <dataType>ChaffTypeEnum8</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition>NA</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>REQUIRED. Type of Chaff \"drop\" (corridor or packet)</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>EndPoint</name>
+                            <dataType>SpatialStruct</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>on change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>REQUIRED. Second point defining chaff cylinder.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>RFSpectralCoverage_High</name>
+                            <dataType>Frequency_Ghz_Float32</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition>NA</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>REQUIRED. High end of effective band.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>RFSpectralCoverage_Low</name>
+                            <dataType>Frequency_Ghz_Float32</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition>NA</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>REQUIRED. Low end of effective band</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>RadarCrossSection</name>
+                            <dataType>dBsm_Integer16</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>on change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>REQUIRED. Radar reflectivity of sphere with specified radius</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>Radius</name>
+                            <dataType>Feet_Float32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>on change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>REQUIRED. Radio of packette cloud, or around corridor line.</semantics>
+                        </attribute>
+                    </objectClass>
+                    <objectClass>
+                        <name>Flare</name>
+                        <sharing>PublishSubscribe</sharing>
+                        <semantics>simple flares 
+ 
+This class was added to the official RPR-FOM module from the JLVCv6r23 FOM.  Eventually, it should go into a separate module.</semantics>
+                        <attribute>
+                            <name>FlareIdentifier</name>
+                            <dataType>FlareIdentifierEnum16</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition>NA</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Type of flare</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>IRSpectralCoverage_High</name>
+                            <dataType>Microns_Float32</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition>NA</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>High end of effective band</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>IRSpectralCoverage_Low</name>
+                            <dataType>Microns_Float32</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition>NA</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Low end of effective IR band</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>PeakOutput</name>
+                            <dataType>KillowattsPerSteradian_Float32</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition>NA</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>IR Signal strength.</semantics>
+                        </attribute>
+                    </objectClass>
+                </objectClass>
+            </objectClass>
+        </objectClass>
+    </objects>
+    <interactions>
+        <interactionClass>
+            <name>HLAinteractionRoot</name>
+            <interactionClass>
+                <name>Collision</name>
+                <sharing>PublishSubscribe</sharing>
+                <dimensions>
+                    <dimension>Latitude</dimension>
+                    <dimension>Longitude</dimension>
+                </dimensions>
+                <transportation>reliable</transportation>
+                <order>Receive</order>
+                <semantics>The act or instance of coming together with solid impact.</semantics>
+                <parameter>
+                    <name notes="COPY-noteLabel_22">CollidingObjectIdentifier</name>
+                    <dataType>RTIobjectId</dataType>
+                    <semantics>The ID of the object that the issuing object has collided with.</semantics>
+                </parameter>
+                <parameter>
+                    <name>IssuingObjectMass</name>
+                    <dataType>Mass_Float32</dataType>
+                    <semantics>The mass of the issuing object.</semantics>
+                </parameter>
+                <parameter>
+                    <name>IssuingObjectVelocityVector</name>
+                    <dataType>VelocityVectorStruct</dataType>
+                    <semantics>The velocity vector of the issuing object at the moment of impact.</semantics>
+                </parameter>
+                <parameter>
+                    <name>CollisionType</name>
+                    <dataType>CollisionTypeEnum8</dataType>
+                    <semantics>The type of collision.</semantics>
+                </parameter>
+                <parameter>
+                    <name>CollisionLocation</name>
+                    <dataType>RelativePositionStruct</dataType>
+                    <semantics>The location of the collision relative to the object that the issuing object has collided with.</semantics>
+                </parameter>
+                <parameter>
+                    <name>EventIdentifier</name>
+                    <dataType>EventIdentifierStruct</dataType>
+                    <semantics>An ID assigned by the issuing object to associate related collision events.</semantics>
+                </parameter>
+                <parameter>
+                    <name notes="COPY-noteLabel_24">IssuingObjectIdentifier</name>
+                    <dataType>RTIobjectId</dataType>
+                    <semantics>The ID of the object that has detected the collision and issued the collision interaction.</semantics>
+                </parameter>
+                <interactionClass>
+                    <name>CollisionElastic</name>
+                    <sharing>Neither</sharing>
+                    <dimensions>
+                        <dimension>Latitude</dimension>
+                        <dimension>Longitude</dimension>
+                    </dimensions>
+                    <transportation>reliable</transportation>
+                    <order>Receive</order>
+                    <semantics>The act or instance of coming together with solid impact in an elastic manner. An elastic collision allows a higher fidelity collision to be modeled, taking into account linear and rotational momentum transfer, variable elasticity, and momentum transfer that is dependent on surface orientation.</semantics>
+                    <parameter>
+                        <name>CoefficientOfRestitution</name>
+                        <dataType>Float32</dataType>
+                        <semantics>The degree that energy is conserved in a collision.</semantics>
+                    </parameter>
+                    <parameter>
+                        <name>IntermediateResultXX</name>
+                        <dataType>Float32</dataType>
+                        <semantics>X-X Component of the positive semi-definite Collision Intermediate Result matrix</semantics>
+                    </parameter>
+                    <parameter>
+                        <name>IntermediateResultXY</name>
+                        <dataType>Float32</dataType>
+                        <semantics>X-Y Component of the positive semi-definite Collision Intermediate Result matrix</semantics>
+                    </parameter>
+                    <parameter>
+                        <name>IntermediateResultXZ</name>
+                        <dataType>Float32</dataType>
+                        <semantics>X-Z Component of the positive semi-definite Collision Intermediate Result matrix</semantics>
+                    </parameter>
+                    <parameter>
+                        <name>IntermediateResultYY</name>
+                        <dataType>Float32</dataType>
+                        <semantics>Y-Y Component of the positive semi-definite Collision Intermediate Result matrix</semantics>
+                    </parameter>
+                    <parameter>
+                        <name>IntermediateResultYZ</name>
+                        <dataType>Float32</dataType>
+                        <semantics>Y-Z Component of the positive semi-definite Collision Intermediate Result matrix</semantics>
+                    </parameter>
+                    <parameter>
+                        <name>IntermediateResultZZ</name>
+                        <dataType>Float32</dataType>
+                        <semantics>Z-Z Component of the positive semi-definite Collision Intermediate Result matrix</semantics>
+                    </parameter>
+                    <parameter>
+                        <name>UnitSurfaceNormal</name>
+                        <dataType>EntityCoordinateVectorStruct</dataType>
+                        <semantics>The normal vector to the surface at the point of collision detection</semantics>
+                    </parameter>
+                </interactionClass>
+            </interactionClass>
+        </interactionClass>
+    </interactions>
+    <dataTypes>
+        <simpleDataTypes>
+            <simpleData>
+                <name>Velocity_dm_per_second_Integer16</name>
+                <representation>UnsignedInteger16BE</representation>
+                <units>deci-metre per second (dm/s)</units>
+                <resolution>1</resolution>
+                <accuracy>perfect</accuracy>
+                <semantics>Velocity/Speed measured as deci-metre per second.</semantics>
+            </simpleData>
+            <simpleData>
+                <name>RPM_Float32</name>
+                <representation>HLAfloat32BE</representation>
+                <units>RPM</units>
+                <resolution>NA</resolution>
+                <accuracy>perfect</accuracy>
+                <semantics>Revolutions Per Minute</semantics>
+            </simpleData>
+            <simpleData>
+                <name>dBsm_Integer16</name>
+                <representation>UnsignedInteger16BE</representation>
+                <units>dBsm</units>
+                <resolution>NA</resolution>
+                <accuracy>perfect</accuracy>
+                <semantics>decibel measure of the radar cross section (RCS) of a target relative to one square meter.</semantics>
+            </simpleData>
+            <simpleData>
+                <name>Feet_Float32</name>
+                <representation>HLAfloat32BE</representation>
+                <units>feet</units>
+                <resolution>NA</resolution>
+                <accuracy>perfect</accuracy>
+                <semantics>feet expressed as a 32 bit float</semantics>
+            </simpleData>
+            <simpleData>
+                <name>Frequency_Ghz_Float32</name>
+                <representation>HLAfloat32BE</representation>
+                <units>Ghz</units>
+                <resolution>NA</resolution>
+                <accuracy>perfect</accuracy>
+                <semantics>frequency in gigahertz</semantics>
+            </simpleData>
+            <simpleData>
+                <name>KillowattsPerSteradian_Float32</name>
+                <representation>HLAfloat32BE</representation>
+                <units>Kw/sr</units>
+                <resolution>NA</resolution>
+                <accuracy>Perfect</accuracy>
+                <semantics>Killowatt/steradian expressed as a float value</semantics>
+            </simpleData>
+        </simpleDataTypes>
+        <enumeratedDataTypes>
+            <enumeratedData>
+                <name>CamouflageEnum32</name>
+                <representation>HLAinteger32BE</representation>
+                <semantics>Type of camouflage.</semantics>
+                <enumerator>
+                    <name>UniformPaintScheme</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>DesertCamouflage</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>WinterCamouflage</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>ForestCamouflage</name>
+                    <value>3</value>
+                </enumerator>
+                <enumerator>
+                    <name>GenericCamouflage</name>
+                    <value>4</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>TrailingEffectsCodeEnum32</name>
+                <representation>HLAinteger32BE</representation>
+                <semantics>Type/Size of a trail that an entity is making.</semantics>
+                <enumerator>
+                    <name>NoTrail</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>SmallTrail</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>MediumTrail</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>LargeTrail</name>
+                    <value>3</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>HatchStateEnum32</name>
+                <representation>HLAinteger32BE</representation>
+                <semantics>State of a hatch.</semantics>
+                <enumerator>
+                    <name>NotApplicable</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>PrimaryHatchIsClosed</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>PrimaryHatchIsPopped</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>PrimaryHatchIsPoppedAndPersonIsVisibleUnderHatch</name>
+                    <value>3</value>
+                </enumerator>
+                <enumerator>
+                    <name>PrimaryHatchIsOpen</name>
+                    <value>4</value>
+                </enumerator>
+                <enumerator>
+                    <name>PrimaryHatchIsOpenAndPersonIsVisible</name>
+                    <value>5</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>StanceCodeEnum32</name>
+                <representation>HLAinteger32BE</representation>
+                <semantics>Stance of a lifeform.</semantics>
+                <enumerator>
+                    <name>NotApplicable</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>UprightStandingStill</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>UprightWalking</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>UprightRunning</name>
+                    <value>3</value>
+                </enumerator>
+                <enumerator>
+                    <name>Kneeling</name>
+                    <value>4</value>
+                </enumerator>
+                <enumerator>
+                    <name>Prone</name>
+                    <value>5</value>
+                </enumerator>
+                <enumerator>
+                    <name>Crawling</name>
+                    <value>6</value>
+                </enumerator>
+                <enumerator>
+                    <name>Swimming</name>
+                    <value>7</value>
+                </enumerator>
+                <enumerator>
+                    <name>Parachuting</name>
+                    <value>8</value>
+                </enumerator>
+                <enumerator>
+                    <name>Jumping</name>
+                    <value>9</value>
+                </enumerator>
+                <enumerator>
+                    <name>Sitting</name>
+                    <value>10</value>
+                </enumerator>
+                <enumerator>
+                    <name>Squatting</name>
+                    <value>11</value>
+                </enumerator>
+                <enumerator>
+                    <name>Crouching</name>
+                    <value>12</value>
+                </enumerator>
+                <enumerator>
+                    <name>Wading</name>
+                    <value>13</value>
+                </enumerator>
+                <enumerator>
+                    <name>Surrender</name>
+                    <value>14</value>
+                </enumerator>
+                <enumerator>
+                    <name>Detained</name>
+                    <value>15</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>WeaponStateEnum32</name>
+                <representation>HLAinteger32BE</representation>
+                <semantics>State of a weapon.</semantics>
+                <enumerator>
+                    <name>NoWeapon</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>Stowed</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>Deployed</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>FiringPosition</name>
+                    <value>3</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>ComplianceStateEnum32</name>
+                <representation>HLAinteger32BE</representation>
+                <semantics>Compliance state of a lifeform.</semantics>
+                <enumerator>
+                    <name>Other</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>Detained</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>Surrender</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>UsingFists</name>
+                    <value>3</value>
+                </enumerator>
+                <enumerator>
+                    <name>VerbalAbuse1</name>
+                    <value>4</value>
+                </enumerator>
+                <enumerator>
+                    <name>VerbalAbuse2</name>
+                    <value>5</value>
+                </enumerator>
+                <enumerator>
+                    <name>VerbalAbuse3</name>
+                    <value>6</value>
+                </enumerator>
+                <enumerator>
+                    <name>PassiveResistance1</name>
+                    <value>7</value>
+                </enumerator>
+                <enumerator>
+                    <name>PassiveResistance2</name>
+                    <value>8</value>
+                </enumerator>
+                <enumerator>
+                    <name>PassiveResistance3</name>
+                    <value>9</value>
+                </enumerator>
+                <enumerator>
+                    <name>NonLethalWeapon1</name>
+                    <value>10</value>
+                </enumerator>
+                <enumerator>
+                    <name>NonLethalWeapon2</name>
+                    <value>11</value>
+                </enumerator>
+                <enumerator>
+                    <name>NonLethalWeapon3</name>
+                    <value>12</value>
+                </enumerator>
+                <enumerator>
+                    <name>NonLethalWeapon4</name>
+                    <value>13</value>
+                </enumerator>
+                <enumerator>
+                    <name>NonLethalWeapon5</name>
+                    <value>14</value>
+                </enumerator>
+                <enumerator>
+                    <name>NonLethalWeapon6</name>
+                    <value>15</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>PowerSetting_Enum32</name>
+                <representation>HLAinteger32BE</representation>
+                <semantics>Field value Engine Power Setting 
+-100 Engine Off 
+0 Idle Power 
+50 Mil. Power (Aircraft) 
+51 Min. A/B (Aircraft) 
+100 Max. Power, Max. A/B (Aircraft)</semantics>
+                <enumerator>
+                    <name>Engine_Off</name>
+                    <value>-100</value>
+                </enumerator>
+                <enumerator>
+                    <name>Idle_Power</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>Mil_Power</name>
+                    <value>50</value>
+                </enumerator>
+                <enumerator>
+                    <name>Min_A_B</name>
+                    <value>51</value>
+                </enumerator>
+                <enumerator>
+                    <name>Max_Power</name>
+                    <value>100</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name notes="COPY-noteLabel_8">CollisionTypeEnum8</name>
+                <representation>HLAoctet</representation>
+                <semantics>-NULL-</semantics>
+                <enumerator>
+                    <name>Inelastic</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>Elastic</name>
+                    <value>1</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData notes="COPY-COPY-VOMT_AUTOGEN_DATATYPE">
+                <name notes="COPY-COPY-jntc_9">ChaffTypeEnum8</name>
+                <representation>HLAoctet</representation>
+                <semantics>Type of Chaff \"drop\" (corridor or packet)</semantics>
+                <enumerator>
+                    <name>NotUsed</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>ChaffPacket</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>ChaffCloud</name>
+                    <value>2</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData notes="COPY-COPY-VOMT_AUTOGEN_DATATYPE">
+                <name>ChaffIdentifierEnum16</name>
+                <representation>HLAinteger16BE</representation>
+                <semantics>Type of Chaff</semantics>
+                <enumerator>
+                    <name>Generic</name>
+                    <value>1</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData notes="COPY-COPY-VOMT_AUTOGEN_DATATYPE">
+                <name>FlareIdentifierEnum16</name>
+                <representation>HLAinteger16BE</representation>
+                <semantics>Type of flare.</semantics>
+                <enumerator>
+                    <name>Generic</name>
+                    <value>1</value>
+                </enumerator>
+            </enumeratedData>
+        </enumeratedDataTypes>
+        <arrayDataTypes>
+            <arrayData>
+                <name>PropulsionSystemDataStructArray</name>
+                <dataType>PropulsionSystemDataStruct</dataType>
+                <cardinality>Dynamic</cardinality>
+                <encoding>HLAlengthlessVarArray</encoding>
+                <semantics>A set of Propulsion System Data descriptions.</semantics>
+            </arrayData>
+            <arrayData>
+                <name>VectoringNozzleSystemDataStructArray</name>
+                <dataType>VectoringNozzleSystemDataStruct</dataType>
+                <cardinality>Dynamic</cardinality>
+                <encoding>HLAlengthlessVarArray</encoding>
+                <semantics>A set of Vectoring Nozzle System Data description.</semantics>
+            </arrayData>
+            <arrayData>
+                <name>MarkingArray11</name>
+                <dataType>Octet</dataType>
+                <cardinality>11</cardinality>
+                <encoding>HLAfixedArray</encoding>
+                <semantics>String of characters represented by an 11 element character string</semantics>
+            </arrayData>
+        </arrayDataTypes>
+        <fixedRecordDataTypes>
+            <fixedRecordData>
+                <name>MarkingStruct</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>Character set used in the marking and the string of characters to be interpreted for display.</semantics>
+                <field>
+                    <name>MarkingEncodingType</name>
+                    <dataType>MarkingEncodingEnum8</dataType>
+                    <semantics>Character set representation.</semantics>
+                </field>
+                <field>
+                    <name>MarkingData</name>
+                    <dataType>ArrayOfOctet</dataType>
+                    <semantics>List of characters that make up the marking.  Must be null terminated if the MarkingEncodingType is ASCII.  Markings longer than 11 characters will be truncated when translated to DIS.</semantics>
+                </field>
+            </fixedRecordData>
+            <fixedRecordData>
+                <name>PropulsionSystemDataStruct</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>Information describing a propulsion system in terms of power settings and current RPM.</semantics>
+                <field>
+                    <name>PowerSetting</name>
+                    <dataType>PowerSetting_Enum32</dataType>
+                    <semantics>The power setting of the propulsion system, after any response lags have been incorporated</semantics>
+                </field>
+                <field>
+                    <name>EngineRPM</name>
+                    <dataType>RPM_Float32</dataType>
+                    <semantics>The current engine speed</semantics>
+                </field>
+            </fixedRecordData>
+            <fixedRecordData>
+                <name>VectoringNozzleSystemDataStruct</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>Operational data for describing the vectoring nozzle systems being simulated.</semantics>
+                <field>
+                    <name>HorizontalDeflectionAngle</name>
+                    <dataType>Angle_Degree_Float32</dataType>
+                    <semantics>The nozzle deflection angle in the horizontal body axis of the entity.</semantics>
+                </field>
+                <field>
+                    <name>VerticalDeflectionAngle</name>
+                    <dataType>Angle_Degree_Float32</dataType>
+                    <semantics>The nozzle deflection angle in the vertical body axis of the entity.</semantics>
+                </field>
+            </fixedRecordData>
+            <fixedRecordData>
+                <name>EntityCoordinateVectorStruct</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>-NULL-</semantics>
+                <field>
+                    <name>XComponent</name>
+                    <dataType>Meters_Float32</dataType>
+                    <semantics>Component along the X axis</semantics>
+                </field>
+                <field>
+                    <name>YComponent</name>
+                    <dataType>Meters_Float32</dataType>
+                    <semantics>Component along the Y axis</semantics>
+                </field>
+                <field>
+                    <name>ZComponent</name>
+                    <dataType>Meters_Float32</dataType>
+                    <semantics>Component along the Z axis</semantics>
+                </field>
+            </fixedRecordData>
+        </fixedRecordDataTypes>
+    </dataTypes>
+    <notes>
+        <note>
+            <label>rpr2physical_1</label>
+            <semantics>Default value: BaseEntity.EntityType</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_2</label>
+            <semantics>Default value: False (0)</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_3</label>
+            <semantics>Default value: Empty</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_4</label>
+            <semantics>Default value: NoDamage (0)</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_5</label>
+            <semantics>Default value: Other (0)</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_6</label>
+            <semantics>Default value: Uniform Paint Scheme</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_7</label>
+            <semantics>Default value: 0</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_8</label>
+            <semantics>Default value: No Information Available</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_9</label>
+            <semantics>Applicable to Aircraft</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_10</label>
+            <semantics>Applicable to Amphibious Vehicle</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_11</label>
+            <semantics>Applicable to Ground Vehicle</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_12</label>
+            <semantics>Applicable to Spacecraft</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_13</label>
+            <semantics>Applicable to Surface Vessel</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_14</label>
+            <semantics>Applicable to Submersible Vessel</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_15</label>
+            <semantics>Applicable to Multi-Domain Platform</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_16</label>
+            <semantics>Default value: NotApplicable</semantics>
+        </note>
+        <note>
+            <label>rpr2physical_17</label>
+            <semantics>Default value: NoWeapon</semantics>
+        </note>
+        <note>
+            <label>COPY-noteLabel_22</label>
+            <semantics>If there is no object instance associated with the attribute, then this should be set to the empty string (no characters).</semantics>
+        </note>
+        <note>
+            <label>COPY-noteLabel_24</label>
+            <semantics>This must reference a valid Object instance.</semantics>
+        </note>
+        <note>
+            <label>COPY-noteLabel_8</label>
+            <semantics>This is an 8-bit enumeration</semantics>
+        </note>
+        <note>
+            <label>COPY-COPY-VOMT_AUTOGEN_DATATYPE</label>
+            <semantics>Automatically generated data type from an HLA 1.3 OMT file, please verify</semantics>
+        </note>
+        <note>
+            <label>COPY-COPY-jntc_9</label>
+            <semantics>This is an 8-bit enumeration</semantics>
+        </note>
+    </notes>
+</objectModel>

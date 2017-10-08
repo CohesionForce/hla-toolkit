@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<objectModel xsi:schemaLocation="http://standards.ieee.org/IEEE1516-2010 http://standards.ieee.org/downloads/1516/1516.2-2010/IEEE1516-DIF-2010.xsd" xmlns="http://standards.ieee.org/IEEE1516-2010" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelIdentification>
+        <name>NTF-MarcoPolo</name>
+        <type>FOM</type>
+        <version>1.0r2</version>
+        <modificationDate>2014-02-11</modificationDate>
+        <securityClassification>unclassified</securityClassification>
+        <purpose>This is a BOM that defines a discovery protocol for federates or entities looking for entities.</purpose>
+        <applicationDomain>Training</applicationDomain>
+        <description>Marco Polo is a request and response protocol that allows a federate to find callsign, location, DIS Enum or RTI ID of entities in the federation based on a filter selection. There are three filtering methods supported. 
+
+The DIS Enum based filter allows for "any" selections for wildcard operation. Any entities matching the DIS Enum in the request are reported in the response. If there are no entities matching the filter, no response is sent. 
+
+The call sign filter allows the federate sending the request to ask for a call sign. Currently, there is limited pattern matching or wild card operations provided in the call sign filter: if the entity call sign contains the substring of the passed call sign parameter, it is considered a match and will be included in the response. 
+
+The domain filter allows the selection of entities contained within a domain (or sub category). For example, "Air" entities can be requested or "AirWeapons". Other domain subcategories can easily be added.
+
+Each filter selection is mutually exclusive of the others and can?t be combined. The most versatile is the DIS Enum filter. 
+
+AFMSTT: Added AFMSTT DDM features. </description>
+        <useLimitation></useLimitation>
+        <useHistory>1.0r2 Release Notes - Removed unused tables.</useHistory>
+        <other></other>
+    </modelIdentification>
+    <interactions>
+        <interactionClass>
+            <name>HLAinteractionRoot</name>
+            <interactionClass>
+                <name>Marco</name>
+                <sharing>PublishSubscribe</sharing>
+                <transportation>reliable</transportation>
+                <order>Receive</order>
+                <semantics>Queries the federation for entities that match one of the filter criteria.</semantics>
+                <parameter>
+                    <name>Filter</name>
+                    <dataType>SelectionFilterType</dataType>
+                    <semantics>REQUIRED - The filter for entries in the response.</semantics>
+                </parameter>
+                <parameter>
+                    <name>SenderCallsign</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>The call sign of the requestor of the response. This is optional.</semantics>
+                </parameter>
+                <parameter>
+                    <name>SenderRtiObjectId</name>
+                    <dataType>RTIobjectId</dataType>
+                    <semantics>The RTI ID of the requestor of the response.</semantics>
+                </parameter>
+                <parameter>
+                    <name>Location</name>
+                    <dataType>MarcoPoloLocationType</dataType>
+                    <semantics>The location of the requestor. This is optional.</semantics>
+                </parameter>
+            </interactionClass>
+            <interactionClass>
+                <name>Polo</name>
+                <sharing>PublishSubscribe</sharing>
+                <transportation>reliable</transportation>
+                <order>Receive</order>
+                <semantics>Response to a Marco query.</semantics>
+                <parameter>
+                    <name>Filter</name>
+                    <dataType>SelectionFilterType</dataType>
+                    <semantics>REQUIRED - The filter for entries in the response.</semantics>
+                </parameter>
+                <parameter>
+                    <name>Response</name>
+                    <dataType>EntityInfoTypeArray</dataType>
+                    <semantics>REQUIRED - The response to the Marco request can be an array of values. If the list would be empty, no response is made.</semantics>
+                </parameter>
+            </interactionClass>
+        </interactionClass>
+    </interactions>
+    <dataTypes>
+        <enumeratedDataTypes>
+            <enumeratedData>
+                <name>MarcoPoloDomainEnum8</name>
+                <representation>HLAoctet</representation>
+                <semantics>Enumeration for the domains of the Marco-Polo protocol.</semantics>
+                <enumerator>
+                    <name>Air</name>
+                    <value>10</value>
+                </enumerator>
+                <enumerator>
+                    <name>AirWeapon</name>
+                    <value>19</value>
+                </enumerator>
+                <enumerator>
+                    <name>Land</name>
+                    <value>20</value>
+                </enumerator>
+                <enumerator>
+                    <name>Installation</name>
+                    <value>21</value>
+                </enumerator>
+                <enumerator>
+                    <name>Surface</name>
+                    <value>30</value>
+                </enumerator>
+                <enumerator>
+                    <name>Merchant</name>
+                    <value>31</value>
+                </enumerator>
+                <enumerator>
+                    <name>Fishing</name>
+                    <value>32</value>
+                </enumerator>
+                <enumerator>
+                    <name>Subsurface</name>
+                    <value>40</value>
+                </enumerator>
+                <enumerator>
+                    <name>UnderseaWeapon</name>
+                    <value>49</value>
+                </enumerator>
+                <enumerator>
+                    <name>Space</name>
+                    <value>50</value>
+                </enumerator>
+                <enumerator>
+                    <name>Emitters</name>
+                    <value>60</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>FilterSelectorEnum32</name>
+                <representation>HLAinteger32BE</representation>
+                <semantics>Defines the type of filter used in a Marco-Polo exchange.</semantics>
+                <enumerator>
+                    <name>domain</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>entity_type</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>callsign</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>LVCID</name>
+                    <value>3</value>
+                </enumerator>
+            </enumeratedData>
+        </enumeratedDataTypes>
+        <arrayDataTypes>
+            <arrayData>
+                <name>EntityInfoTypeArray</name>
+                <dataType>EntityInfoType</dataType>
+                <cardinality>Dynamic</cardinality>
+                <encoding>HLAvariableArray</encoding>
+                <semantics>The response to the Marco request. Can be an array of values. If the list would be Empty, no response is made.</semantics>
+            </arrayData>
+        </arrayDataTypes>
+        <fixedRecordDataTypes>
+            <fixedRecordData>
+                <name>MarcoPoloLocationType</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>Location parameter for Marco Polo interactions.</semantics>
+                <field>
+                    <name>Latitude</name>
+                    <dataType>Float64</dataType>
+                    <semantics>In degrees.  North is positive.</semantics>
+                </field>
+                <field>
+                    <name>Longitude</name>
+                    <dataType>Float64</dataType>
+                    <semantics>In degrees.  East is positive.</semantics>
+                </field>
+                <field>
+                    <name>Altitude</name>
+                    <dataType>Float64</dataType>
+                    <semantics>Height in meters above mean sea level.</semantics>
+                </field>
+            </fixedRecordData>
+            <fixedRecordData>
+                <name>EntityInfoType</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>Indenfication information for Polo responses to Marco requests.</semantics>
+                <field>
+                    <name>MarcoPoloLocation</name>
+                    <dataType>MarcoPoloLocationType</dataType>
+                    <semantics>Matching entity lat long position</semantics>
+                </field>
+                <field>
+                    <name>EntityType</name>
+                    <dataType>EntityTypeStruct</dataType>
+                    <semantics>Entity type of matching entity..</semantics>
+                </field>
+                <field>
+                    <name>CallSign</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>Matching entity call sign.</semantics>
+                </field>
+                <field>
+                    <name>RtiObjectId</name>
+                    <dataType>RTIobjectId</dataType>
+                    <semantics>RTI id of matching entity</semantics>
+                </field>
+                <field>
+                    <name>LVCID</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>LVCID of matching entity.</semantics>
+                </field>
+            </fixedRecordData>
+        </fixedRecordDataTypes>
+        <variantRecordDataTypes>
+            <variantRecordData>
+                <name>SelectionFilterType</name>
+                <discriminant>FilterSelector</discriminant>
+                <dataType>FilterSelectorEnum32</dataType>
+                <alternative>
+                    <enumerator>domain</enumerator>
+                    <name>Domain</name>
+                    <dataType>MarcoPoloDomainEnum8</dataType>
+                    <semantics>Filter spec for Domain Filter</semantics>
+                </alternative>
+                <alternative>
+                    <enumerator>entity_type</enumerator>
+                    <name>EntityType</name>
+                    <dataType>EntityTypeStruct</dataType>
+                    <semantics>Filter spec for EntityType filter.</semantics>
+                </alternative>
+                <alternative>
+                    <enumerator>callsign</enumerator>
+                    <name>CallSign</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>Filter spec for CallSign filter.</semantics>
+                </alternative>
+                <alternative>
+                    <enumerator>LVCID</enumerator>
+                    <name>LVCID</name>
+                    <dataType>LVCIDStruct</dataType>
+                    <semantics>Filter spec for LVCID filter.</semantics>
+                </alternative>
+                <encoding>HLAvariantRecord</encoding>
+                <semantics></semantics>
+            </variantRecordData>
+        </variantRecordDataTypes>
+    </dataTypes>
+    <notes/>
+</objectModel>

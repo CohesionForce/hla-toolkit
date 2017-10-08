@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<objectModel xsi:schemaLocation="http://standards.ieee.org/IEEE1516-2010 http://standards.ieee.org/downloads/1516/1516.2-2010/IEEE1516-DIF-2010.xsd" xmlns="http://standards.ieee.org/IEEE1516-2010" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelIdentification>
+        <name>AFMSTT-Logistics</name>
+        <type>FOM</type>
+        <version>1.1r2</version>
+        <modificationDate>2014-01-14</modificationDate>
+        <securityClassification>unclassified</securityClassification>
+        <purpose>Constructive Air Operations Center Training</purpose>
+        <applicationDomain>AFMSTT Federation</applicationDomain>
+        <description>This module adds Air Base Simulation logistics modeling functionality to AFMSTT Federation</description>
+        <useLimitation></useLimitation>
+        <useHistory></useHistory>
+        <useHistory>1.1r2 Release Notes - Remove unused tables.</useHistory>
+        <poc>
+            <pocType>Primary author</pocType>
+            <pocName>Jake Borah</pocName>
+            <pocOrg>AFMSTT </pocOrg>
+            <pocTelephone>(407) 674-6702</pocTelephone>
+            <pocEmail>jborah@aegistg.com</pocEmail>
+        </poc>
+        <other>Sean Reilly deleted federation switches table
+Jake Borah revised PartNumber, PartName, and Quantity attributes for AircraftMXStatus, AirbaseEquipment subclasses.</other>
+    </modelIdentification>
+    <objects>
+        <objectClass>
+            <name>HLAobjectRoot</name>
+            <objectClass>
+                <name>AFMSTTLogisticsData</name>
+                <sharing>Subscribe</sharing>
+                <semantics>This object class and subclasses exist to persist data related to AirBase sim logistics simulation.</semantics>
+                <attribute>
+                    <name>BaseID</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <updateType>Static</updateType>
+                    <updateCondition></updateCondition>
+                    <ownership>NoTransfer</ownership>
+                    <sharing>PublishSubscribe</sharing>
+                    <transportation>state_consistent</transportation>
+                    <order>Receive</order>
+                    <semantics>The International Civil Aviation Organization (ICAO) base identified</semantics>
+                </attribute>
+                <attribute>
+                    <name>Quantity</name>
+                    <dataType>Float64</dataType>
+                    <updateType>Conditional</updateType>
+                    <updateCondition>Attribute is updated when required.</updateCondition>
+                    <ownership>NoTransfer</ownership>
+                    <sharing>PublishSubscribe</sharing>
+                    <transportation>state_consistent</transportation>
+                    <order>Receive</order>
+                    <semantics>The number of items.  Quantity could be a decimal value</semantics>
+                </attribute>
+                <attribute notes="N-1">
+                    <name>FactionID</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <updateType>Static</updateType>
+                    <updateCondition></updateCondition>
+                    <ownership>NoTransfer</ownership>
+                    <sharing>PublishSubscribe</sharing>
+                    <transportation>state_consistent</transportation>
+                    <order>Receive</order>
+                    <semantics></semantics>
+                </attribute>
+                <objectClass>
+                    <name>Personnel</name>
+                    <sharing>PublishSubscribe</sharing>
+                    <semantics>Authorized personnel may change as an exercise input</semantics>
+                    <attribute>
+                        <name>PersonnelCode</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The Air Force Speciality Code (AFSC) of the Personnel</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>Description</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Data source is Airbase Sim Personnel Code</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>Rank</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The Rank of the Personnel</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>Casualties</name>
+                        <dataType>Integer64</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The number of Personnel who are dead.  Note: Wounded Personnel are not modeled</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>Authorized</name>
+                        <dataType>Integer64</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics></semantics>
+                    </attribute>
+                </objectClass>
+                <objectClass>
+                    <name>MiscSupply</name>
+                    <sharing>PublishSubscribe</sharing>
+                    <semantics></semantics>
+                    <attribute>
+                        <name>MiscSupplyType</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Type of Miscellaneous Supply item</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>MiscSupplyName</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Name of Miscellaneous Supply item</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>StorageCapacity</name>
+                        <dataType>Float64</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Not modeled (not interactively calculated--exercise input value) purely for inclusion on reports</semantics>
+                    </attribute>
+                </objectClass>
+                <objectClass>
+                    <name>Spares</name>
+                    <sharing>PublishSubscribe</sharing>
+                    <semantics></semantics>
+                    <attribute>
+                        <name>PartNumber</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>AirBase Sim NSN or other part identifier.  A unique identifier for this count of spares at this base (required)</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>PartName</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>AirBase Sim Part Table.  A human-readable description of these spare parts</semantics>
+                    </attribute>
+                </objectClass>
+                <objectClass>
+                    <name>AirbaseCulturalFeatures</name>
+                    <sharing>PublishSubscribe</sharing>
+                    <semantics>Engineering and natural effects unique to an airbase physical environment such as control towers, aircraft hangars, fuel tanks etc.</semantics>
+                    <attribute>
+                        <name>BECode</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Used to map ABS Facilities to ACE IOS</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>FacilityType</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Identifies the type of Airbase Cultural Feature</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>Description</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Associated with FacilityType</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>DamageStatus</name>
+                        <dataType>Float64</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Set by BE Server</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>FeatureLatitude</name>
+                        <dataType>Angle_Degree_Float64</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Optional- some Airbase Cultural Features are only "at a base" and do not have specific coordinates.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>FeatureLongitude</name>
+                        <dataType>Angle_Degree_Float64</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Optional- some Airbase Cultural Features are only "at a base" and do not have specific coordinates.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>ParkingRows</name>
+                        <dataType>Integer64</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Used for hangars / parking areas only</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>ParkingColumns</name>
+                        <dataType>Integer64</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Used for hangars / parking areas only</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>StorageCapacity</name>
+                        <dataType>Float64</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Used for fuel tanks only</semantics>
+                    </attribute>
+                </objectClass>
+                <objectClass>
+                    <name>AirbaseEquipment</name>
+                    <sharing>PublishSubscribe</sharing>
+                    <semantics></semantics>
+                    <attribute>
+                        <name>EquipmentType</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Type data is in the database, but not needed for publishing</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>EstimatedRepairTime</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>This is the exact time to MX completion; not actually "estimated".</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>PartsTimeOfArrival</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics></semantics>
+                    </attribute>
+                    <attribute>
+                        <name>RegistrationNumber</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Real-world unique ID, used only for inclusion in reports; uniqueness is not enforced by model.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>ReportedEstimatedRepairTime</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Calculated number for end-user views</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>ReportedPartsTimeOfArrival</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Calculated number for end-user views</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>MaintStatus</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>"EquipmentStatus" in model.  Maintenance status</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>CauseDescription</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Obtained from Cause Table</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>EquipmentRepairPartNumber</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>NA</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>A reference to the unique part number required for this equipment to complete repairs, if any, if it is broken</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>EquipmentRepairPartName</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>NA</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>A human-readable description of the part required for this equipment to complete repairs, if it is broken</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>EquipmentRepairQuantity</name>
+                        <dataType>Float64</dataType>
+                        <updateType>NA</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The number of parts the aircraft needs to complete repairs, if it is broken</semantics>
+                    </attribute>
+                </objectClass>
+                <objectClass>
+                    <name>AircraftMXStatus</name>
+                    <sharing>PublishSubscribe</sharing>
+                    <semantics></semantics>
+                    <attribute>
+                        <name>MXProblem</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Description of what is wrong with aircraft.  Example: "Fuel transfer is inoperative".</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>ETIC</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>ETIC is an acronym for "Estimated Time of Completion" for the maintenance action.  The reference time for an ETIC is simulation scenario time.  Example: "281002Z".  Data source is ETIC column of Aircraft table.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>AircraftRepairStatus</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The aircraft repair status is the current maintenance state of an aircraft.  Example: "Awaiting Parts (AWP)".</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>MXEntryTime</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The simulation scenario time when an aircraft entered maintenance state.  Example: "272200Z".  Data source is "aircraft.tem_hours".</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>partETA</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The Estimated Time of Arrival (ETA) for a requested part.  Example: "272345Z".  Data source is aircraft.partsTOA.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>AircraftTailNumber</name>
+                        <dataType>AggregateMarkingStruct</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics></semantics>
+                    </attribute>
+                    <attribute>
+                        <name>DamageLevel</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>Attribute is updated when required.</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Describes damage state of an aircraft.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>AircraftMXRequiredPartNumber</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>NA</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>A reference to the unique part number required for this aircraft to complete repairs, if any.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>AircraftMXRequiredPartName</name>
+                        <dataType>HLAASCIIstring</dataType>
+                        <updateType>NA</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>Acquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>A human-readable description of the part required for this aircraft to complete repairs</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>AircraftMXRequiredPartQuantity</name>
+                        <dataType>Float64</dataType>
+                        <updateType>NA</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The number of parts the aircraft needs to complete repairs</semantics>
+                    </attribute>
+                </objectClass>
+            </objectClass>
+        </objectClass>
+    </objects>
+    <notes>
+        <note>
+            <label>N-1</label>
+            <semantics>Use of the inherited attribute "FactionID"  is optional for the object class "Spares".</semantics>
+        </note>
+    </notes>
+</objectModel>

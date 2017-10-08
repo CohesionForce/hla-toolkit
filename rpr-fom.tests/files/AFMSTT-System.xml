@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<objectModel xsi:schemaLocation="http://standards.ieee.org/IEEE1516-2010 http://standards.ieee.org/downloads/1516/1516.2-2010/IEEE1516-DIF-2010.xsd" xmlns="http://standards.ieee.org/IEEE1516-2010" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelIdentification>
+        <name>AFMSTT-System</name>
+        <type>FOM</type>
+        <version>1.1</version>
+        <modificationDate>2014-01-14</modificationDate>
+        <securityClassification>unclassified</securityClassification>
+        <purpose>Provides AFMSTT System interfaces between federates</purpose>
+        <applicationDomain>Training</applicationDomain>
+        <description>Defines interactions that control the execution of the AFMSTT Federation.</description>
+        <useLimitation></useLimitation>
+        <poc>
+            <pocType>Primary author</pocType>
+            <pocName>Sean Reilly</pocName>
+            <pocOrg>AFMSTT</pocOrg>
+            <pocTelephone>(401) 294-3996 (Office)</pocTelephone>
+            <pocTelephone>(401) 523-5780 (Cell)</pocTelephone>
+            <pocEmail>sreilly@aegistg.com</pocEmail>
+        </poc>
+        <other>Sean Reilly deleted federation switches table</other>
+    </modelIdentification>
+    <interactions>
+        <interactionClass>
+            <name>HLAinteractionRoot</name>
+            <interactionClass>
+                <name>FederationSave</name>
+                <sharing>PublishSubscribe</sharing>
+                <transportation>reliable</transportation>
+                <order>Receive</order>
+                <semantics>Conveys federation save activities to the AFMSTT Federation.  Enumeration values represent the RTI callback being made.</semantics>
+                <parameter>
+                    <name>Value</name>
+                    <dataType>FederationSaveEnum</dataType>
+                    <semantics>The RTI callback represented</semantics>
+                </parameter>
+                <parameter>
+                    <name>Label</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>The save label for which this callback applies</semantics>
+                </parameter>
+            </interactionClass>
+            <interactionClass>
+                <name>FederateSave</name>
+                <sharing>PublishSubscribe</sharing>
+                <transportation>reliable</transportation>
+                <order>Receive</order>
+                <semantics>Conveys federate save status to the federation.  Enumeration values represent the RTI call being made.</semantics>
+                <parameter>
+                    <name>Value</name>
+                    <dataType>FederateSaveEnum</dataType>
+                    <semantics>The RTI call represented</semantics>
+                </parameter>
+                <parameter>
+                    <name>Label</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>The save label for which this call applies</semantics>
+                </parameter>
+                <parameter>
+                    <name>Federate</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>The federate making the RTI call</semantics>
+                </parameter>
+            </interactionClass>
+            <interactionClass>
+                <name>FederationRestore</name>
+                <sharing>PublishSubscribe</sharing>
+                <transportation>reliable</transportation>
+                <order>Receive</order>
+                <semantics>Conveys federation restore activities to the AFMSTT Federation.  Enumeration values represent the RTI callback being made.</semantics>
+                <parameter>
+                    <name>Value</name>
+                    <dataType>FederationRestoreEnum</dataType>
+                    <semantics>The RTI callback represented</semantics>
+                </parameter>
+                <parameter>
+                    <name>Label</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>The restore label for which this callback applies</semantics>
+                </parameter>
+            </interactionClass>
+            <interactionClass>
+                <name>FederateRestore</name>
+                <sharing>PublishSubscribe</sharing>
+                <transportation>reliable</transportation>
+                <order>Receive</order>
+                <semantics>Conveys federate restore status to the federation.  Enumeration values represent the RTI call being made.</semantics>
+                <parameter>
+                    <name>Value</name>
+                    <dataType>FederateRestoreEnum</dataType>
+                    <semantics>The RTI call represented</semantics>
+                </parameter>
+                <parameter>
+                    <name>Label</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>The restore label for which the call applies</semantics>
+                </parameter>
+                <parameter>
+                    <name>Federate</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>The federate making the RTI call</semantics>
+                </parameter>
+            </interactionClass>
+            <interactionClass>
+                <name>FireControl</name>
+                <sharing>PublishSubscribe</sharing>
+                <transportation>reliable</transportation>
+                <order>Receive</order>
+                <semantics>Conveys MRF Fire Control attribute ownership activities</semantics>
+                <parameter>
+                    <name>Action</name>
+                    <dataType>FireControlEnum</dataType>
+                    <semantics>The RTI call/callback that this interaction represents</semantics>
+                </parameter>
+                <parameter>
+                    <name>InstanceName</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>The instance name of the object for which this interaction applies</semantics>
+                </parameter>
+            </interactionClass>
+        </interactionClass>
+    </interactions>
+    <dataTypes>
+        <enumeratedDataTypes>
+            <enumeratedData>
+                <name>FederationSaveEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>The RTI callback represented</semantics>
+                <enumerator>
+                    <name>InitiateFederateSave</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>FederationSaved</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>FederationNotSaved</name>
+                    <value>2</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>FederateSaveEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>The RTI call represented</semantics>
+                <enumerator>
+                    <name>FederateSaveBegun</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>FederateSaveComplete</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>FederateSaveNotComplete</name>
+                    <value>2</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>FederationRestoreEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>The RTI callback represented</semantics>
+                <enumerator>
+                    <name>InitiateFederateRestore</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>FederationRestoreBegun</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>FederationRestored</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>FederationNotRestored</name>
+                    <value>3</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>FederateRestoreEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>The RTI call represented</semantics>
+                <enumerator>
+                    <name>FederateRestoreComplete</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>FederateRestoreNotComplete</name>
+                    <value>1</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>FireControlEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>The RTI call/callback represented</semantics>
+                <enumerator>
+                    <name>Acquired</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>Divest</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>Request</name>
+                    <value>2</value>
+                </enumerator>
+            </enumeratedData>
+        </enumeratedDataTypes>
+    </dataTypes>
+</objectModel>

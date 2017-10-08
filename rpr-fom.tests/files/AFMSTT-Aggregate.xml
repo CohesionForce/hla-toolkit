@@ -1,0 +1,1890 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<objectModel xsi:schemaLocation="http://standards.ieee.org/IEEE1516-2010 http://standards.ieee.org/downloads/1516/1516.2-2010/IEEE1516-DIF-2010.xsd" xmlns="http://standards.ieee.org/IEEE1516-2010" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelIdentification>
+        <name>AFMSTT Aggregate Module</name>
+        <type>FOM</type>
+        <version>1.1r5</version>
+        <modificationDate>2014-05-23</modificationDate>
+        <securityClassification>unclassified</securityClassification>
+        <purpose>Extends AFMSTT Aggregate objects from RPR-FOM Aggregate.</purpose>
+        <applicationDomain>Training</applicationDomain>
+        <description>This module contains extensions of the AggregateEntity that implement attributes specific to the AFMSTT federation.</description>
+        <useLimitation>AFMSTT internal federation only.</useLimitation>
+        <useHistory>1.1r2 Release Notes - 
+
+Add several attributes to AirBase to better support ASTABSTAB status includes
+ACOName, ACOIdentifier, Faction, SharedShipFlag, FuelList, AircontrolMeans, WeaponList.
+Replace Category with BaseClass.
+Add enumeration for AirBaseClassEnum
+
+Add several attributes to Flight to better support ASTABSTAB status includes
+FlightCategory, IsgroundAlertpending, AntiRadarPriorities, AirliftMissionNumber.
+Add enumeration for FlightCategoryEnum
+
+Move many of the AFMSTT specific attributes from Aircraft to Flight.
+Including AirliftMissionNumber, AircraftPerformanceData, FuelCurrent, WeaponList,
+IsGroundAlertPending, AirliftMissionNumber, AntiRadarPriorities, Cargo.</useHistory>
+        <useHistory>1.1r3 Release Notes -
+Add Category back into AirBase as a deprecated attribute.
+To help AWSIM with transition.</useHistory>
+        <useHistory>1.1r4 Release Notes - Fix attributes in Flight object.
+Correct the spelling of isStealth
+Add AirdropLatitude, AirdropLongitude, and BeingJammed attributes.</useHistory>
+        <useHistory>1.1r5 - Add Force DDM dimension to all sub-classes of BaseEntity.</useHistory>
+        <other></other>
+    </modelIdentification>
+    <objects>
+        <objectClass>
+            <name>HLAobjectRoot</name>
+            <objectClass>
+                <name>BaseEntity</name>
+                <objectClass>
+                    <name>AggregateEntity</name>
+                    <objectClass>
+                        <name>AirBase</name>
+                        <sharing>PublishSubscribe</sharing>
+                        <semantics>Defines an air base, aircraft carrier, or landing zones from which aircraft can depart and arrive.</semantics>
+                        <attribute>
+                            <name>BaseClass</name>
+                            <dataType>AirBaseClassEnum</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Distinquishes air bases from aircraft carriers and landing zones (required).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>ActiveRunwayDirection</name>
+                            <dataType>Angle_Radian_Float64</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Compass heading for the currently active runway.  This is the aircraft heading that will be used for both take-off and landing from this base.  Required if the BaseClass is LandingZone; optional otherwise.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>ActiveRunwayLength</name>
+                            <dataType>Length_Float32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Length for the currently active runway.  This is the runaway that will be used for both take-off and landing from this base.  Required if the BaseClass is LandingZone; optional otherwise.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>NormalLaunchRate</name>
+                            <dataType>Integer32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On Change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Number of aircraft per minute (optional). Defaults to zero. No launch capability if zero.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>NormalRecoveryRate</name>
+                            <dataType>Integer32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Number of aircraft per minute (optional).  Defaults to zero.  No recovery capability if zero.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>CurrentLaunchRate</name>
+                            <dataType>Integer32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Number of aircraft per minute (optional).  Defaults to zero.  No launch capability if zero.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>TimeLastHit</name>
+                            <dataType>HLAfloat64Time</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Simulation time of most recent air to ground attack on the Base or Carrier (optional). If not provided or less than zero, it indicates that the base has never been attacked.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>FlightLineOpenTime</name>
+                            <dataType>HLAfloat64Time</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>The SimTime that the flightline will be open.  If value is -1 then closed indefinitely, If 0 then flightline is open</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>CurrMaintCapacity</name>
+                            <dataType>Percent_Float32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Fraction of the total maintenance capability currently available for use (optional).  Decreases when aircraft are added to the maintenance queue.  Defaults to zero. No maintenance capability if zero.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>TimeToNormalMaintenance</name>
+                            <dataType>HLAfloat64Time</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Simulation time at which the the base is expected to complete all work in the maintenance queue (optional).  Defaults to zero.  No maintenance underway if zero.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>NumSheltersOperational</name>
+                            <dataType>Integer32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Number of shelters currently operational at the base (optional).  Only used if BaseClass = Airbase.  Defaults to zero.  No shelters available if zero.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>HighFidelity</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>True if ABS is modeling this Airbase (optional).  Defaults to false.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>BeingJammed</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>True when this unit is being jammed.  When this is true, the unit will also publish a list of JammerEffects objects for each source of jamming.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>Faction</name>
+                            <dataType>HLAASCIIstring</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Primary faction for this AirBase.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>AirControlMeans</name>
+                            <dataType>RTIobjectId</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Reference to the ACM for this air base (optional).  Used to associate the AWSIM concept of an Air Base with the ACO concept of a landing zone.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>ACOName</name>
+                            <dataType>HLAASCIIstring</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Reference to the ACM for this air base (optional).  Used to associate the AWSIM concept of an Air Base with the ACO concept of a landing zone. 
+ 
+Will be deprecated in future version of FOM in favor of AirControlMeasure reference.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>ACOIdentifier</name>
+                            <dataType>HLAASCIIstring</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Reference to the ACM for this air base (optional).  Used to associate the AWSIM concept of an Air Base with the ACO concept of a landing zone. 
+ 
+Will be deprecated in future version of FOM in favor of AirControlMeasure reference.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>SharedShipFlag</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>This flag is set to true when this airbase is associated with a ship (optional).  This type of association allows AWSIM to control aircraft deaprting from or rconvering to that ship.  When set to True, the ship should be the first entry in the EntityIdentifiers list.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>WeaponList</name>
+                            <dataType>EquipmentArray</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>List of AWSIM equipment records for munitions (optional).  Includes a separate record for each munition and faction.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>FuelList</name>
+                            <dataType>EquipmentArray</dataType>
+                            <updateType>NA</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>List of AWSIM equipment records for fuel (optional). Includes a separate record for each faction.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>Category</name>
+                            <dataType>Integer32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Depreccated: remove in future version.</semantics>
+                        </attribute>
+                    </objectClass>
+                    <objectClass>
+                        <name>Squadron</name>
+                        <sharing>PublishSubscribe</sharing>
+                        <semantics>Defines status information for AWSIM squadrons.  Multiple squadrons can be assigned to the same AirBase.  If a flight is split between two bases, a temporary squadron shall be created for the FOL or Diverted portion of the squadron.  Derived from the structure of the Squadron_ASTAB message.</semantics>
+                        <attribute>
+                            <name>CallSignPrefix</name>
+                            <dataType>HLAASCIIstring</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Two letter call sign prefix for aircraft from this squadron (required).  Equivalent to Unit ID in AWSIM Squadron_ASTAB message.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>SquadronType</name>
+                            <dataType>SquadronTypeEnum</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>HomeBase squadrons are the permanent units located at the home base.  ForwardOperatingLocation squadrons are the subordinate units operating for long periods of time at a location other than the home base.  TemporaryDivert squadrons are subordinate units that represent a part of the superior squadron that has landed at a location other than the HomeBase or the ForwardOperatingLocation.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>CurrentBase</name>
+                            <dataType>RTIobjectId</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Airbase to which this squadron is currently assigned (required).  Set equal to the HomeBase if SquadronType equal HomeBase.  Set equal to the ForwardOperatingBase if SquadronType equal ForwardOperatingBase.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>ParentBase</name>
+                            <dataType>RTIobjectId</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Airbase to which this squadron is originally assigned.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>DivertBases</name>
+                            <dataType>RTIobjectIdArray</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>If the squadron is has been diverted to a base other than its Home or FOL location, this holds the reference to the squadron's current assignement.  Empty or blank indicates that this squadron is not diverted.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>AssignmentStats</name>
+                            <dataType>AirAssignmentsStats</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>This record holds statistics about the aircraft assignments for this squadron (required).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>LostStats</name>
+                            <dataType>AirLossStats</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>This record holds statistics about the number of aircraft destroyed from this squadron (required).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>MaintenanceStats</name>
+                            <dataType>AirMaintenanceStats</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>This record holds statistics about the number of aircraft currently under maintenance in this squadron (required).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>HighFidelity</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>True if ABS is modeling this squadron.</semantics>
+                        </attribute>
+                    </objectClass>
+                    <objectClass>
+                        <name>Flight</name>
+                        <sharing>PublishSubscribe</sharing>
+                        <semantics>Defines status information for AWSIM flights.  The call sign for the flight shall be specified in Marking field of the AggregateEntity parent class.  The tail number for each aircraft in the flight shall be specified in Marking field of the PhysicalEntity class.</semantics>
+                        <attribute>
+                            <name>TaskedBy</name>
+                            <dataType>FlightTaskedByEnum</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On Change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Corresponds to values that are displayed in the Tasked By (TSK) column of ASTAB board 5 (Mission Status).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>RulesOfEngagement</name>
+                            <dataType>RulesOfEngagementEnum</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Define the circumstances, conditions, degree, and manner in which force, or actions which might be construed as provocative, may be applied.  Free will engage any non-friendly, Tight will engage any identified foe, Hold will not egage any targets.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>HomeBase</name>
+                            <dataType>HLAASCIIstring</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>The optional International Civil Aviation Organization (ICAO) code for the air base that owns this aircraft (ex: KBWI for Baltimore–Washington International Airport).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>ATOIdentifier</name>
+                            <dataType>HLAASCIIstring</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Serial number of the ATO from which this aircraft's current mission was defined (optional).  Equivalent to the FIELD 3 OF SET MSGID (MESSAGE SERIAL NUMBER) in the ATO.  Blank if no mission is currently assigned.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>MissionNumber</name>
+                            <dataType>HLAASCIIstring</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>The identifying number assigned to a specific mission within an approved project, task, operation, or exercise (optional).  May include numbers, letters, spaces, and punctuation (ex:  D123HA).  Equivalent to FIELD 2 OF SET AMSNDAT (MISSION NUMBER) in the ATO.  Blank if no mission is currently assigned.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>AirliftMissionNumber</name>
+                            <dataType>HLAASCIIstring</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Mission number assigned by the Air Mobility Command (AMC) or the U.S. Transportation Command (USTRANSCOM) (optional).  Applies only to Airlift flights.  Airlift flights have two mission numbers: this one and the ATO mission number.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>AircraftPerformanceData</name>
+                            <dataType>AircraftPerformanceStruct</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>This structure defines the AWSIM performance characteristics for flight manuevers.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>FuelCurrent</name>
+                            <dataType>FuelLevel_Float64</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Current amount of fuel on this aircraft.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>Squadron</name>
+                            <dataType>RTIobjectId</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Reference to the squadron to which this flight is currently assigned.  May change if the squadron is split during forward operating location deployment or diversion.  Required for all aircraft that are controlled by AWSIM or ABS.  Optional otherwise.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>CurrentTarget</name>
+                            <dataType>RTIobjectId</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Reference to the entity currently being targeted by this flight's aircraft (optional). No current target if blank or missing.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>WeaponList</name>
+                            <dataType>EquipmentArray</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>List of AWSIM equipment records for munitions (optional).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>AirSearchRadarActive</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Set to true when any aircraft in the flight has an air search radar active (optional).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>SurfaceSearchRadarActive</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Set to true when any aircraft in the flight has a 
+surface search radar active (optional).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>GroundSearchRadarActive</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Set to true when any aircraft in the flight has a ground search radar active (optional).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>IsDiverting</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Set to true when the flight diverting to a different recovery air base.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>IsGroundAlertPending</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Set to true when this flight is fully serviced and armed, with combat crews in readiness to take off within a specified short period of time (usually 15 minutes) after receipt of a mission order (optional).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>IsStealth</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>True when this flight is stealthed.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>FlightCategory</name>
+                            <dataType>FlightCategoryEnum</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>AWSIM designation for the type of flight.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>AntiRadarPriorities</name>
+                            <dataType>RadarNameArray</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Priority of Radars to be attacked by Anti-Radar Missile.  The first entry has they highest priority, and the priorrities decrease from there.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>Cargo</name>
+                            <dataType>CargoStruct</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>AWSIM equipment record for munition and fuel cargo.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>BeingJammed</name>
+                            <dataType>OMT13boolean</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>True when this unit is being jammed (optional).  When this is true, the unit will also publish a list of JammerEffects objects for each source of jamming.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>AirdropLatitude</name>
+                            <dataType>Float64</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Latitude component of air drop location in degrees (required if FlightCateogory is AirLiftCategory).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>AirdropLongitude</name>
+                            <dataType>Float64</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Longitude component of air drop location in degrees (required if FlightCateogory is AirLiftCategory).</semantics>
+                        </attribute>
+                    </objectClass>
+                    <objectClass>
+                        <name>AirFacility</name>
+                        <sharing>PublishSubscribe</sharing>
+                        <semantics>Defines status information for AWSIM air facilities.</semantics>
+                        <attribute>
+                            <name>FacilityType</name>
+                            <dataType>HLAASCIIstring</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>TBD enumeration</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>OperationsStatus</name>
+                            <dataType>HLAASCIIstring</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>change on update</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics></semantics>
+                        </attribute>
+                    </objectClass>
+                    <objectClass>
+                        <name>Site</name>
+                        <sharing>PublishSubscribe</sharing>
+                        <semantics>AFMSTT uses this class both to define the characteristics of missile sites, radar sites, and aggregations of these sites.  A MissileSite is a site with missile launchers, but no radars; this is equivalent to the MRF-W concept of the GROUND.MANEUVER.ALLRAD and GROUND.MANEUVER.HIMAD equipment group (usually a platoon). A RadarSite is a site with radars, but no missile launcher; this is equivalent to the MRF-W concept of the GROUND.MANEUVER.RADAR equipment group (usually a platoon). A MissileRadarSite is a site with both missile launchers and radars; this type of site is published by AWSIM.  An AggregateSite is a higher level command that aggregates MissileSites and RadarSites into a single military unit; this is equivalent of the MRF-W AU_ALLRAD and AU_HIMAD automated unit (usually a company); it is also equivalent to the ACE-IOS concept of a virtual aggregate.</semantics>
+                        <attribute>
+                            <name>SiteCategory</name>
+                            <dataType>SiteCategoryEnum</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Defines the organization of the site.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>RulesOfEngagement</name>
+                            <dataType>RulesOfEngagementEnum</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Define the circumstances, conditions, degree, and manner in which force, or actions which might be construed as provocative, may be applied.  Free will engage any non-friendly, Tight will engage any identified foe, Hold will not egage any targets.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>OperationsStatus</name>
+                            <dataType>SiteOperationalStatusEnum</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Defines the operational status of a missile or radar site.  All values other than 1 (Operational) indicated that the site is non-operational.  The value of 2 (NonOperational) is only used in cases where the details of supression are not known (ex: virtual aggregates).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>PrimaryTargetLine</name>
+                            <dataType>Angle_Radian_Float64</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Compass heading for the direction that the battery is facing (optional).  This value is required for systems, such as Patriot, that only have the ability to engage targets in a sector around this direction.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>GroundImpactRadius</name>
+                            <dataType>Length_Float64</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics></semantics>
+                        </attribute>
+                        <attribute>
+                            <name>TimeLastHit</name>
+                            <dataType>Float64</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Simulation time of most recent attack on this site (optional). If not provided or less than zero, it indicates that the base has never been attacked.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>TimeToNormalOperation</name>
+                            <dataType>Float64</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>The SimTime that the site will return to normal operations (optional).  If value is -1 then closed indefinitely, If 0 or missing, the site is open.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>LauncherCategory</name>
+                            <dataType>LauncherCategoryEnum</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Defines the AWSIM classification for a missile launcher (required).</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>TargetType</name>
+                            <dataType>TargetTypeEnum</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Defines the AWSIM classification for this site's missile launcher (optional).  Only provided for sites with launchers.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>CurrentTarget</name>
+                            <dataType>RTIobjectId</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Reference to the entity currently being targeted by this site's launcher (optional).  Only provided for sites with launchers.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>CurrentUnitSize</name>
+                            <dataType>Integer32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Current number of targets being tracked by this system's radar (optional).  Only provided for sites with radars.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>InitialUnitSize</name>
+                            <dataType>Integer32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Initial number of targets being tracked by this system's radar (optional).  Only provided for sites with radars.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>CurrentTargetHists</name>
+                            <dataType>Integer32</dataType>
+                            <updateType>NA</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Number of hits against current target (optional).  Only provided for sites with launchers.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>TotalFired</name>
+                            <dataType>Integer32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Total number of missiles fired by this site's launcher (optional).  Only provided for sites with launchers.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>TotalHits</name>
+                            <dataType>Integer32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Total number of missile hits by this site's launcher (optional).  Only provided for sites with launchers.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>TotalHitsTBM</name>
+                            <dataType>Integer32</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Total number of missile hits by this site's launcher against tactical ballistic missile targets (optional).  Only provided for sites with launchers.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>ExplosivePower</name>
+                            <dataType>ExplosivePowerFloat64</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <dimensions>
+                                <dimension>Force</dimension>
+                                <dimension>Latitude</dimension>
+                                <dimension>Longitude</dimension>
+                            </dimensions>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>Explosive power delivered in the last hit (optional).  Only provided for sites with launchers.</semantics>
+                        </attribute>
+                    </objectClass>
+                </objectClass>
+            </objectClass>
+            <objectClass>
+                <name>EmbeddedSystem</name>
+                <objectClass>
+                    <name>JammerEffects</name>
+                    <sharing>PublishSubscribe</sharing>
+                    <semantics>The object being jammed creates an instance of this object to communicate the impact of each source of jamming.  The HostObjectIdentifier references the object being jammed.  Setting this value to false allows the jamming to be turned off without deleting the object.</semantics>
+                    <attribute>
+                        <name>Jamming</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>True when this source of jamming is impacting performance.  False when it is not.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>Bearing</name>
+                        <dataType>Angle_Radian_Float64</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>True bearing of the jammer relative to the sensor being jammed.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>AcquisitionFactor</name>
+                        <dataType>Percent_Float32</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Defines the jamming impact on radar acquisition.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>LaunchFactor</name>
+                        <dataType>Percent_Float32</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Defines the jamming impact on the launcher.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>GuideFactor</name>
+                        <dataType>Percent_Float32</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Defines the jamming impact on missile guidance.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>TerrainFactor</name>
+                        <dataType>Percent_Float32</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Defines the jamming impact on missile terrain following.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>C3Factor</name>
+                        <dataType>Percent_Float32</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Defines the jamming impact on command, control, and communications.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>PowerFactor</name>
+                        <dataType>Percent_Float32</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Defines the jamming impact on radar power.</semantics>
+                    </attribute>
+                </objectClass>
+            </objectClass>
+        </objectClass>
+    </objects>
+    <dataTypes>
+        <simpleDataTypes>
+            <simpleData>
+                <name>ExplosivePowerFloat64</name>
+                <representation>HLAfloat64BE</representation>
+                <units>Explosive Power Unit</units>
+                <resolution>NA</resolution>
+                <accuracy>NA</accuracy>
+                <semantics>A measure of explosive power equivalent to 20 pounds of Tritonal. Tritonal is a mixture of 80% TNT and 20% aluminium powder that is approximately 18% more powerful than TNT alone.  One EPU is approximate 100 MJoule of energy if detonated.</semantics>
+            </simpleData>
+            <simpleData>
+                <name>FuelLevel_Float64</name>
+                <representation>HLAfloat64BE</representation>
+                <units>Pounds</units>
+                <resolution>NA</resolution>
+                <accuracy>NA</accuracy>
+                <semantics>Fuel amount expressed in pounds</semantics>
+            </simpleData>
+        </simpleDataTypes>
+        <enumeratedDataTypes>
+            <enumeratedData>
+                <name>FlightTaskedByEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>Used by the TaskedBy attribute in the Flight object class.  Describes where the current flight behavior originated from.</semantics>
+                <enumerator>
+                    <name>FlightPlan</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>Manual</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>Internal</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>TadilJ</name>
+                    <value>3</value>
+                </enumerator>
+                <enumerator>
+                    <name>Unknown</name>
+                    <value>4</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>RulesOfEngagementEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>Define the circumstances, conditions, degree, and manner in which force, or actions which might be construed as provocative, may be applied.  Free will engage any non-friendly, Tight will engage any identified foe, Hold will not egage any targets.</semantics>
+                <enumerator>
+                    <name>Unknown</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>Free</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>Hold</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>Tight</name>
+                    <value>3</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>AirBaseClassEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>Defines the class of air base.</semantics>
+                <enumerator>
+                    <name>Unknown</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>AirBase</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>Carrier</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>LandingZone</name>
+                    <value>3</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>SquadronTypeEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>HomeBase squadrons are the permanent units located at the home base.  ForwardOperatingLocation squadrons are the subordinate units operating for long periods of time at a location other than the home base.  TemporaryDivert squadrons are subordinate units that represent a part of the superior squadron that has landed at a location other than the HomeBase or the ForwardOperatingLocation.</semantics>
+                <enumerator>
+                    <name>Unknown</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>HomeBase</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>ForwardOperatingLocation</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>TemporaryDivert</name>
+                    <value>3</value>
+                </enumerator>
+                <enumerator>
+                    <name>ForwardOperatingLocationDivert</name>
+                    <value>4</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>LauncherCategoryEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>Defines the AWSIM classification for a missile launcher.</semantics>
+                <enumerator>
+                    <name>Unknown</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>SurfaceToAir</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>SurfaceToSurface</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>ShortRangeAirDefense</name>
+                    <value>3</value>
+                </enumerator>
+                <enumerator>
+                    <name>TransporterErectorLauncher</name>
+                    <value>4</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>TargetTypeEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>Defines the AWSIM classification for a target type.</semantics>
+                <enumerator>
+                    <name>Other</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>Aircraft</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>CruiseMissle</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>TacticalBallisticMissile</name>
+                    <value>3</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>SiteOperationalStatusEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>Defines the operational status of a missile or radar site.  All values other than 1 (Operational) indicated that the site is non-operational.  The value of 2 (NonOperational) is only used in cases where the details of supression are not known (ex: virtual aggregates).</semantics>
+                <enumerator>
+                    <name>Unknown</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>Operational</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>NonOperational</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>SuppressedByAir</name>
+                    <value>3</value>
+                </enumerator>
+                <enumerator>
+                    <name>SuppressedByGround</name>
+                    <value>4</value>
+                </enumerator>
+                <enumerator>
+                    <name>Moving</name>
+                    <value>5</value>
+                </enumerator>
+                <enumerator>
+                    <name>Maintenance</name>
+                    <value>6</value>
+                </enumerator>
+                <enumerator>
+                    <name>Damaged</name>
+                    <value>7</value>
+                </enumerator>
+                <enumerator>
+                    <name>Detroyed</name>
+                    <value>8</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>SiteCategoryEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>Defines the organization of the site.  A MissileSite is a site with missile launchers, but no radars; this is equivalent to the MRF-W concept of the GROUND.MANEUVER.ALLRAD and GROUND.MANEUVER.HIMAD equipment group (usually a platoon). A RadarSite is a site with radars, but no missile launcher; this is equivalent to the MRF-W concept of the GROUND.MANEUVER.RADAR equipment group (usually a platoon). A MissileRadarSite is a site with both missile launchers and radars; this type of site is published by AWSIM.  An AggregateSite is a higher level command that aggregates MissileSites and RadarSites into a single military unit; this is equivalent of the MRF-W AU_ALLRAD and AU_HIMAD automated unit (usually a company); it is also equivalent to the ACE-IOS concept of a virtual aggregate.</semantics>
+                <enumerator>
+                    <name>Unknown</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>MissileSite</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>RadarSite</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>MissileRadarSite</name>
+                    <value>3</value>
+                </enumerator>
+                <enumerator>
+                    <name>AggregateSite</name>
+                    <value>4</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>FlightCategoryEnum</name>
+                <representation>HLAoctet</representation>
+                <semantics>AWSIM designation for the type of flight.</semantics>
+                <enumerator>
+                    <name>Unknown</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>AircraftCategory</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>CruiseMissileCategory</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>BaliisticMissileCategory</name>
+                    <value>3</value>
+                </enumerator>
+                <enumerator>
+                    <name>AirLiftCategory</name>
+                    <value>4</value>
+                </enumerator>
+            </enumeratedData>
+        </enumeratedDataTypes>
+        <arrayDataTypes>
+            <arrayData>
+                <name>EquipmentArray</name>
+                <dataType>EquipmentStruct</dataType>
+                <cardinality>Dynamic</cardinality>
+                <encoding>HLAvariableArray</encoding>
+                <semantics>List of AWSIM equipment records for munitions and fuel.  Used by Aircraft and Air Bases objects.</semantics>
+            </arrayData>
+            <arrayData>
+                <name>RadarNameArray</name>
+                <dataType>HLAASCIIstring</dataType>
+                <cardinality>Dynamic</cardinality>
+                <encoding>HLAvariableArray</encoding>
+                <semantics>List of AWSIM name for radar types.  Used by Flight objects.</semantics>
+            </arrayData>
+        </arrayDataTypes>
+        <fixedRecordDataTypes>
+            <fixedRecordData>
+                <name>AirAssignmentsStats</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>This record holds statistics about the aircraft assignments for this squadron.</semantics>
+                <field>
+                    <name>NumAirborne</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft currently airborne from this squadron. Equivalent to Num AC Airborn in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumAwaitingLaunch</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft currently in launch queue. Equivalent to Num AC Awaiting Launch in AWSIM Squadron_ASTAB.message.</semantics>
+                </field>
+                <field>
+                    <name>NumCombatAvailable</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Equivalent to Num AC Airborn in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumSorties</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Total sorties for this squadron (updates at takeoff not landing). 
+Equivalent to Num AC Sorties in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumAirToAirKills</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Total number of air to air kills achieved by this squadron. Equivalent to Num AC Kills in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumGroundAlert</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of Ground Alert aircraft. Equivalent to Num on Ground Alert in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumDiverted</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft from this squadron that are currently diverted to a different base. Equivalent to Diverted AC Count in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumAssignedForward</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft from this squadron that are currently re-assigned to Forward Operating Locations (FOL). Equivalent to Num AC Assigned to FOL in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+            </fixedRecordData>
+            <fixedRecordData>
+                <name>AirLossStats</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>This record holds statistics about the aircraft losses from this squadron.</semantics>
+                <field>
+                    <name>NumOnGround</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft from this squadron that were destroyed on the ground. Equivalent to Num AC Lost on Ground in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumAirToAir</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft from this squadron that were destroyed in air-to-air combat. Equivalent to Num AC Lost to Air2Air in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumSurfaceToAir</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft from this squadron that were destroyed in surface-to-air combat. Equivalent to Num AC Lost to Surface2Air in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumBelowMSOA</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft from this squadron that were destroyed while flying below the Minimum Safe Operating Altitutde (MSOA). Equivalent to Num AC Lost while Below MSOA in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumDuringLanding</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft from this squadron that were destroyed during landing. Equivalent to Num AC Lost during Landing in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumDuringTakeoff</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft from this squadron that were destroyed during takeoff. Equivalent to Num AC Lost during Takeoff in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumSystemFailure</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft from this squadron that were destroyed due to system failure. Equivalent to Num AC Lost to System Failure in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumTransferControlDelete</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft from this squadron that were deleted by a federate than that one that owns the squadron.  For example, an aicraft deleted by ABS for a squadron created by AWSIM. Equivalent to num_ac_lost_transfer_control_delete in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumDeleted</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft from this squadron that were deleted by the same federate that owns the squadron. Equivalent to num_ac_lost_delete_unit in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>NumLowFuel</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft from this squadron that were destroyed due to low fuel. Equivalent to Num AC Lost to Low Fuel in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+            </fixedRecordData>
+            <fixedRecordData>
+                <name>AirMaintenanceStats</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>This record holds statistics about the number of aircraft destroyed from this squadron (required).</semantics>
+                <field>
+                    <name>Num5Mins</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 5 minutes  Equivalent to Num in 5 Mins in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>Num15Mins</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 15 minutes  Equivalent to Num in 15 Mins in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>Num30Mins</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 30 minutes  Equivalent to Num in 30 Mins in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>Num1Hour</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 1 hour.  Equivalent to Num in 1 Hour in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>Num2Hours</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 2 hours.  Equivalent to Num in 2 Hours in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>Num4Hours</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 4 hours.  Equivalent to Num in 4 Hours in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>Num6Hours</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 6 hours.  Equivalent to Num in 6 Hours in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>Num12Hours</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 12 hours.  Equivalent to Num in 12 Hours in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>Num18Hours</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 18 hours.  Equivalent to Num in 18 Hours in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>Num24Hours</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 24 hours.  Equivalent to Num in 24 Hours in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>Num36Hours</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 36 hours.  Equivalent to Num in 36 Hours in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>Num48Hours</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 48 hours.  Equivalent to Num in 48 Hours in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+                <field>
+                    <name>Num72Hours</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Number of aircraft that are currently in maintenance, but will be ready in 72 hours.  Equivalent to Num in 72 Hours in AWSIM Squadron_ASTAB message.</semantics>
+                </field>
+            </fixedRecordData>
+            <fixedRecordData>
+                <name>AircraftPerformanceStruct</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>This structure defines the AWSIM performance characteristics for flight manuevers.</semantics>
+                <field>
+                    <name>GForceStandard</name>
+                    <dataType>Float64</dataType>
+                    <semantics>Amount of G Force exherted in a standard maneuver.</semantics>
+                </field>
+                <field>
+                    <name>GForceCombat</name>
+                    <dataType>Float64</dataType>
+                    <semantics>Amount of G Force exherted in a combat maneuver.</semantics>
+                </field>
+                <field>
+                    <name>AccelerationStandard</name>
+                    <dataType>Acceleration_Float64</dataType>
+                    <semantics>Acceleration used in a standard maneuver.</semantics>
+                </field>
+                <field>
+                    <name>AccelerationCombat</name>
+                    <dataType>Acceleration_Float64</dataType>
+                    <semantics>Acceleration used in a combat maneuver.</semantics>
+                </field>
+                <field>
+                    <name>ClimbRateStandard</name>
+                    <dataType>Velocity_Float64</dataType>
+                    <semantics>ClimbRate used in a standard maneuver.</semantics>
+                </field>
+                <field>
+                    <name>ClimbRateCombat</name>
+                    <dataType>Velocity_Float64</dataType>
+                    <semantics>Climb rate used in a combat maneuver.</semantics>
+                </field>
+                <field>
+                    <name>BlockAltitudeMin</name>
+                    <dataType>Length_Float64</dataType>
+                    <semantics>Lower altitude block limit from BLOCK order.</semantics>
+                </field>
+                <field>
+                    <name>BlockAltitudeMax</name>
+                    <dataType>Length_Float64</dataType>
+                    <semantics>Upper altitude block limit from BLOCK order.</semantics>
+                </field>
+                <field>
+                    <name>SpeedMin</name>
+                    <dataType>Velocity_Float64</dataType>
+                    <semantics>Minimum sustainable speed.</semantics>
+                </field>
+                <field>
+                    <name>FuelMax</name>
+                    <dataType>FuelLevel_Float64</dataType>
+                    <semantics>Maximum amount of fuel that this aircraft can hold.</semantics>
+                </field>
+            </fixedRecordData>
+            <fixedRecordData>
+                <name>EquipmentStruct</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>Individual AWSIM equipment record for munitions and fuel.  Used by Aircraft and Air Bases objects.</semantics>
+                <field>
+                    <name>Name</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>AWSIM name for this equipment in the form of an ASCII string. All names are null terminated and unused elements are padded with zeros. Only currently used for munitions, not used for fuel.</semantics>
+                </field>
+                <field>
+                    <name>Faction</name>
+                    <dataType>HLAASCIIstring</dataType>
+                    <semantics>AWSIM name of the faction associated with this equipment in the form of an ASCII string.  All names are null terminated and unused elements are padded with zeros.</semantics>
+                </field>
+                <field>
+                    <name>Quantity</name>
+                    <dataType>Integer32</dataType>
+                    <semantics></semantics>
+                </field>
+                <field>
+                    <name>Consumed</name>
+                    <dataType>Integer32</dataType>
+                    <semantics></semantics>
+                </field>
+                <field>
+                    <name>Loaded</name>
+                    <dataType>Integer32</dataType>
+                    <semantics></semantics>
+                </field>
+                <field>
+                    <name>Pending</name>
+                    <dataType>Integer32</dataType>
+                    <semantics></semantics>
+                </field>
+                <field>
+                    <name>DisEnum</name>
+                    <dataType>EntityTypeStruct</dataType>
+                    <semantics></semantics>
+                </field>
+            </fixedRecordData>
+            <fixedRecordData>
+                <name>CargoStruct</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>AWSIM equipment record for munition and fuel cargo.</semantics>
+                <field>
+                    <name>FuelQuanity</name>
+                    <dataType>Integer32</dataType>
+                    <semantics>Amount of fuel in the cargo.</semantics>
+                </field>
+                <field>
+                    <name>IsCBS</name>
+                    <dataType>OMT13boolean</dataType>
+                    <semantics>True if this cargo is used by CBS.</semantics>
+                </field>
+                <field>
+                    <name>IsJDLM</name>
+                    <dataType>OMT13boolean</dataType>
+                    <semantics>True if this cargo is used by JDLM.</semantics>
+                </field>
+                <field>
+                    <name>Padding</name>
+                    <dataType>Integer16</dataType>
+                    <semantics>Padding to align data to 4 byte boundary.  Must be set to all zeros.</semantics>
+                </field>
+                <field>
+                    <name>WeaponList</name>
+                    <dataType>EquipmentArray</dataType>
+                    <semantics>List of AWSIM equipment records for munitions.</semantics>
+                </field>
+            </fixedRecordData>
+        </fixedRecordDataTypes>
+    </dataTypes>
+</objectModel>

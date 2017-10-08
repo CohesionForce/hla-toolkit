@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<objectModel xsi:schemaLocation="http://standards.ieee.org/IEEE1516-2010 http://standards.ieee.org/downloads/1516/1516.2-2010/IEEE1516-DIF-2010.xsd" xmlns="http://standards.ieee.org/IEEE1516-2010" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelIdentification>
+        <name>RPR2 Aggregate FOM Module</name>
+        <type>FOM</type>
+        <version>1.0.1v3</version>
+        <modificationDate>2014-05-23</modificationDate>
+        <securityClassification>Unclassified</securityClassification>
+        <purpose></purpose>
+        <applicationDomain></applicationDomain>
+        <description>FOM Module compatible with RPR-FOM v2.0. Represents EntityState, aggregate entity.
+
+AFMSTT: Changed marking to a variable length to match NCTE.</description>
+        <useLimitation></useLimitation>
+        <useHistory>1.0.1v2 Release notes
+Turn off publish/subscribe for VariableDatums and NumberOfVariableDatums
+Change update tyoe on EntityTypecontained from NA to Static.</useHistory>
+        <useHistory>1.0.1v3 - Add Force DDM dimension to all sub-classes of BaseEntity.</useHistory>
+        <reference>
+            <type>Dependency</type>
+            <identification>RPR2 Base FOM  Module</identification>
+        </reference>
+        <other></other>
+    </modelIdentification>
+    <objects>
+        <objectClass>
+            <name>HLAobjectRoot</name>
+            <objectClass>
+                <name>BaseEntity</name>
+                <objectClass>
+                    <name>AggregateEntity</name>
+                    <sharing>PublishSubscribe</sharing>
+                    <semantics>A group of one or more separate objects that operate together as part of an organization.  These objects may be discrete, may be other aggregate objects, or may be a mixture of both. 
+ 
+An aggregation is a conceptual collection of entities that can be treated as a single unit.  An aggregation can save network bandwidth by sending fewer attributes for the aggregate than for individually represented units, or save computational effort by providing information on the group of entities that can be used by a receiver to sort entities.  Aggregation can also be used to put hierarchical information about military or functional units or groups on the network.  All federates updating instance attributes of this object class or its subclasses shall provide the 'AggregateState' and 'Dimensions' fields.  All other attributes shall be treated as optional fields. 
+ 
+Because the AggregateEntity object class is derived from BaseEntity, aggregates behave in some ways as if they were discrete entities. However, instantiations of the AggregateEntity object class represent the conceptual collection itself and not the component entities. The attributes of AggregateEntity identify the aggregation and maintain the organization of the entities incorporated into each unit. This object class is only intended to represent military aggregates.</semantics>
+                    <attribute notes="rpr2aggregate_1">
+                        <name>AggregateMarking</name>
+                        <dataType>AggregateMarkingStruct</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>A uniqList of characters that make up the marking.  Must be null terminated if the MarkingEncodingType is ASCII.  Markings longer than 11 characters will be truncated when translated to DIS.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2aggregate_2">
+                        <name>AggregateState</name>
+                        <dataType>AggregateStateEnum8</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>An indicator of the extent of association of objects form an operating group.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2aggregate_2">
+                        <name>Dimensions</name>
+                        <dataType>DimensionStruct</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>AggSizeChange</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The size of the area covered by the units in the aggregate. Bounding space, in meters, occupied by the aggregate.These measurements are taken along the orientation axes of the aggregate.Measurements X, Y, and Z are taken from the center of mass of the aggregate to the shortest distance along an axis in the positive or negative direction that includes all of the constituent entities.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2aggregate_1">
+                        <name>EntityIdentifiers</name>
+                        <dataType>RTIobjectIdArray</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The identification of entities that are contained within the aggregate. List of ID's for those constituent entities that are also represented by individual object instances.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2aggregate_3">
+                        <name>ForceIdentifier</name>
+                        <dataType>ForceIdentifierEnum8</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The identification of the force that the aggregate belongs to. Aggregates shall not group opposing forces together.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2aggregate_3">
+                        <name>Formation</name>
+                        <dataType>FormationEnum32</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The category of positional arrangement of the entities within the aggregate.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2aggregate_4">
+                        <name>NumberOfSilentEntities</name>
+                        <dataType>Integer16</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The number of elements in the SilentEntities list. Number of units in this aggregate.  Used to provide size information to those federates who may not be interested in the details of unit composition.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2aggregate_4">
+                        <name>NumberOfVariableDatums</name>
+                        <dataType>UnsignedInteger32</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The number of records in the Variable Datum structure</semantics>
+                    </attribute>
+                    <attribute notes="rpr2aggregate_1">
+                        <name>SilentAggregates</name>
+                        <dataType>SilentAggregateArray</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The numbers and types, of slient aggregates contained in the aggregate.  Silent aggregates are sub-aggregates that are in the aggregate, but that are not separately represented in the virtual world.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2aggregate_1">
+                        <name>SilentEntities</name>
+                        <dataType>SilentEntityArray</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The numbers and types, of silent entities in the aggregate.  Silent entites are entities that are in the aggregate, but that are not separately represented in the virtual world.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2aggregate_1">
+                        <name>SubAggregateIdentifiers</name>
+                        <dataType>RTIobjectIdArray</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The identifications of aggregates represented in the virtual world that are contained in the aggregate.</semantics>
+                    </attribute>
+                    <attribute notes="rpr2aggregate_1">
+                        <name>VariableDatums</name>
+                        <dataType>VariableDatumArray</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>NoTransfer</ownership>
+                        <sharing>Neither</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Extra data that describes the aggregate. Data used by entity-level and aggregate-level simulations to transfer control and correlate simulation entities in an aggregate. The contents of these records shall be determined before each exercise. The first Variable Datum record may be used to indicate a flag that tells that the composition or formation of the unit has changed.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>EntityTypeContained</name>
+                        <dataType>EntityTypeStruct</dataType>
+                        <updateType>Static</updateType>
+                        <updateCondition></updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Primary type of entity contained in this aggregate. This allows the subscribers to interpret the types of entities aggregated in this unit, even when the individual entities have been filtered out by DDM.  Also useful in defining the type of symbol used in map applications.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>DamageState</name>
+                        <dataType>DamageStatusEnum32</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>The state of damage of the entity. Describes the damaged appearance of an entity.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>FirePowerDisabled</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity's main weapon system has been disabled or not. True if an entity's fire power has been disabled.</semantics>
+                    </attribute>
+                    <attribute>
+                        <name>Immobilized</name>
+                        <dataType>OMT13boolean</dataType>
+                        <updateType>Conditional</updateType>
+                        <updateCondition>On change</updateCondition>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>PublishSubscribe</sharing>
+                        <dimensions>
+                            <dimension>Force</dimension>
+                            <dimension>Latitude</dimension>
+                            <dimension>Longitude</dimension>
+                        </dimensions>
+                        <transportation>state_consistent</transportation>
+                        <order>Receive</order>
+                        <semantics>Whether the entity is immobilized or not. True if the entity has been immobilized (mobility kill).</semantics>
+                    </attribute>
+                </objectClass>
+            </objectClass>
+        </objectClass>
+    </objects>
+    <dataTypes>
+        <enumeratedDataTypes>
+            <enumeratedData>
+                <name>AggregateStateEnum8</name>
+                <representation>HLAoctet</representation>
+                <semantics>Aggregation state</semantics>
+                <enumerator>
+                    <name>Other</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>Aggregated</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>Disaggregated</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>FullyDisaggregated</name>
+                    <value>3</value>
+                </enumerator>
+                <enumerator>
+                    <name>PseudoDisaggregated</name>
+                    <value>4</value>
+                </enumerator>
+                <enumerator>
+                    <name>PartiallyDisaggregated</name>
+                    <value>5</value>
+                </enumerator>
+            </enumeratedData>
+            <enumeratedData>
+                <name>FormationEnum32</name>
+                <representation>HLAinteger32BE</representation>
+                <semantics>Formation of an aggregate</semantics>
+                <enumerator>
+                    <name>Other</name>
+                    <value>0</value>
+                </enumerator>
+                <enumerator>
+                    <name>Assembly</name>
+                    <value>1</value>
+                </enumerator>
+                <enumerator>
+                    <name>Vee</name>
+                    <value>2</value>
+                </enumerator>
+                <enumerator>
+                    <name>Wedge</name>
+                    <value>3</value>
+                </enumerator>
+                <enumerator>
+                    <name>Line</name>
+                    <value>4</value>
+                </enumerator>
+                <enumerator>
+                    <name>Column</name>
+                    <value>5</value>
+                </enumerator>
+            </enumeratedData>
+        </enumeratedDataTypes>
+        <arrayDataTypes>
+            <arrayData>
+                <name>SilentEntityArray</name>
+                <dataType>SilentEntityStruct</dataType>
+                <cardinality>Dynamic</cardinality>
+                <encoding>HLAlengthlessVarArray</encoding>
+                <semantics>A set of Silent Entities (Entities not registered in the federation).</semantics>
+            </arrayData>
+            <arrayData>
+                <name>SilentAggregateArray</name>
+                <dataType>SilentAggregateStruct</dataType>
+                <cardinality>Dynamic</cardinality>
+                <encoding>HLAlengthlessVarArray</encoding>
+                <semantics>Set of Silent Aggregates (Aggregates not published in the federation).</semantics>
+            </arrayData>
+            <arrayData>
+                <name>AggregateMarkingArray31</name>
+                <dataType>Octet</dataType>
+                <cardinality>31</cardinality>
+                <encoding>HLAfixedArray</encoding>
+                <semantics>A 31 octed marking array.</semantics>
+            </arrayData>
+            <arrayData>
+                <name>VariableDatumArray</name>
+                <dataType>VariableDatumStruct</dataType>
+                <cardinality>Dynamic</cardinality>
+                <encoding>HLAlengthlessVarArray</encoding>
+                <semantics>Set of additional data associated with an aggregate.</semantics>
+            </arrayData>
+        </arrayDataTypes>
+        <fixedRecordDataTypes>
+            <fixedRecordData>
+                <name>AggregateMarkingStruct</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>Unique marking associated with an aggregate.</semantics>
+                <field>
+                    <name>MarkingEncodingType</name>
+                    <dataType>MarkingEncodingEnum8</dataType>
+                    <semantics>The type of marking</semantics>
+                </field>
+                <field>
+                    <name>MarkingData</name>
+                    <dataType>ArrayOfOctet</dataType>
+                    <semantics>List of characters that make up the marking.  Must be null terminated if the MarkingEncodingType is ASCII.</semantics>
+                </field>
+            </fixedRecordData>
+            <fixedRecordData>
+                <name>SilentEntityStruct</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>These fields contain information about entities not registered in the federation.</semantics>
+                <field>
+                    <name>NumberOfEntitiesOfThisType</name>
+                    <dataType>UnsignedInteger16</dataType>
+                    <semantics>This field shall specify the number of entities that have the type specified in the field EntityType.</semantics>
+                </field>
+                <field>
+                    <name>NumberOfAppearanceRecords</name>
+                    <dataType>UnsignedInteger16</dataType>
+                    <semantics>This field shall specify the number of Entity Appearance records that follow. This number shall be between zero and the number of entities of this type. Simulation applications representing the aggregate that do not model entity appearances shall set this field to zero. Simulation applications representing the aggregate that model entity appearances shall set this field to the number of entity appearances that deviate from the default appearance. Other simulations can safely assume that any entity appearances not specified are 
+default appearances.</semantics>
+                </field>
+                <field>
+                    <name>EntityType</name>
+                    <dataType>EntityTypeStruct</dataType>
+                    <semantics>This field shall specify the entity types common to the entities in this system list.</semantics>
+                </field>
+                <field>
+                    <name>EntityAppearance</name>
+                    <dataType>UnsignedInteger32</dataType>
+                    <semantics>This field shall specify the entity appearances of entities in 
+the aggregate that deviate from the default.</semantics>
+                </field>
+            </fixedRecordData>
+            <fixedRecordData>
+                <name>SilentAggregateStruct</name>
+                <encoding>HLAfixedRecord</encoding>
+                <semantics>These fields contain information about subaggregates not registered in the federation.</semantics>
+                <field>
+                    <name>AggregateType</name>
+                    <dataType>EntityTypeStruct</dataType>
+                    <semantics>This field shall specify the aggregates common to this system list.</semantics>
+                </field>
+                <field>
+                    <name>NumberOfAggregatesOfThisType</name>
+                    <dataType>UnsignedInteger16</dataType>
+                    <semantics>This field shall specify the number of aggregates that have the type specified in AggregateType field.</semantics>
+                </field>
+            </fixedRecordData>
+        </fixedRecordDataTypes>
+    </dataTypes>
+    <notes>
+        <note>
+            <label>rpr2aggregate_1</label>
+            <semantics>Default value: Empty</semantics>
+        </note>
+        <note>
+            <label>rpr2aggregate_2</label>
+            <semantics>Default value: Not Optional</semantics>
+        </note>
+        <note>
+            <label>rpr2aggregate_3</label>
+            <semantics>Default value: Other (0)</semantics>
+        </note>
+        <note>
+            <label>rpr2aggregate_4</label>
+            <semantics>Default value: Zero</semantics>
+        </note>
+    </notes>
+</objectModel>

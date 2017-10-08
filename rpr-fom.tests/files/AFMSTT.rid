@@ -1,0 +1,727 @@
+;; Hey, emacs, display this as -*-lisp-*-
+
+;; === AFMSTT RID file for RTI-s ===
+;;
+;; Requires HLA multicast to be turned off on the WAN.
+;;
+
+("rti"
+    ;; This specifies the version of RTI-s that this RID is for.
+    (version D35)
+
+    ;; This section controls how the federation as a whole operates.  
+    ;; Everything in this section must be identical for all federates.
+    (federation_parameters
+
+        ;;====================================================================
+        ;; AFMSTT DDM - map class and dimension values to streams
+        ;;
+        ;; * All sub-classes of BaseEntity, EmitterSystem, EmitterBeam shall 
+        ;;   be published to a single point in a region that consists of the 
+        ;;   Latitude, Longitude, and Force dimensions.  
+        ;; * All objects and interactions in the AFMSTT Mission Status, 
+        ;;   ACM, and Logistics Data modules shall be published to a single 
+        ;;    point in a region which consists of just the Force dimension.  
+        ;; * All other object and interaction classes shall be published 
+        ;;   without a DDM region. 
+
+        (routing_spaces
+
+            ;; Routing for BaseEntity objects
+            ;; Lat/long mesh of 0.1 deg x 0.1 deg cells
+            ;; No filtering by Force
+            (BaseEntitySpace
+                (type gridded)
+                (bounds
+                    ("Force"     (domain 0 30))
+                    ("Latitude"  (domain -90.0 90.0))
+                    ("Longitude" (domain -180.0 180.0))
+                )
+                (grid "primary"
+                    ("Force"     (range 0 30)          (size 1))
+                    ("Latitude"  (range -90.0 90.0)    (size 1080))
+                    ("Longitude" (range -180.0 180.0)  (size 2160))
+                )
+            )
+
+            ;; Routing for AggregateEntity objects and all its subclasses
+            ;; Lat/long mesh of 10 deg x 10 deg cells
+            ;; Each Force in its own stream
+            (AggregateEntitySpace
+                (type gridded)
+                (bounds
+                    ("Force"     (domain 0 30))
+                    ("Latitude"  (domain -90.0 90.0))
+                    ("Longitude" (domain -180.0 180.0))
+                )
+                (grid "primary"
+                    ("Force"     (range 0 30)          (size 31))
+                    ("Latitude"  (range -90.0 90.0)    (size 72))
+                    ("Longitude" (range -180.0 180.0)  (size 144))
+                )
+            )
+
+            ;; Routing for Aircraft objects
+            ;; Lat/long mesh of 10 deg x 10 deg cells
+            ;; Each Force in its own stream
+            (AircraftSpace
+                (type gridded)
+                (bounds
+                    ("Force"     (domain 0 30))
+                    ("Latitude"  (domain -90.0 90.0))
+                    ("Longitude" (domain -180.0 180.0))
+                )
+                (grid "primary"
+                    ("Force"     (range 0 30)          (size 31))
+                    ("Latitude"  (range -90.0 90.0)    (size 72))
+                    ("Longitude" (range -180.0 180.0)  (size 144))
+                )
+            )
+
+            ;; Routing for SurfaceVessel and SubmersibleVessel objects
+            ;; Lat/long mesh of 10 deg x 10 deg cells
+            ;; Each Force in its own stream
+            (SurfaceSubSpace
+                (type gridded)
+                (bounds
+                    ("Force"     (domain 0 30))
+                    ("Latitude"  (domain -90.0 90.0))
+                    ("Longitude" (domain -180.0 180.0))
+                )
+                (grid "primary"
+                    ("Force"     (range 0 30)          (size 31))
+                    ("Latitude"  (range -90.0 90.0)    (size 72))
+                    ("Longitude" (range -180.0 180.0)  (size 144))
+                )
+            )
+
+            ;; Routing for SurfaceVessel and SubmersibleVessel objects
+            ;; Everyting in one stream
+            (SpacecraftSpace
+                (type gridded)
+                (bounds
+                    ("Force"     (domain 0 30))
+                    ("Latitude"  (domain -90.0 90.0))
+                    ("Longitude" (domain -180.0 180.0))
+                )
+                (grid "primary"
+                    ("Force"     (range 0 30)          (size 1))
+                    ("Latitude"  (range -90.0 90.0)    (size 1))
+                    ("Longitude" (range -180.0 180.0)  (size 1))
+                )
+            )
+
+            ;; Routing for Munition and CounterMeasure objects
+            ;; Everyting in one stream
+            (MunitionSpace
+                (type gridded)
+                (bounds
+                    ("Force"     (domain 0 30))
+                    ("Latitude"  (domain -90.0 90.0))
+                    ("Longitude" (domain -180.0 180.0))
+                )
+                (grid "primary"
+                    ("Force"     (range 0 30)          (size 1))
+                    ("Latitude"  (range -90.0 90.0)    (size 1))
+                    ("Longitude" (range -180.0 180.0)  (size 1))
+                )
+            )
+
+            ;; Routing for EmitterSystem and EmitterBeam objects
+            ;; Lat/long mesh of 10 deg x 10 deg cells
+            (EmitterSpace
+                (type gridded)
+                (bounds
+                    ("Latitude"  (domain -90.0 90.0))
+                    ("Longitude" (domain -180.0 180.0))
+                )
+                (grid "primary"
+                    ("Latitude"  (range -90.0 90.0)    (size 18))
+                    ("Longitude" (range -180.0 180.0)  (size 36))
+                )
+            )
+
+            ;; Routing for AFMSTT-ACM module
+            ;; Just filtering by Force
+            (AirspaceSpace
+                (type gridded)
+                (bounds
+                    ("Force"     (domain 0 30))
+                )
+                (grid "primary"
+                    ("Force"     (range 0 30)          (size 31))
+                )
+            )
+
+            ;; Routing for all objects in AFMSTT-MissionStatus module
+            ;; Just filtering by Force
+            (AirMissionSpace
+                (type gridded)
+                (bounds
+                    ("Force"     (domain 0 30))
+                )
+                (grid "primary"
+                    ("Force"     (range 0 30)          (size 31))
+                )
+            )
+
+            ;;====================================================================
+            ;; AFMSTT DDM - map 1516e dimensions into routing spaces
+            ;;
+            (Multiverse         ;; maps 1516e dimensions into routing spaces
+                (type mapped_dimensions)
+
+                (dimensions "Force"
+                            "Latitude"
+                            "Longitude")
+
+                ;; send BaseEntity objects to BaseEntitySpace
+
+                (mapping "BaseEntityForceMapping"
+                         (classes "BaseEntity")
+                         (dimension "Force")
+                         (map_space "BaseEntitySpace")
+                         (map_dimension "Force")
+                         (map_function "identity")
+                )
+
+                (mapping "BaseEntityLatitudeMapping"
+                         (classes "BaseEntity")
+                         (dimension "Latitude")
+                         (map_space "BaseEntitySpace")
+                         (map_dimension "Latitude")
+                         (map_function "identity")
+                )
+
+                (mapping "BaseEntityLongitudeMapping"
+                         (classes "BaseEntity")
+                         (dimension "Longitude")
+                         (map_space "BaseEntitySpace")
+                         (map_dimension "Longitude")
+                         (map_function "identity")
+                )
+
+                ;; send AggregateEntity objects to AggregateEntitySpace
+
+                (mapping "AggregateEntityForceMapping"
+                         (classes "BaseEntity.AggregateEntity")
+                         (dimension "Force")
+                         (map_space "AggregateEntitySpace")
+                         (map_dimension "Force")
+                         (map_function "identity")
+                )
+
+                (mapping "AggregateEntityLatitudeMapping"
+                         (classes "BaseEntity.AggregateEntity")
+                         (dimension "Latitude")
+                         (map_space "AggregateEntitySpace")
+                         (map_dimension "Latitude")
+                         (map_function "identity")
+                )
+
+                (mapping "AggregateEntityLongitudeMapping"
+                         (classes "BaseEntity.AggregateEntity")
+                         (dimension "Longitude")
+                         (map_space "AggregateEntitySpace")
+                         (map_dimension "Longitude")
+                         (map_function "identity")
+                )
+
+                ;; send Aircraft objects to AircraftSpace
+
+                (mapping "AircraftForceMapping"
+                         (classes "BaseEntity.PhysicalEntity.Platform.Aircraft")
+                         (dimension "Force")
+                         (map_space "AircraftSpace")
+                         (map_dimension "Force")
+                         (map_function "identity")
+                )
+
+                (mapping "AircraftLatitudeMapping"
+                         (classes "BaseEntity.PhysicalEntity.Platform.Aircraft")
+                         (dimension "Latitude")
+                         (map_space "AircraftSpace")
+                         (map_dimension "Latitude")
+                         (map_function "identity")
+                )
+
+                (mapping "AircraftLongitudeMapping"
+                         (classes "BaseEntity.PhysicalEntity.Platform.Aircraft")
+                         (dimension "Longitude")
+                         (map_space "AircraftSpace")
+                         (map_dimension "Longitude")
+                         (map_function "identity")
+                )
+
+                ;; send SurfaceVessel objects to SurfaceSubSpace
+
+                (mapping "SurfaceVesselForceMapping"
+                         (classes "BaseEntity.PhysicalEntity.Platform.SurfaceVessel")
+                         (dimension "Force")
+                         (map_space "SurfaceSubSpace")
+                         (map_dimension "Force")
+                         (map_function "identity")
+                )
+
+                (mapping "SurfaceVesselLatitudeMapping"
+                         (classes "BaseEntity.PhysicalEntity.Platform.SurfaceVessel")
+                         (dimension "Latitude")
+                         (map_space "SurfaceSubSpace")
+                         (map_dimension "Latitude")
+                         (map_function "identity")
+                )
+
+                (mapping "SurfaceVesselLongitudeMapping"
+                         (classes "BaseEntity.PhysicalEntity.Platform.SurfaceVessel")
+                         (dimension "Longitude")
+                         (map_space "SurfaceSubSpace")
+                         (map_dimension "Longitude")
+                         (map_function "identity")
+                )
+
+                ;; send SubmersibleVessel objects to SurfaceSubSpace
+
+                (mapping "SubmersibleVesselForceMapping"
+                         (classes "BaseEntity.PhysicalEntity.Platform.SubmersibleVessel")
+                         (dimension "Force")
+                         (map_space "SurfaceSubSpace")
+                         (map_dimension "Force")
+                         (map_function "identity")
+                )
+
+                (mapping "SubmersibleVesselLatitudeMapping"
+                         (classes "BaseEntity.PhysicalEntity.Platform.SubmersibleVessel")
+                         (dimension "Latitude")
+                         (map_space "SurfaceSubSpace")
+                         (map_dimension "Latitude")
+                         (map_function "identity")
+                )
+
+                (mapping "SubmersibleVesselLongitudeMapping"
+                         (classes "BaseEntity.PhysicalEntity.Platform.SubmersibleVessel")
+                         (dimension "Longitude")
+                         (map_space "SurfaceSubSpace")
+                         (map_dimension "Longitude")
+                         (map_function "identity")
+                )
+
+                ;; send Spacecraft objects to SpacecraftSpace
+
+                (mapping "SpacecraftForceMapping"
+                         (classes "BaseEntity.PhysicalEntity.Platform.Spacecraft")
+                         (dimension "Force")
+                         (map_space "SpacecraftSpace")
+                         (map_dimension "Force")
+                         (map_function "identity")
+                )
+
+                (mapping "SpacecraftLatitudeMapping"
+                         (classes "BaseEntity.PhysicalEntity.Platform.Spacecraft")
+                         (dimension "Latitude")
+                         (map_space "SpacecraftSpace")
+                         (map_dimension "Latitude")
+                         (map_function "identity")
+                )
+
+                (mapping "SpacecraftLongitudeMapping"
+                         (classes "BaseEntity.PhysicalEntity.Platform.Spacecraft")
+                         (dimension "Longitude")
+                         (map_space "SpacecraftSpace")
+                         (map_dimension "Longitude")
+                         (map_function "identity")
+                )
+
+                ;; send Munition objects to MunitionSpace
+
+                (mapping "MunitionForceMapping"
+                         (classes "BaseEntity.PhysicalEntity.Munition")
+                         (dimension "Force")
+                         (map_space "MunitionSpace")
+                         (map_dimension "Force")
+                         (map_function "identity")
+                )
+
+                (mapping "MunitionLatitudeMapping"
+                         (classes "BaseEntity.PhysicalEntity.Munition")
+                         (dimension "Latitude")
+                         (map_space "MunitionSpace")
+                         (map_dimension "Latitude")
+                         (map_function "identity")
+                )
+
+                (mapping "MunitionLongitudeMapping"
+                         (classes "BaseEntity.PhysicalEntity.Munition")
+                         (dimension "Longitude")
+                         (map_space "MunitionSpace")
+                         (map_dimension "Longitude")
+                         (map_function "identity")
+                )
+
+                ;; send CounterMeasure objects to MunitionSpace
+
+                (mapping "CounterMeasureForceMapping"
+                         (classes "BaseEntity.CounterMeasure")
+                         (dimension "Force")
+                         (map_space "MunitionSpace")
+                         (map_dimension "Force")
+                         (map_function "identity")
+                )
+
+                (mapping "CounterMeasureLatitudeMapping"
+                         (classes "BaseEntity.CounterMeasure")
+                         (dimension "Latitude")
+                         (map_space "MunitionSpace")
+                         (map_dimension "Latitude")
+                         (map_function "identity")
+                )
+
+                (mapping "CounterMeasureLongitudeMapping"
+                         (classes "BaseEntity.CounterMeasure")
+                         (dimension "Longitude")
+                         (map_space "MunitionSpace")
+                         (map_dimension "Longitude")
+                         (map_function "identity")
+                )
+
+                ;; send EmitterSystem objects to EmitterSpace
+
+                (mapping "EmitterSystemLatitudeMapping"
+                         (classes "EmbeddedSystem.EmitterSystem")
+                         (dimension "Latitude")
+                         (map_space "EmitterSpace")
+                         (map_dimension "Latitude")
+                         (map_function "identity")
+                )
+
+                (mapping "EmitterSystemLongitudeMapping"
+                         (classes "EmbeddedSystem.EmitterSystem")
+                         (dimension "Longitude")
+                         (map_space "EmitterSpace")
+                         (map_dimension "Longitude")
+                         (map_function "identity")
+                )
+
+                ;; send EmitterBeam objects to EmitterSpace
+
+                (mapping "EmitterBeamLatitudeMapping"
+                         (classes "EmitterBeam")
+                         (dimension "Latitude")
+                         (map_space "EmitterSpace")
+                         (map_dimension "Latitude")
+                         (map_function "identity")
+                )
+
+                (mapping "EmitterBeamLongitudeMapping"
+                         (classes "EmitterBeam")
+                         (dimension "Longitude")
+                         (map_space "EmitterSpace")
+                         (map_dimension "Longitude")
+                         (map_function "identity")
+                )
+
+                ;; send AirspaceControlMeans objects to AirspaceSpace
+
+                (mapping "AirspaceMapping"
+                         (classes "AirspaceControlMeans")
+                         (dimension "Force")
+                         (map_space "AirspaceSpace")
+                         (map_dimension "Force")
+                         (map_function "identity")
+                )
+
+                ;; send AirMissionElement objects to AirMissionSpace
+
+                (mapping "AirMissionMapping"
+                         (classes "AirMissionElement")
+                         (dimension "Force")
+                         (map_space "AirMissionSpace")
+                         (map_dimension "Force")
+                         (map_function "identity")
+                )
+            )
+        )
+    
+        ;;====================================================================
+        ;; protocol configuration
+        ;;
+        (connectivity_providers
+            (null
+                NULL_PATH
+                (packet_size 8192)
+            )
+            (multicast
+                MULTICAST_SQUELCHED_PATH
+                (listener_type "multicast_listener")
+                (packet_size 1348)           ; largest packet size to use (1400 MTU)
+                (filtered_streams "")        ; allow all streams 
+                (ratelimit_max_mbps 75.0)    ; max megabits per second
+                (fragment_timeout 3000)      ; ms max to wait on delayed frags
+                (bundle_timeout 100)         ; ms max delay due to bundling
+                (bundle_flush_threshold 128) ; bytes left before bundle full
+                (socket_poll_interval 10)    ; ms between receiving packets
+                (base_address "224.22.0.0")  ; base multicast address to use
+                (port 7001)                  ; UDP port to send to
+                (ttl 32)                     ; multicast time to live
+                (mapping_fallback "500")
+                (stream_mappings             ; map each space to one multicast group
+                        (map "BaseEntitySpace"                  "501")
+                        (map "AggregateEntitySpace"             "502")
+                        (map "AircraftSpace"                    "503")
+                        (map "SurfaceSubSpace"                  "504")
+                        (map "SpacecraftSpace"                  "505")
+                        (map "MunitionSpace"                    "506")
+                        (map "EmitterSpace"                     "507")
+                        (map "AirspaceSpace"                    "508")
+                        (map "AirMissionSpace"                  "509")
+                )
+            )
+            (tcp
+                TCP_PATH
+                (listener_type tcp_listener)
+                (server_port 2243)
+                (packet_size 8192)            ; largest buffer size to use
+                (filtered_streams "")         ; allow all streams
+                (bundle_timeout 100)          ; ms max delay due to bundling
+                (bundle_flush_threshold 128)  ; bytes left before bundle full
+                (ratelimit_max_mbps 0.0)      ; don't ratelimit, let tcp deal
+                (socket_poll_interval 10)     ; ms between receiving packets
+            )
+        )
+
+        (transport_types
+            (best_effort
+                (type              "simple")      ; simple message service
+                (message_service   "best_effort") ; best effort protocol
+                (message_priority  0x0)           ; lowest priority
+                (use_low_latency   false)         ; prefer bandwidth vs latency
+            )
+
+            (reliable
+                (type              "simple")   ; simple message service
+                (message_service   "reliable") ; reliable multicast protocol
+                (message_priority  0xf)        ; maximum priority
+                (use_low_latency   false)      ; prefer bandwidth vs latency
+            )
+
+            (best_effort_prioritized
+                (type               "simple")      ; simple message service
+                (message_service    "best_effort") ; best effort protocol
+                (message_priority   0x8)           ; change -- medium priority
+                (heartbeat_priority 0x1)           ; no change -- low priority
+                (use_low_latency    false)         ; prefer bandwidth vs latency
+            )
+
+            (best_effort_lowlatency
+                (type              "simple")      ; simple message service
+                (message_service   "best_effort") ; best effort protocol
+                (message_priority  0xf)           ; highest priority
+                (use_low_latency   true)          ; prefer latency vs bandwidth
+            )
+
+            (semireliable
+                (type              "simple")   ; simple message service
+                (suppress_dups     true)       ; drop duplicated updates
+                (message_service   "oneshot")  ; use the oneshot protocol
+                (message_priority  0xc)        ; fairly high priority
+                (use_low_latency   false)      ; prefer bandwidth vs latency
+                )
+
+            (state_consistent
+                (type               "state_consistent")  ; the SC protocol
+                (suppress_dups      true)      ; drop duplicated updates
+                (deliver_heartbeats false)     ; pretend to receive heartbeats
+                (host_heartbeat     10000)     ; send host's state every 10 sec
+                (host_timeout       360000)    ; time out hosts after 3 mins
+            )
+
+            (shared
+                (type               "state_consistent")  ; the SC protocol
+                (suppress_dups      true)    ; drop duplicated updates
+                (implicit_transfer  true)    ; allow auto-ownership transfer
+                (failure_transfer   true)    ; pick up timed out objects
+                (deliver_heartbeats true)    ; pretend to receive heartbeats
+                (host_heartbeat     10000)   ; send host's state every 10 sec
+                (host_timeout       60000)   ; time out hosts after 60 sec
+            )
+
+            (minimum_rate_fast
+                (type               "minimum_rate")  ; DIS-style heartbeats
+                (suppress_dups      true)     ; drop duplicated updates
+                (deliver_heartbeats true)     ; pretend to receive heartbeats
+                (heartbeat_interval 5000)     ; heartbeat every 5 seconds
+                (timeout_time       12000)    ; timeout after 12 seconds
+                (heartbeat_priority 0x2)      ; priority of unchanged msgs
+                (change_priority    0x4)      ; priority of changed msgs
+            )
+
+            (minimum_rate_medium
+                (type               "minimum_rate")  ; DIS-style heartbeats
+                (suppress_dups      true)     ; drop duplicated updates
+                (deliver_heartbeats true)     ; pretend to receive heartbeats
+                (heartbeat_interval 30000)    ; heartbeat every 30 seconds
+                (timeout_time       100000)   ; timeout after 100 seconds
+                (heartbeat_priority 0x2)      ; priority of unchanged msgs
+                (change_priority    0x5)      ; priority of changed msgs
+            )
+
+            (minimum_rate_slow
+                (type               "minimum_rate")  ; DIS-style heartbeats
+                (suppress_dups      true)     ; drop duplicated updates
+                (deliver_heartbeats true)     ; pretend to receive heartbeats
+                (heartbeat_interval 60000)    ; heartbeat every 1 minute
+                (timeout_time       210000)   ; timeout after 3.5 minutes
+                (heartbeat_priority 0x2)      ; priority of unchanged msgs
+                (change_priority    0x6)      ; priority of changed msgs
+            )
+
+            (quiescent
+                (type               "quiescent")  ; High Performance Quiescence
+                (suppress_dups      true)     ; drop duplicated updates
+                (deliver_heartbeats false)    ; pretend to receive heartbeats
+                (quiescence_delay   30000)    ; how long before we go quiet
+                (activation_period  15000)    ; what makes us go active
+                (host_heartbeat     10000)    ; send host's state every 10 sec
+                (host_timeout       60000)    ; time out hosts after 60 sec
+                (heartbeat_interval 5000)     ; heartbeat every 5 seconds
+                (timeout_time       12000)    ; timeout after 12 seconds
+                (heartbeat_priority 0x2)      ; priority of unchanged msgs
+                (change_priority    0x4)      ; priority of changed msgs
+            )
+        )
+
+        (subscriptions
+            (region_sub_gets_nonregion false) ; how do DM and DDM mix
+            (nonregion_sub_gets_region false) ; how do DM and DDM mix
+            (force_static_spaces false)    ; should we check FED space assocs
+            (one_byclass_stream false)     ; divide by class if region not specfied
+            (num_byclass_streams 400)      ; use streams 100-499 for class DM
+        )
+
+        (updates
+            (sort_attributes  true)   ; should we sort the attributes by size
+            (pass_times       true)   ; do we deliver times in non-TSO messages
+            (perfect_filter   true)   ; enable receiver-side filtering by DDM region
+            (send_trans_attrs false)  ; do we list all attrs of this transport
+        )
+
+        (objects
+            (deletion_memory_length  5000)  ; how long we remember deletions
+            (creation_announcements  false) ; notify on object creation
+            (reliable_announcements  false) ; do we use reliable transport
+            (enforce_reservations    false) ; do we track object reservations
+        )
+
+        (queries
+            (bundle_query_timeout 125)  ; aggregate queries for this long
+            (query_backoff_window 250)  ; max delay before requesting update
+        )
+
+        (ownership
+            (sloppy_transfers  false)   ; can federates just grab ownership
+            (reliable_requests false)   ; do we use reliable transport
+        )
+
+        (federation
+            (heartbeat_interval     5)   ; federate heartbeat period in seconds
+            (join_timeout           6)   ; seconds to wait before joining
+            (federate_amber_timeout 12)  ; seconds before a federate goes amber
+            (federate_red_timeout   30)  ; seconds before a federate goes red
+            (federate_gone_timeout  120) ; seconds before a federate goes away
+            (must_provide_fom       false) ; require create call before joining
+            (foms_must_match        false) ; require every FOM be identical
+        )
+
+        (disable
+            (syncpoints      enabled)  ; are syncpoints allowed
+            (saverestore     enabled)  ; are save/restore calls allowed
+            (queries         enabled)  ; are request calls allowed
+            (ownership       enabled)  ; are ownership transfers allowed
+            (timeadvance     enabled)  ; are synchronized clock calls allowed
+            (regions         enabled)  ; are regions allowed
+        )
+    )
+
+    ;;====================================================================
+    ;; This section controls how your individual federate operates.  
+    ;; Anything in this section may be changed as necessary for each federate.
+    ;;
+    (federate_parameters
+
+        (connectivity
+            (default_uplink "multicast")    ; default connectivity_provider
+            (default_server "unnecessary")  ; server name if necessary
+            (network_device "")             ; network device to use
+            (max_stream 0)                  ; allow all streams 
+            (receive_buffer_size 512)       ; kernel socket buffer in Kbytes 
+            (send_buffer_size 512)          ; kernel socket buffer in Kbytes 
+            (connectivity_map <connectivity_map.cfg>) ; file saying who connects to whom
+            (spawn_router false)            ; are routers internal or external
+        )
+
+        (router
+            (listeners)
+        )
+
+        (quality_of_service
+            (default_pub_priority  0x1)   ; min publication pri this federate
+            (default_sub_priority  0x1)   ; min subscription pri this federate
+            (sub_priority_streams
+                (priority 0x2 "BaseEntitySpace")     ; speed-up for finest DDM
+                (priority 0x3 "MunitionSpace")       ; speed-up for weapons
+            )
+            (pub_priority_streams
+                (priority 0x2 "BaseEntitySpace")     ; speed-up for finest DDM
+                (priority 0x3 "MunitionSpace")       ; speed-up for weapons
+            )
+        )
+
+        (default_traits
+            (transport_defaults)
+            (order_defaults)
+            (space_defaults)
+        )
+
+        (synthetic_heartbeats
+            (deliver_fake_heartbeats false)
+            (heartbeat_period 50000)
+        )
+
+        (override_parameters
+            (node_overrides)
+            (network_overrides)
+            (federate_overrides)
+            (federation_overrides)
+        )
+
+        (threading
+            (callback_model evoked)   ; evoked: call tick, immediate: threaded
+        )
+
+        (management_objects
+            (mom_interval 10)            ; seconds between MOM object updates
+        )
+
+        (virtual_terminal
+            (accept_connections false)    ; do we accept telnet for debugging
+        )
+
+        (debug_flags        ; debugging flags that should be on at startup
+            (fake_flag "logfile")     ; debug to logfile
+            (fake_debug "-")          ; debug to stdout
+        )
+
+        (workarounds             ; are we disabling features for this federate
+            (autoachieve_syncpoints false)
+            (disable_shared true)
+        )
+
+        (plugins                         ; plugin modules to load on startup
+         ;  plugins to load on startup
+         ;  (ddmintercept
+         ;      (filename "ddmintercept")
+         ;       (parameters "")
+         ;  )
+        )
+    )
+)
+

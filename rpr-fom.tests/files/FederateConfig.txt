@@ -1,0 +1,48 @@
+#
+# Federation settings for the AFMSTT federation.
+#
+# This implementation assumes that the RTI_RID_FILE environment variable
+# has been set to point RTI-s to the URL that holds the AFMSTT.rid file.
+# RTI-s also uses this URL to find the FOM modules.  Note that RTI-s does
+# not allow spaces in any path values, and this often causes problems on
+# Windows systems.
+
+# default federation name
+# federationName = AFMSTT
+
+# Main HLA 1516-2010 Evolved FOM Module URL
+evolvedFomURL = RPR2-Base.xml
+
+# Additional HLA 1516-2010 Evolved FOM Module URLs
+additionalFomURLs = \
+    RPR2-Aggregate.xml ; \
+    RPR2-DER.xml ; \
+    RPR2-Physical.xml ; \
+    RPR2-Warfare.xml ; \
+    AFMSTT-Aggregate.xml ; \
+    JLVC-Intel.xml ; \
+    JLVC-Warfare.xml ; \
+    MRF-Warfare.xml ; \
+    NTF-MarcoPolo.xml ; \
+    AFMSTT-MissionStatus.xml ; \
+    AFMSTT-System.xml ; \
+    AFMSTT-ACM.xml ; \
+	AFMSTT-LogisticsData.xml
+
+# Try to create the federation before join
+createFederation = true
+
+# Try to destroy the federation after resign
+destroyFederation = true
+
+# Enable HLA Time Management with time constrained
+timeConstrained = false
+
+# Enable HLA Time Management with time regulating
+timeRegulating = false
+
+# Enable time pacing
+timePacing = true
+
+# HLA Time Management step size
+stepSize = 1

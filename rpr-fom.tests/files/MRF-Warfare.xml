@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<objectModel xsi:schemaLocation="http://standards.ieee.org/IEEE1516-2010 http://standards.ieee.org/downloads/1516/1516.2-2010/IEEE1516-DIF-2010.xsd" xmlns="http://standards.ieee.org/IEEE1516-2010" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelIdentification>
+        <name>MRF-Warfare</name>
+        <type>FOM</type>
+        <version>1.0r2</version>
+        <modificationDate>2014-05-23</modificationDate>
+        <securityClassification>unclassified</securityClassification>
+        <purpose></purpose>
+        <applicationDomain></applicationDomain>
+        <description>The module extends the JLVC Warfare interaction to support addition parameters required by the MRF federation.</description>
+        <useLimitation></useLimitation>
+        <useHistory>1.0r2 - Remove Lat/Long DDM dimensions from all classes.</useHistory>
+        <other></other>
+    </modelIdentification>
+    <objects>
+        <objectClass>
+            <name>HLAobjectRoot</name>
+            <objectClass>
+                <name>BasicEncyclopedia</name>
+                <objectClass>
+                    <name>BE_Facility</name>
+                    <objectClass>
+                        <name>BE_AirBaseFacility</name>
+                        <sharing>PublishSubscribe</sharing>
+                        <semantics>Adds attributes needed to represent air base BE object.  Used to map BE objects to MRF-W.</semantics>
+                        <attribute>
+                            <name>ICAO</name>
+                            <dataType>HLAASCIIstring</dataType>
+                            <updateType>Static</updateType>
+                            <updateCondition></updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>The International Civil Aviation Organization (ICAO) code is a unique four (4) character identifier of each airbase within the theater of operations, both IFOR and OPFOR. These are used by AWSIM and RESA to uniquely identify and track airbases within their simulations.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>RunwayLength</name>
+                            <dataType>Integer64</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>The longest usable length of runway available on the airbase (calculated after runways are damaged and "cut" by cratering them at specific DMPI locations.</semantics>
+                        </attribute>
+                        <attribute>
+                            <name>TotalCapability</name>
+                            <dataType>Integer64</dataType>
+                            <updateType>Conditional</updateType>
+                            <updateCondition>On change</updateCondition>
+                            <ownership>DivestAcquire</ownership>
+                            <sharing>PublishSubscribe</sharing>
+                            <transportation>state_consistent</transportation>
+                            <order>Receive</order>
+                            <semantics>The current total functional capability this airbase. This may be the longest section of runway available of all runways on the airbase, the total fuel storage capability of all fuel storage facilities on the airbase, or total shelter, maintenance, weapons storage, or communication capability on the airbase given all facilities on the airbase of this type.</semantics>
+                        </attribute>
+                    </objectClass>
+                </objectClass>
+            </objectClass>
+        </objectClass>
+    </objects>
+    <interactions>
+        <interactionClass>
+            <name>HLAinteractionRoot</name>
+            <interactionClass>
+                <name>MunitionDetonation</name>
+                <interactionClass>
+                    <name>JLVC_MunitionDetonation</name>
+                    <interactionClass>
+                        <name>ExtendedMunitionDetonation</name>
+                        <interactionClass>
+                            <name>MRF_MunitionDetonation</name>
+                            <sharing>PublishSubscribe</sharing>
+                            <transportation>reliable</transportation>
+                            <order>Receive</order>
+                            <semantics>Adds attributes needed to engage aggregate entities.  Used to map MunitionDetonations to MRF-W Engagements.</semantics>
+                            <parameter>
+                                <name>TargetsEngaged</name>
+                                <dataType>UnsignedInteger16</dataType>
+                                <semantics>Number of targets engaged.</semantics>
+                            </parameter>
+                            <parameter>
+                                <name>Mission</name>
+                                <dataType>HLAASCIIstring</dataType>
+                                <semantics>Specifies the Mission Type of the munition.  Examples of Mission values are CAS, CAP, AIRLIFT, and AEW. This will be used by JLCCTC Bridge to generate Engagement interactions in the JLCCTC federation.</semantics>
+                            </parameter>
+                            <parameter>
+                                <name>Targets</name>
+                                <dataType>RTIobjectIdArray</dataType>
+                                <semantics>This is an array of target strings based on values extracted from map_target_priority.data which can produce 0 to 3 values. This does not use RTIobjectIds. The code generation in Pitch forced the use of this datatype because it generated duplicate declarations because the underlying type of RTIobjectIdArray is an array of strings.</semantics>
+                            </parameter>
+                            <parameter>
+                                <name>Target_Ref</name>
+                                <dataType>ArrayOfTargetRefStruct</dataType>
+                                <semantics>An array of TargetRefStruct that will be of length 1 for AWSIM (for now) and only one field of the struct will have a valid value</semantics>
+                            </parameter>
+                        </interactionClass>
+                    </interactionClass>
+                </interactionClass>
+            </interactionClass>
+            <interactionClass>
+                <name>BattleDamageAssessment</name>
+                <interactionClass>
+                    <name>MRF_BattleDamageAssessment</name>
+                    <sharing>PublishSubscribe</sharing>
+                    <transportation>reliable</transportation>
+                    <order>Receive</order>
+                    <semantics>Adds attributes needed to engage aggregate entities.  Used to map BattleDamageAssessments to MRF-W Attritition Reports.</semantics>
+                    <parameter>
+                        <name>MunitionType</name>
+                        <dataType>EntityTypeStruct</dataType>
+                        <semantics>The type of munition that detonated.</semantics>
+                    </parameter>
+                    <parameter>
+                        <name>QuantityFired</name>
+                        <dataType>UnsignedInteger16</dataType>
+                        <semantics>The quantity of rounds fired in the burst.</semantics>
+                    </parameter>
+                    <parameter>
+                        <name>PercentEquipmentLost</name>
+                        <dataType>Percent_Float32</dataType>
+                        <semantics>Percent of the units total equipment that was damaged or destroyed.</semantics>
+                    </parameter>
+                    <parameter>
+                        <name>EquipmentLost</name>
+                        <dataType>SilentEntityArray</dataType>
+                        <semantics>Types and counts of equipement lost.</semantics>
+                    </parameter>
+                    <parameter>
+                        <name>NumberEquipmentLostRecords</name>
+                        <dataType>Integer16</dataType>
+                        <semantics>Number of records in the EquipementLost array.</semantics>
+                    </parameter>
+                </interactionClass>
+            </interactionClass>
+            <interactionClass>
+                <name>FacilityBattleDamageAssessment</name>
+                <interactionClass>
+                    <name>MRF_FacilityBattleDamageAssessment</name>
+                    <sharing>PublishSubscribe</sharing>
+                    <transportation>reliable</transportation>
+                    <order>Receive</order>
+                    <semantics>Adds attributes needed to engage facilities in the BE database.  Used to map BattleDamageAssessments to MRF-W BE object reports.</semantics>
+                </interactionClass>
+            </interactionClass>
+        </interactionClass>
+    </interactions>
+    <notes/>
+</objectModel>

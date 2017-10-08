@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<viewpoint:DAnalysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:viewpoint="http://www.eclipse.org/sirius/1.1.0" xmi:id="_6jIh0JTNEee8C5IhV3cXSw" version="12.0.0.201704271200">
+  <semanticResources>schema/IEEE1516-DIF-2010.xsd</semanticResources>
+  <semanticResources>bundleentry://853.fwk1424029551/cache/www.w3.org/2001/XMLSchema-instance.xsd</semanticResources>
+  <semanticResources>bundleentry://853.fwk1424029551/cache/www.w3.org/2001/XMLSchema.xsd</semanticResources>
+  <semanticResources>bundleentry://853.fwk1424029551/cache/www.w3.org/2001/MagicXMLSchema.xsd</semanticResources>
+  <semanticResources>model/IEEE1516-DIF-2010.genmodel</semanticResources>
+  <semanticResources>model/_2010.ecore</semanticResources>
+  <semanticResources>http://www.eclipse.org/emf/2003/XMLType</semanticResources>
+  <semanticResources>http://www.eclipse.org/emf/2002/Ecore</semanticResources>
+</viewpoint:DAnalysis>

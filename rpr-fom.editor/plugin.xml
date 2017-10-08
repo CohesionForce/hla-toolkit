@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.newWizards">
+      <!-- @generated IEEE1516-DIF-2010 -->
+      <category
+            id="org.eclipse.emf.ecore.Wizard.category.ID"
+            name="%_UI_Wizard_category"/>
+      <wizard
+            id="org.sisostds.schemas.ieee1516._2010.presentation._2010ModelWizardID"
+            name="%_UI__2010ModelWizard_label"
+            class="org.sisostds.schemas.ieee1516._2010.presentation._2010ModelWizard"
+            category="org.eclipse.emf.ecore.Wizard.category.ID"
+            icon="icons/full/obj16/_2010ModelFile.gif">
+         <description>%_UI__2010ModelWizard_description</description>
+         <selection class="org.eclipse.core.resources.IResource"/>
+      </wizard>
+   </extension>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated IEEE1516-DIF-2010 -->
+      <editor
+            id="org.sisostds.schemas.ieee1516._2010.presentation._2010EditorID"
+            name="%_UI__2010Editor_label"
+            icon="icons/full/obj16/_2010ModelFile.gif"
+            extensions="_2010"
+            class="org.sisostds.schemas.ieee1516._2010.presentation._2010Editor"
+            contributorClass="org.sisostds.schemas.ieee1516._2010.presentation._2010ActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>
