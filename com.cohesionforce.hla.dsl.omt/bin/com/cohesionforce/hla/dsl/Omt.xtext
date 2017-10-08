@@ -69,12 +69,12 @@ RoutingSpace:
 
 Dimension:
 	OPEN 'Dimension' OPEN 'Name' name=STRING nameNote=NoteRef? CLOSE
-		OPEN 'DimensionType' type=STRING typeNote=NoteRef? CLOSE
+		OPEN 'DimensionType' (type=[TypeReference|STRING]|dataType=BASE_DATA_TYPE) typeNote=NoteRef? CLOSE
 		domain=DimensionDomain
 		( OPEN 'RangeSetUnits' units=STRING unitsNote=NoteRef? CLOSE )?
 		OPEN 'NormalizationFunction' function=STRING functionNote=NoteRef? CLOSE
 	CLOSE
-;
+;	
 
 DimensionDomain: 
 	DimensionRange | DimensionSet
@@ -188,14 +188,17 @@ Position:
 	OPEN 'Position' position=STRING CLOSE
 ;
 DataType:
-//	OPEN 'DataType' (refType=[ComplexDataType|STRING]| dataType=BASE_DATA_TYPE) dataTypeNode=NoteRef? CLOSE
-	OPEN 'DataType' dataType=STRING dataTypeNode=NoteRef? CLOSE
+	OPEN 'DataType' (refType=[TypeReference|STRING]| dataType=BASE_DATA_TYPE) dataTypeNode=NoteRef? CLOSE
+//	OPEN 'DataType' dataType=STRING dataTypeNode=NoteRef? CLOSE
+;
+TypeReference:
+	ComplexDataType | EnumeratedDataType
 ;
 FieldName:
-	OPEN 'FieldName' name=STRING fieldNameNote=NoteRef? CLOSE
+	OPEN 'FieldName' name=AnyString fieldNameNote=NoteRef? CLOSE
 ;
 Units:
-	OPEN 'Units' units=STRING unitsNote=NoteRef? CLOSE
+	OPEN 'Units' units=AnyString unitsNote=NoteRef? CLOSE
 ;
 Cardinality:
 	OPEN 'Cardinality' cardinality=STRING cardinalityNote=NoteRef? CLOSE
@@ -249,13 +252,16 @@ Note:
 
 NoteRef : '[' refs+=INT (',' refs+=INT)* ']';
 
-//terminal BASE_DATA_TYPE : '"' ('unsigned short' | 'short' | 'unsigned long' | 'long' | 'unsigned long
-//	long' | 'long long' | 'double' | 'float' | 'boolean' | 'any' | 'string' |
-//	'char' | 'octet') '"';
-
 AnyText:
 	ID | TEXT
 ;
+
+AnyString:
+	STRING | BASE_DATA_TYPE
+;
+
+terminal BASE_DATA_TYPE : '"' ('unsigned short' | 'short' | 'unsigned long' | 'long' | 'unsigned long long' 
+	| 'long long' | 'double' | 'float' | 'boolean' | 'any' | 'string' |	'char' | 'octet') '"';
 
 terminal OPEN		: '(';
 terminal CLOSE		: ')';

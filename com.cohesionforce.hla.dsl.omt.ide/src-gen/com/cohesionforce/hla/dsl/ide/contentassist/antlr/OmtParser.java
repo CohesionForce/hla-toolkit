@@ -33,6 +33,7 @@ public class OmtParser extends AbstractContentAssistParser {
 				{
 					put(grammarAccess.getMOD_TypeAccess().getAlternatives(), "rule__MOD_Type__Alternatives");
 					put(grammarAccess.getOMTComponentAccess().getAlternatives(), "rule__OMTComponent__Alternatives");
+					put(grammarAccess.getDimensionAccess().getAlternatives_9(), "rule__Dimension__Alternatives_9");
 					put(grammarAccess.getDimensionDomainAccess().getAlternatives(), "rule__DimensionDomain__Alternatives");
 					put(grammarAccess.getIntervalTypeAccess().getAlternatives(), "rule__IntervalType__Alternatives");
 					put(grammarAccess.getIsMOMClassAccess().getAlternatives(), "rule__IsMOMClass__Alternatives");
@@ -43,10 +44,13 @@ public class OmtParser extends AbstractContentAssistParser {
 					put(grammarAccess.getATT_UpdateReflectAccess().getAlternatives(), "rule__ATT_UpdateReflect__Alternatives");
 					put(grammarAccess.getEnumeratedDataTypeAccess().getIsMOMEnumeratedDataTypeAlternatives_7_2_0(), "rule__EnumeratedDataType__IsMOMEnumeratedDataTypeAlternatives_7_2_0");
 					put(grammarAccess.getComplexDataTypeAccess().getIsMOMComplexDataTypeAlternatives_7_2_0(), "rule__ComplexDataType__IsMOMComplexDataTypeAlternatives_7_2_0");
+					put(grammarAccess.getDataTypeAccess().getAlternatives_2(), "rule__DataType__Alternatives_2");
+					put(grammarAccess.getTypeReferenceAccess().getAlternatives(), "rule__TypeReference__Alternatives");
 					put(grammarAccess.getInteractionAccess().getIsMOMInteractionAlternatives_16_2_0(), "rule__Interaction__IsMOMInteractionAlternatives_16_2_0");
 					put(grammarAccess.getISRTypeAccess().getAlternatives(), "rule__ISRType__Alternatives");
 					put(grammarAccess.getInteractionComponentAccess().getAlternatives(), "rule__InteractionComponent__Alternatives");
 					put(grammarAccess.getAnyTextAccess().getAlternatives(), "rule__AnyText__Alternatives");
+					put(grammarAccess.getAnyStringAccess().getAlternatives(), "rule__AnyString__Alternatives");
 					put(grammarAccess.getHLAOMT_DIF_v1_3Access().getGroup(), "rule__HLAOMT_DIF_v1_3__Group__0");
 					put(grammarAccess.getObjectModelAccess().getGroup(), "rule__ObjectModel__Group__0");
 					put(grammarAccess.getObjectModelAccess().getGroup_2(), "rule__ObjectModel__Group_2__0");
@@ -150,7 +154,8 @@ public class OmtParser extends AbstractContentAssistParser {
 					put(grammarAccess.getRoutingSpaceAccess().getDimensionsAssignment_7(), "rule__RoutingSpace__DimensionsAssignment_7");
 					put(grammarAccess.getDimensionAccess().getNameAssignment_4(), "rule__Dimension__NameAssignment_4");
 					put(grammarAccess.getDimensionAccess().getNameNoteAssignment_5(), "rule__Dimension__NameNoteAssignment_5");
-					put(grammarAccess.getDimensionAccess().getTypeAssignment_9(), "rule__Dimension__TypeAssignment_9");
+					put(grammarAccess.getDimensionAccess().getTypeAssignment_9_0(), "rule__Dimension__TypeAssignment_9_0");
+					put(grammarAccess.getDimensionAccess().getDataTypeAssignment_9_1(), "rule__Dimension__DataTypeAssignment_9_1");
 					put(grammarAccess.getDimensionAccess().getTypeNoteAssignment_10(), "rule__Dimension__TypeNoteAssignment_10");
 					put(grammarAccess.getDimensionAccess().getDomainAssignment_12(), "rule__Dimension__DomainAssignment_12");
 					put(grammarAccess.getDimensionAccess().getUnitsAssignment_13_2(), "rule__Dimension__UnitsAssignment_13_2");
@@ -215,7 +220,8 @@ public class OmtParser extends AbstractContentAssistParser {
 					put(grammarAccess.getResolutionAccess().getResolutionAssignment_2(), "rule__Resolution__ResolutionAssignment_2");
 					put(grammarAccess.getResolutionAccess().getResolutionNoteAssignment_3(), "rule__Resolution__ResolutionNoteAssignment_3");
 					put(grammarAccess.getPositionAccess().getPositionAssignment_2(), "rule__Position__PositionAssignment_2");
-					put(grammarAccess.getDataTypeAccess().getDataTypeAssignment_2(), "rule__DataType__DataTypeAssignment_2");
+					put(grammarAccess.getDataTypeAccess().getRefTypeAssignment_2_0(), "rule__DataType__RefTypeAssignment_2_0");
+					put(grammarAccess.getDataTypeAccess().getDataTypeAssignment_2_1(), "rule__DataType__DataTypeAssignment_2_1");
 					put(grammarAccess.getDataTypeAccess().getDataTypeNodeAssignment_3(), "rule__DataType__DataTypeNodeAssignment_3");
 					put(grammarAccess.getFieldNameAccess().getNameAssignment_2(), "rule__FieldName__NameAssignment_2");
 					put(grammarAccess.getFieldNameAccess().getFieldNameNoteAssignment_3(), "rule__FieldName__FieldNameNoteAssignment_3");

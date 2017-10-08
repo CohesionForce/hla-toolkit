@@ -36,6 +36,7 @@ import com.cohesionforce.hla.dsl.omt.RoutingSpace;
 import com.cohesionforce.hla.dsl.omt.SuperClass;
 import com.cohesionforce.hla.dsl.omt.SuperInteraction;
 import com.cohesionforce.hla.dsl.omt.TimeRepresentation;
+import com.cohesionforce.hla.dsl.omt.TypeReference;
 import com.cohesionforce.hla.dsl.omt.Units;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -227,6 +228,11 @@ public class OmtAdapterFactory extends AdapterFactoryImpl
       public Adapter caseDataType(DataType object)
       {
         return createDataTypeAdapter();
+      }
+      @Override
+      public Adapter caseTypeReference(TypeReference object)
+      {
+        return createTypeReferenceAdapter();
       }
       @Override
       public Adapter caseFieldName(FieldName object)
@@ -656,6 +662,21 @@ public class OmtAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createDataTypeAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link com.cohesionforce.hla.dsl.omt.TypeReference <em>Type Reference</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see com.cohesionforce.hla.dsl.omt.TypeReference
+   * @generated
+   */
+  public Adapter createTypeReferenceAdapter()
   {
     return null;
   }

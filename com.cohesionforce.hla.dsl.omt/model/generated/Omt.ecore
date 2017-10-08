@@ -73,7 +73,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nameNote" eType="#//NoteRef"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//TypeReference"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="typeNote" eType="#//NoteRef"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="domain" eType="#//DimensionDomain"
@@ -147,7 +148,7 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routingSpace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="EnumeratedDataType" eSuperTypes="#//OMTComponent">
+  <eClassifiers xsi:type="ecore:EClass" name="EnumeratedDataType" eSuperTypes="#//OMTComponent #//TypeReference">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="note" eType="#//NoteRef"
         containment="true"/>
@@ -164,7 +165,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="representationNote" eType="#//NoteRef"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ComplexDataType" eSuperTypes="#//OMTComponent">
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexDataType" eSuperTypes="#//OMTComponent #//TypeReference">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="note" eType="#//NoteRef"
         containment="true"/>
@@ -209,10 +210,12 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="position" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="refType" eType="#//TypeReference"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dataTypeNode" eType="#//NoteRef"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeReference"/>
   <eClassifiers xsi:type="ecore:EClass" name="FieldName">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fieldNameNote" eType="#//NoteRef"

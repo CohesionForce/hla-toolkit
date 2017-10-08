@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.cohesionforce.hla.dsl.omt.Dimension#getName <em>Name</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.Dimension#getNameNote <em>Name Note</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.Dimension#getType <em>Type</em>}</li>
+ *   <li>{@link com.cohesionforce.hla.dsl.omt.Dimension#getDataType <em>Data Type</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.Dimension#getTypeNote <em>Type Note</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.Dimension#getDomain <em>Domain</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.Dimension#getUnits <em>Units</em>}</li>
@@ -84,30 +85,56 @@ public interface Dimension extends EObject
   void setNameNote(NoteRef value);
 
   /**
-   * Returns the value of the '<em><b>Type</b></em>' attribute.
+   * Returns the value of the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Type</em>' attribute isn't clear,
+   * If the meaning of the '<em>Type</em>' reference isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Type</em>' attribute.
-   * @see #setType(String)
+   * @return the value of the '<em>Type</em>' reference.
+   * @see #setType(TypeReference)
    * @see com.cohesionforce.hla.dsl.omt.OmtPackage#getDimension_Type()
    * @model
    * @generated
    */
-  String getType();
+  TypeReference getType();
 
   /**
-   * Sets the value of the '{@link com.cohesionforce.hla.dsl.omt.Dimension#getType <em>Type</em>}' attribute.
+   * Sets the value of the '{@link com.cohesionforce.hla.dsl.omt.Dimension#getType <em>Type</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Type</em>' attribute.
+   * @param value the new value of the '<em>Type</em>' reference.
    * @see #getType()
    * @generated
    */
-  void setType(String value);
+  void setType(TypeReference value);
+
+  /**
+   * Returns the value of the '<em><b>Data Type</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Data Type</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Data Type</em>' attribute.
+   * @see #setDataType(String)
+   * @see com.cohesionforce.hla.dsl.omt.OmtPackage#getDimension_DataType()
+   * @model
+   * @generated
+   */
+  String getDataType();
+
+  /**
+   * Sets the value of the '{@link com.cohesionforce.hla.dsl.omt.Dimension#getDataType <em>Data Type</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Data Type</em>' attribute.
+   * @see #getDataType()
+   * @generated
+   */
+  void setDataType(String value);
 
   /**
    * Returns the value of the '<em><b>Type Note</b></em>' containment reference.

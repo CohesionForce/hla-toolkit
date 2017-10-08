@@ -62,7 +62,8 @@
     <genClasses ecoreClass="Omt.ecore#//Dimension">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Dimension/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Dimension/nameNote"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Dimension/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Omt.ecore#//Dimension/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Dimension/dataType"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Dimension/typeNote"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Dimension/domain"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Dimension/units"/>
@@ -159,9 +160,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Position/position"/>
     </genClasses>
     <genClasses ecoreClass="Omt.ecore#//DataType">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Omt.ecore#//DataType/refType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//DataType/dataType"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//DataType/dataTypeNode"/>
     </genClasses>
+    <genClasses ecoreClass="Omt.ecore#//TypeReference"/>
     <genClasses ecoreClass="Omt.ecore#//FieldName">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//FieldName/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//FieldName/fieldNameNote"/>

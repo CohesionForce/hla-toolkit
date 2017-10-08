@@ -36,6 +36,7 @@ import com.cohesionforce.hla.dsl.omt.RoutingSpace;
 import com.cohesionforce.hla.dsl.omt.SuperClass;
 import com.cohesionforce.hla.dsl.omt.SuperInteraction;
 import com.cohesionforce.hla.dsl.omt.TimeRepresentation;
+import com.cohesionforce.hla.dsl.omt.TypeReference;
 import com.cohesionforce.hla.dsl.omt.Units;
 
 import org.eclipse.emf.ecore.EObject;
@@ -222,6 +223,7 @@ public class OmtSwitch<T> extends Switch<T>
         EnumeratedDataType enumeratedDataType = (EnumeratedDataType)theEObject;
         T result = caseEnumeratedDataType(enumeratedDataType);
         if (result == null) result = caseOMTComponent(enumeratedDataType);
+        if (result == null) result = caseTypeReference(enumeratedDataType);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -237,6 +239,7 @@ public class OmtSwitch<T> extends Switch<T>
         ComplexDataType complexDataType = (ComplexDataType)theEObject;
         T result = caseComplexDataType(complexDataType);
         if (result == null) result = caseOMTComponent(complexDataType);
+        if (result == null) result = caseTypeReference(complexDataType);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -279,6 +282,13 @@ public class OmtSwitch<T> extends Switch<T>
       {
         DataType dataType = (DataType)theEObject;
         T result = caseDataType(dataType);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case OmtPackage.TYPE_REFERENCE:
+      {
+        TypeReference typeReference = (TypeReference)theEObject;
+        T result = caseTypeReference(typeReference);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -740,6 +750,22 @@ public class OmtSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseDataType(DataType object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Type Reference</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Type Reference</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseTypeReference(TypeReference object)
   {
     return null;
   }

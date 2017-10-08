@@ -263,6 +263,7 @@ public abstract class AbstractOmtSemanticSequencer extends AbstractDelegatingSem
 	 * Contexts:
 	 *     OMTComponent returns ComplexDataType
 	 *     ComplexDataType returns ComplexDataType
+	 *     TypeReference returns ComplexDataType
 	 *
 	 * Constraint:
 	 *     (name=STRING note=NoteRef? (isMOMComplexDataType='TRUE' | isMOMComplexDataType='FALSE')? components+=ComplexComponent+)
@@ -277,7 +278,7 @@ public abstract class AbstractOmtSemanticSequencer extends AbstractDelegatingSem
 	 *     DataType returns DataType
 	 *
 	 * Constraint:
-	 *     (dataType=STRING dataTypeNode=NoteRef?)
+	 *     ((refType=[TypeReference|STRING] | dataType=BASE_DATA_TYPE) dataTypeNode=NoteRef?)
 	 */
 	protected void sequence_DataType(ISerializationContext context, DataType semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -354,7 +355,7 @@ public abstract class AbstractOmtSemanticSequencer extends AbstractDelegatingSem
 	 *     (
 	 *         name=STRING 
 	 *         nameNote=NoteRef? 
-	 *         type=STRING 
+	 *         (type=[TypeReference|STRING] | dataType=BASE_DATA_TYPE) 
 	 *         typeNote=NoteRef? 
 	 *         domain=DimensionDomain 
 	 *         (units=STRING unitsNote=NoteRef?)? 
@@ -371,6 +372,7 @@ public abstract class AbstractOmtSemanticSequencer extends AbstractDelegatingSem
 	 * Contexts:
 	 *     OMTComponent returns EnumeratedDataType
 	 *     EnumeratedDataType returns EnumeratedDataType
+	 *     TypeReference returns EnumeratedDataType
 	 *
 	 * Constraint:
 	 *     (name=STRING note=NoteRef? (isMOMEnumeratedDataType='TRUE' | isMOMEnumeratedDataType='FALSE')? literals+=Enumeration+)
@@ -397,7 +399,7 @@ public abstract class AbstractOmtSemanticSequencer extends AbstractDelegatingSem
 	 *     FieldName returns FieldName
 	 *
 	 * Constraint:
-	 *     (name=STRING fieldNameNote=NoteRef?)
+	 *     (name=AnyString fieldNameNote=NoteRef?)
 	 */
 	protected void sequence_FieldName(ISerializationContext context, FieldName semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -648,7 +650,7 @@ public abstract class AbstractOmtSemanticSequencer extends AbstractDelegatingSem
 	 *     Units returns Units
 	 *
 	 * Constraint:
-	 *     (units=STRING unitsNote=NoteRef?)
+	 *     (units=AnyString unitsNote=NoteRef?)
 	 */
 	protected void sequence_Units(ISerializationContext context, Units semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

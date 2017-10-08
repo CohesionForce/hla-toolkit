@@ -6,6 +6,7 @@ package com.cohesionforce.hla.dsl.omt.impl;
 import com.cohesionforce.hla.dsl.omt.DataType;
 import com.cohesionforce.hla.dsl.omt.NoteRef;
 import com.cohesionforce.hla.dsl.omt.OmtPackage;
+import com.cohesionforce.hla.dsl.omt.TypeReference;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -24,6 +25,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link com.cohesionforce.hla.dsl.omt.impl.DataTypeImpl#getRefType <em>Ref Type</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.impl.DataTypeImpl#getDataType <em>Data Type</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.impl.DataTypeImpl#getDataTypeNode <em>Data Type Node</em>}</li>
  * </ul>
@@ -32,6 +34,16 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class DataTypeImpl extends MinimalEObjectImpl.Container implements DataType
 {
+  /**
+   * The cached value of the '{@link #getRefType() <em>Ref Type</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRefType()
+   * @generated
+   * @ordered
+   */
+  protected TypeReference refType;
+
   /**
    * The default value of the '{@link #getDataType() <em>Data Type</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -81,6 +93,49 @@ public class DataTypeImpl extends MinimalEObjectImpl.Container implements DataTy
   protected EClass eStaticClass()
   {
     return OmtPackage.Literals.DATA_TYPE;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TypeReference getRefType()
+  {
+    if (refType != null && refType.eIsProxy())
+    {
+      InternalEObject oldRefType = (InternalEObject)refType;
+      refType = (TypeReference)eResolveProxy(oldRefType);
+      if (refType != oldRefType)
+      {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, OmtPackage.DATA_TYPE__REF_TYPE, oldRefType, refType));
+      }
+    }
+    return refType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TypeReference basicGetRefType()
+  {
+    return refType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setRefType(TypeReference newRefType)
+  {
+    TypeReference oldRefType = refType;
+    refType = newRefType;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, OmtPackage.DATA_TYPE__REF_TYPE, oldRefType, refType));
   }
 
   /**
@@ -180,6 +235,9 @@ public class DataTypeImpl extends MinimalEObjectImpl.Container implements DataTy
   {
     switch (featureID)
     {
+      case OmtPackage.DATA_TYPE__REF_TYPE:
+        if (resolve) return getRefType();
+        return basicGetRefType();
       case OmtPackage.DATA_TYPE__DATA_TYPE:
         return getDataType();
       case OmtPackage.DATA_TYPE__DATA_TYPE_NODE:
@@ -198,6 +256,9 @@ public class DataTypeImpl extends MinimalEObjectImpl.Container implements DataTy
   {
     switch (featureID)
     {
+      case OmtPackage.DATA_TYPE__REF_TYPE:
+        setRefType((TypeReference)newValue);
+        return;
       case OmtPackage.DATA_TYPE__DATA_TYPE:
         setDataType((String)newValue);
         return;
@@ -218,6 +279,9 @@ public class DataTypeImpl extends MinimalEObjectImpl.Container implements DataTy
   {
     switch (featureID)
     {
+      case OmtPackage.DATA_TYPE__REF_TYPE:
+        setRefType((TypeReference)null);
+        return;
       case OmtPackage.DATA_TYPE__DATA_TYPE:
         setDataType(DATA_TYPE_EDEFAULT);
         return;
@@ -238,6 +302,8 @@ public class DataTypeImpl extends MinimalEObjectImpl.Container implements DataTy
   {
     switch (featureID)
     {
+      case OmtPackage.DATA_TYPE__REF_TYPE:
+        return refType != null;
       case OmtPackage.DATA_TYPE__DATA_TYPE:
         return DATA_TYPE_EDEFAULT == null ? dataType != null : !DATA_TYPE_EDEFAULT.equals(dataType);
       case OmtPackage.DATA_TYPE__DATA_TYPE_NODE:

@@ -1513,20 +1513,36 @@ ruleDimension returns [EObject current=null]
 		}
 		(
 			(
-				lv_type_9_0=RULE_STRING
-				{
-					newLeafNode(lv_type_9_0, grammarAccess.getDimensionAccess().getTypeSTRINGTerminalRuleCall_9_0());
-				}
-				{
-					if ($current==null) {
-						$current = createModelElement(grammarAccess.getDimensionRule());
+				(
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getDimensionRule());
+						}
 					}
-					setWithLastConsumed(
-						$current,
-						"type",
-						lv_type_9_0,
-						"com.cohesionforce.hla.dsl.Omt.STRING");
-				}
+					otherlv_9=RULE_STRING
+					{
+						newLeafNode(otherlv_9, grammarAccess.getDimensionAccess().getTypeTypeReferenceCrossReference_9_0_0());
+					}
+				)
+			)
+			    |
+			(
+				(
+					lv_dataType_10_0=RULE_BASE_DATA_TYPE
+					{
+						newLeafNode(lv_dataType_10_0, grammarAccess.getDimensionAccess().getDataTypeBASE_DATA_TYPETerminalRuleCall_9_1_0());
+					}
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getDimensionRule());
+						}
+						setWithLastConsumed(
+							$current,
+							"dataType",
+							lv_dataType_10_0,
+							"com.cohesionforce.hla.dsl.Omt.BASE_DATA_TYPE");
+					}
+				)
 			)
 		)
 		(
@@ -1534,7 +1550,7 @@ ruleDimension returns [EObject current=null]
 				{
 					newCompositeNode(grammarAccess.getDimensionAccess().getTypeNoteNoteRefParserRuleCall_10_0());
 				}
-				lv_typeNote_10_0=ruleNoteRef
+				lv_typeNote_11_0=ruleNoteRef
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getDimensionRule());
@@ -1542,22 +1558,22 @@ ruleDimension returns [EObject current=null]
 					set(
 						$current,
 						"typeNote",
-						lv_typeNote_10_0,
+						lv_typeNote_11_0,
 						"com.cohesionforce.hla.dsl.Omt.NoteRef");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)?
-		this_CLOSE_11=RULE_CLOSE
+		this_CLOSE_12=RULE_CLOSE
 		{
-			newLeafNode(this_CLOSE_11, grammarAccess.getDimensionAccess().getCLOSETerminalRuleCall_11());
+			newLeafNode(this_CLOSE_12, grammarAccess.getDimensionAccess().getCLOSETerminalRuleCall_11());
 		}
 		(
 			(
 				{
 					newCompositeNode(grammarAccess.getDimensionAccess().getDomainDimensionDomainParserRuleCall_12_0());
 				}
-				lv_domain_12_0=ruleDimensionDomain
+				lv_domain_13_0=ruleDimensionDomain
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getDimensionRule());
@@ -1565,26 +1581,26 @@ ruleDimension returns [EObject current=null]
 					set(
 						$current,
 						"domain",
-						lv_domain_12_0,
+						lv_domain_13_0,
 						"com.cohesionforce.hla.dsl.Omt.DimensionDomain");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)
 		(
-			this_OPEN_13=RULE_OPEN
+			this_OPEN_14=RULE_OPEN
 			{
-				newLeafNode(this_OPEN_13, grammarAccess.getDimensionAccess().getOPENTerminalRuleCall_13_0());
+				newLeafNode(this_OPEN_14, grammarAccess.getDimensionAccess().getOPENTerminalRuleCall_13_0());
 			}
-			otherlv_14='RangeSetUnits'
+			otherlv_15='RangeSetUnits'
 			{
-				newLeafNode(otherlv_14, grammarAccess.getDimensionAccess().getRangeSetUnitsKeyword_13_1());
+				newLeafNode(otherlv_15, grammarAccess.getDimensionAccess().getRangeSetUnitsKeyword_13_1());
 			}
 			(
 				(
-					lv_units_15_0=RULE_STRING
+					lv_units_16_0=RULE_STRING
 					{
-						newLeafNode(lv_units_15_0, grammarAccess.getDimensionAccess().getUnitsSTRINGTerminalRuleCall_13_2_0());
+						newLeafNode(lv_units_16_0, grammarAccess.getDimensionAccess().getUnitsSTRINGTerminalRuleCall_13_2_0());
 					}
 					{
 						if ($current==null) {
@@ -1593,7 +1609,7 @@ ruleDimension returns [EObject current=null]
 						setWithLastConsumed(
 							$current,
 							"units",
-							lv_units_15_0,
+							lv_units_16_0,
 							"com.cohesionforce.hla.dsl.Omt.STRING");
 					}
 				)
@@ -1603,7 +1619,7 @@ ruleDimension returns [EObject current=null]
 					{
 						newCompositeNode(grammarAccess.getDimensionAccess().getUnitsNoteNoteRefParserRuleCall_13_3_0());
 					}
-					lv_unitsNote_16_0=ruleNoteRef
+					lv_unitsNote_17_0=ruleNoteRef
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getDimensionRule());
@@ -1611,30 +1627,30 @@ ruleDimension returns [EObject current=null]
 						set(
 							$current,
 							"unitsNote",
-							lv_unitsNote_16_0,
+							lv_unitsNote_17_0,
 							"com.cohesionforce.hla.dsl.Omt.NoteRef");
 						afterParserOrEnumRuleCall();
 					}
 				)
 			)?
-			this_CLOSE_17=RULE_CLOSE
+			this_CLOSE_18=RULE_CLOSE
 			{
-				newLeafNode(this_CLOSE_17, grammarAccess.getDimensionAccess().getCLOSETerminalRuleCall_13_4());
+				newLeafNode(this_CLOSE_18, grammarAccess.getDimensionAccess().getCLOSETerminalRuleCall_13_4());
 			}
 		)?
-		this_OPEN_18=RULE_OPEN
+		this_OPEN_19=RULE_OPEN
 		{
-			newLeafNode(this_OPEN_18, grammarAccess.getDimensionAccess().getOPENTerminalRuleCall_14());
+			newLeafNode(this_OPEN_19, grammarAccess.getDimensionAccess().getOPENTerminalRuleCall_14());
 		}
-		otherlv_19='NormalizationFunction'
+		otherlv_20='NormalizationFunction'
 		{
-			newLeafNode(otherlv_19, grammarAccess.getDimensionAccess().getNormalizationFunctionKeyword_15());
+			newLeafNode(otherlv_20, grammarAccess.getDimensionAccess().getNormalizationFunctionKeyword_15());
 		}
 		(
 			(
-				lv_function_20_0=RULE_STRING
+				lv_function_21_0=RULE_STRING
 				{
-					newLeafNode(lv_function_20_0, grammarAccess.getDimensionAccess().getFunctionSTRINGTerminalRuleCall_16_0());
+					newLeafNode(lv_function_21_0, grammarAccess.getDimensionAccess().getFunctionSTRINGTerminalRuleCall_16_0());
 				}
 				{
 					if ($current==null) {
@@ -1643,7 +1659,7 @@ ruleDimension returns [EObject current=null]
 					setWithLastConsumed(
 						$current,
 						"function",
-						lv_function_20_0,
+						lv_function_21_0,
 						"com.cohesionforce.hla.dsl.Omt.STRING");
 				}
 			)
@@ -1653,7 +1669,7 @@ ruleDimension returns [EObject current=null]
 				{
 					newCompositeNode(grammarAccess.getDimensionAccess().getFunctionNoteNoteRefParserRuleCall_17_0());
 				}
-				lv_functionNote_21_0=ruleNoteRef
+				lv_functionNote_22_0=ruleNoteRef
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getDimensionRule());
@@ -1661,19 +1677,19 @@ ruleDimension returns [EObject current=null]
 					set(
 						$current,
 						"functionNote",
-						lv_functionNote_21_0,
+						lv_functionNote_22_0,
 						"com.cohesionforce.hla.dsl.Omt.NoteRef");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)?
-		this_CLOSE_22=RULE_CLOSE
-		{
-			newLeafNode(this_CLOSE_22, grammarAccess.getDimensionAccess().getCLOSETerminalRuleCall_18());
-		}
 		this_CLOSE_23=RULE_CLOSE
 		{
-			newLeafNode(this_CLOSE_23, grammarAccess.getDimensionAccess().getCLOSETerminalRuleCall_19());
+			newLeafNode(this_CLOSE_23, grammarAccess.getDimensionAccess().getCLOSETerminalRuleCall_18());
+		}
+		this_CLOSE_24=RULE_CLOSE
+		{
+			newLeafNode(this_CLOSE_24, grammarAccess.getDimensionAccess().getCLOSETerminalRuleCall_19());
 		}
 	)
 ;
@@ -3775,20 +3791,36 @@ ruleDataType returns [EObject current=null]
 		}
 		(
 			(
-				lv_dataType_2_0=RULE_STRING
-				{
-					newLeafNode(lv_dataType_2_0, grammarAccess.getDataTypeAccess().getDataTypeSTRINGTerminalRuleCall_2_0());
-				}
-				{
-					if ($current==null) {
-						$current = createModelElement(grammarAccess.getDataTypeRule());
+				(
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getDataTypeRule());
+						}
 					}
-					setWithLastConsumed(
-						$current,
-						"dataType",
-						lv_dataType_2_0,
-						"com.cohesionforce.hla.dsl.Omt.STRING");
-				}
+					otherlv_2=RULE_STRING
+					{
+						newLeafNode(otherlv_2, grammarAccess.getDataTypeAccess().getRefTypeTypeReferenceCrossReference_2_0_0());
+					}
+				)
+			)
+			    |
+			(
+				(
+					lv_dataType_3_0=RULE_BASE_DATA_TYPE
+					{
+						newLeafNode(lv_dataType_3_0, grammarAccess.getDataTypeAccess().getDataTypeBASE_DATA_TYPETerminalRuleCall_2_1_0());
+					}
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getDataTypeRule());
+						}
+						setWithLastConsumed(
+							$current,
+							"dataType",
+							lv_dataType_3_0,
+							"com.cohesionforce.hla.dsl.Omt.BASE_DATA_TYPE");
+					}
+				)
 			)
 		)
 		(
@@ -3796,7 +3828,7 @@ ruleDataType returns [EObject current=null]
 				{
 					newCompositeNode(grammarAccess.getDataTypeAccess().getDataTypeNodeNoteRefParserRuleCall_3_0());
 				}
-				lv_dataTypeNode_3_0=ruleNoteRef
+				lv_dataTypeNode_4_0=ruleNoteRef
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getDataTypeRule());
@@ -3804,15 +3836,15 @@ ruleDataType returns [EObject current=null]
 					set(
 						$current,
 						"dataTypeNode",
-						lv_dataTypeNode_3_0,
+						lv_dataTypeNode_4_0,
 						"com.cohesionforce.hla.dsl.Omt.NoteRef");
 					afterParserOrEnumRuleCall();
 				}
 			)
 		)?
-		this_CLOSE_4=RULE_CLOSE
+		this_CLOSE_5=RULE_CLOSE
 		{
-			newLeafNode(this_CLOSE_4, grammarAccess.getDataTypeAccess().getCLOSETerminalRuleCall_4());
+			newLeafNode(this_CLOSE_5, grammarAccess.getDataTypeAccess().getCLOSETerminalRuleCall_4());
 		}
 	)
 ;
@@ -3843,19 +3875,20 @@ ruleFieldName returns [EObject current=null]
 		}
 		(
 			(
-				lv_name_2_0=RULE_STRING
 				{
-					newLeafNode(lv_name_2_0, grammarAccess.getFieldNameAccess().getNameSTRINGTerminalRuleCall_2_0());
+					newCompositeNode(grammarAccess.getFieldNameAccess().getNameAnyStringParserRuleCall_2_0());
 				}
+				lv_name_2_0=ruleAnyString
 				{
 					if ($current==null) {
-						$current = createModelElement(grammarAccess.getFieldNameRule());
+						$current = createModelElementForParent(grammarAccess.getFieldNameRule());
 					}
-					setWithLastConsumed(
+					set(
 						$current,
 						"name",
 						lv_name_2_0,
-						"com.cohesionforce.hla.dsl.Omt.STRING");
+						"com.cohesionforce.hla.dsl.Omt.AnyString");
+					afterParserOrEnumRuleCall();
 				}
 			)
 		)
@@ -3911,19 +3944,20 @@ ruleUnits returns [EObject current=null]
 		}
 		(
 			(
-				lv_units_2_0=RULE_STRING
 				{
-					newLeafNode(lv_units_2_0, grammarAccess.getUnitsAccess().getUnitsSTRINGTerminalRuleCall_2_0());
+					newCompositeNode(grammarAccess.getUnitsAccess().getUnitsAnyStringParserRuleCall_2_0());
 				}
+				lv_units_2_0=ruleAnyString
 				{
 					if ($current==null) {
-						$current = createModelElement(grammarAccess.getUnitsRule());
+						$current = createModelElementForParent(grammarAccess.getUnitsRule());
 					}
-					setWithLastConsumed(
+					set(
 						$current,
 						"units",
 						lv_units_2_0,
-						"com.cohesionforce.hla.dsl.Omt.STRING");
+						"com.cohesionforce.hla.dsl.Omt.AnyString");
+					afterParserOrEnumRuleCall();
 				}
 			)
 		)
@@ -4881,6 +4915,42 @@ ruleAnyText returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()
 		}
 	)
 ;
+
+// Entry rule entryRuleAnyString
+entryRuleAnyString returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getAnyStringRule()); }
+	iv_ruleAnyString=ruleAnyString
+	{ $current=$iv_ruleAnyString.current.getText(); }
+	EOF;
+
+// Rule AnyString
+ruleAnyString returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		this_STRING_0=RULE_STRING
+		{
+			$current.merge(this_STRING_0);
+		}
+		{
+			newLeafNode(this_STRING_0, grammarAccess.getAnyStringAccess().getSTRINGTerminalRuleCall_0());
+		}
+		    |
+		this_BASE_DATA_TYPE_1=RULE_BASE_DATA_TYPE
+		{
+			$current.merge(this_BASE_DATA_TYPE_1);
+		}
+		{
+			newLeafNode(this_BASE_DATA_TYPE_1, grammarAccess.getAnyStringAccess().getBASE_DATA_TYPETerminalRuleCall_1());
+		}
+	)
+;
+
+RULE_BASE_DATA_TYPE : '"' ('unsigned short'|'short'|'unsigned long'|'long'|'unsigned long long'|'long long'|'double'|'float'|'boolean'|'any'|'string'|'char'|'octet') '"';
 
 RULE_OPEN : '(';
 

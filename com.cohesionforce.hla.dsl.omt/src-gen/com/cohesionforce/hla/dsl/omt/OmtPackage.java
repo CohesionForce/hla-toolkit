@@ -578,7 +578,7 @@ public interface OmtPackage extends EPackage
   int DIMENSION__NAME_NOTE = 1;
 
   /**
-   * The feature id for the '<em><b>Type</b></em>' attribute.
+   * The feature id for the '<em><b>Type</b></em>' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -587,13 +587,22 @@ public interface OmtPackage extends EPackage
   int DIMENSION__TYPE = 2;
 
   /**
+   * The feature id for the '<em><b>Data Type</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DIMENSION__DATA_TYPE = 3;
+
+  /**
    * The feature id for the '<em><b>Type Note</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DIMENSION__TYPE_NOTE = 3;
+  int DIMENSION__TYPE_NOTE = 4;
 
   /**
    * The feature id for the '<em><b>Domain</b></em>' containment reference.
@@ -602,7 +611,7 @@ public interface OmtPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DIMENSION__DOMAIN = 4;
+  int DIMENSION__DOMAIN = 5;
 
   /**
    * The feature id for the '<em><b>Units</b></em>' attribute.
@@ -611,7 +620,7 @@ public interface OmtPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DIMENSION__UNITS = 5;
+  int DIMENSION__UNITS = 6;
 
   /**
    * The feature id for the '<em><b>Units Note</b></em>' containment reference.
@@ -620,7 +629,7 @@ public interface OmtPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DIMENSION__UNITS_NOTE = 6;
+  int DIMENSION__UNITS_NOTE = 7;
 
   /**
    * The feature id for the '<em><b>Function</b></em>' attribute.
@@ -629,7 +638,7 @@ public interface OmtPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DIMENSION__FUNCTION = 7;
+  int DIMENSION__FUNCTION = 8;
 
   /**
    * The feature id for the '<em><b>Function Note</b></em>' containment reference.
@@ -638,7 +647,7 @@ public interface OmtPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DIMENSION__FUNCTION_NOTE = 8;
+  int DIMENSION__FUNCTION_NOTE = 9;
 
   /**
    * The number of structural features of the '<em>Dimension</em>' class.
@@ -647,7 +656,7 @@ public interface OmtPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DIMENSION_FEATURE_COUNT = 9;
+  int DIMENSION_FEATURE_COUNT = 10;
 
   /**
    * The meta object id for the '{@link com.cohesionforce.hla.dsl.omt.impl.DimensionDomainImpl <em>Dimension Domain</em>}' class.
@@ -1495,13 +1504,22 @@ public interface OmtPackage extends EPackage
   int DATA_TYPE = 23;
 
   /**
+   * The feature id for the '<em><b>Ref Type</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DATA_TYPE__REF_TYPE = 0;
+
+  /**
    * The feature id for the '<em><b>Data Type</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DATA_TYPE__DATA_TYPE = 0;
+  int DATA_TYPE__DATA_TYPE = 1;
 
   /**
    * The feature id for the '<em><b>Data Type Node</b></em>' containment reference.
@@ -1510,7 +1528,7 @@ public interface OmtPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DATA_TYPE__DATA_TYPE_NODE = 1;
+  int DATA_TYPE__DATA_TYPE_NODE = 2;
 
   /**
    * The number of structural features of the '<em>Data Type</em>' class.
@@ -1519,7 +1537,26 @@ public interface OmtPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DATA_TYPE_FEATURE_COUNT = 2;
+  int DATA_TYPE_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link com.cohesionforce.hla.dsl.omt.impl.TypeReferenceImpl <em>Type Reference</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see com.cohesionforce.hla.dsl.omt.impl.TypeReferenceImpl
+   * @see com.cohesionforce.hla.dsl.omt.impl.OmtPackageImpl#getTypeReference()
+   * @generated
+   */
+  int TYPE_REFERENCE = 24;
+
+  /**
+   * The number of structural features of the '<em>Type Reference</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TYPE_REFERENCE_FEATURE_COUNT = 0;
 
   /**
    * The meta object id for the '{@link com.cohesionforce.hla.dsl.omt.impl.FieldNameImpl <em>Field Name</em>}' class.
@@ -1529,7 +1566,7 @@ public interface OmtPackage extends EPackage
    * @see com.cohesionforce.hla.dsl.omt.impl.OmtPackageImpl#getFieldName()
    * @generated
    */
-  int FIELD_NAME = 24;
+  int FIELD_NAME = 25;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1566,7 +1603,7 @@ public interface OmtPackage extends EPackage
    * @see com.cohesionforce.hla.dsl.omt.impl.OmtPackageImpl#getUnits()
    * @generated
    */
-  int UNITS = 25;
+  int UNITS = 26;
 
   /**
    * The feature id for the '<em><b>Units</b></em>' attribute.
@@ -1603,7 +1640,7 @@ public interface OmtPackage extends EPackage
    * @see com.cohesionforce.hla.dsl.omt.impl.OmtPackageImpl#getCardinality()
    * @generated
    */
-  int CARDINALITY = 26;
+  int CARDINALITY = 27;
 
   /**
    * The feature id for the '<em><b>Cardinality</b></em>' attribute.
@@ -1640,7 +1677,7 @@ public interface OmtPackage extends EPackage
    * @see com.cohesionforce.hla.dsl.omt.impl.OmtPackageImpl#getInteraction()
    * @generated
    */
-  int INTERACTION = 27;
+  int INTERACTION = 28;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -1740,7 +1777,7 @@ public interface OmtPackage extends EPackage
    * @see com.cohesionforce.hla.dsl.omt.impl.OmtPackageImpl#getInteractionComponent()
    * @generated
    */
-  int INTERACTION_COMPONENT = 28;
+  int INTERACTION_COMPONENT = 29;
 
   /**
    * The number of structural features of the '<em>Interaction Component</em>' class.
@@ -1759,7 +1796,7 @@ public interface OmtPackage extends EPackage
    * @see com.cohesionforce.hla.dsl.omt.impl.OmtPackageImpl#getSuperInteraction()
    * @generated
    */
-  int SUPER_INTERACTION = 29;
+  int SUPER_INTERACTION = 30;
 
   /**
    * The feature id for the '<em><b>ID</b></em>' attribute.
@@ -1787,7 +1824,7 @@ public interface OmtPackage extends EPackage
    * @see com.cohesionforce.hla.dsl.omt.impl.OmtPackageImpl#getParameter()
    * @generated
    */
-  int PARAMETER = 30;
+  int PARAMETER = 31;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1887,7 +1924,7 @@ public interface OmtPackage extends EPackage
    * @see com.cohesionforce.hla.dsl.omt.impl.OmtPackageImpl#getDescription()
    * @generated
    */
-  int DESCRIPTION = 31;
+  int DESCRIPTION = 32;
 
   /**
    * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -1915,7 +1952,7 @@ public interface OmtPackage extends EPackage
    * @see com.cohesionforce.hla.dsl.omt.impl.OmtPackageImpl#getNote()
    * @generated
    */
-  int NOTE = 32;
+  int NOTE = 33;
 
   /**
    * The feature id for the '<em><b>ID</b></em>' attribute.
@@ -1952,7 +1989,7 @@ public interface OmtPackage extends EPackage
    * @see com.cohesionforce.hla.dsl.omt.impl.OmtPackageImpl#getNoteRef()
    * @generated
    */
-  int NOTE_REF = 33;
+  int NOTE_REF = 34;
 
   /**
    * The feature id for the '<em><b>Refs</b></em>' attribute list.
@@ -2528,15 +2565,26 @@ public interface OmtPackage extends EPackage
   EReference getDimension_NameNote();
 
   /**
-   * Returns the meta object for the attribute '{@link com.cohesionforce.hla.dsl.omt.Dimension#getType <em>Type</em>}'.
+   * Returns the meta object for the reference '{@link com.cohesionforce.hla.dsl.omt.Dimension#getType <em>Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Type</em>'.
+   * @return the meta object for the reference '<em>Type</em>'.
    * @see com.cohesionforce.hla.dsl.omt.Dimension#getType()
    * @see #getDimension()
    * @generated
    */
-  EAttribute getDimension_Type();
+  EReference getDimension_Type();
+
+  /**
+   * Returns the meta object for the attribute '{@link com.cohesionforce.hla.dsl.omt.Dimension#getDataType <em>Data Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Data Type</em>'.
+   * @see com.cohesionforce.hla.dsl.omt.Dimension#getDataType()
+   * @see #getDimension()
+   * @generated
+   */
+  EAttribute getDimension_DataType();
 
   /**
    * Returns the meta object for the containment reference '{@link com.cohesionforce.hla.dsl.omt.Dimension#getTypeNote <em>Type Note</em>}'.
@@ -3402,6 +3450,17 @@ public interface OmtPackage extends EPackage
   EClass getDataType();
 
   /**
+   * Returns the meta object for the reference '{@link com.cohesionforce.hla.dsl.omt.DataType#getRefType <em>Ref Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference '<em>Ref Type</em>'.
+   * @see com.cohesionforce.hla.dsl.omt.DataType#getRefType()
+   * @see #getDataType()
+   * @generated
+   */
+  EReference getDataType_RefType();
+
+  /**
    * Returns the meta object for the attribute '{@link com.cohesionforce.hla.dsl.omt.DataType#getDataType <em>Data Type</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3422,6 +3481,16 @@ public interface OmtPackage extends EPackage
    * @generated
    */
   EReference getDataType_DataTypeNode();
+
+  /**
+   * Returns the meta object for class '{@link com.cohesionforce.hla.dsl.omt.TypeReference <em>Type Reference</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Type Reference</em>'.
+   * @see com.cohesionforce.hla.dsl.omt.TypeReference
+   * @generated
+   */
+  EClass getTypeReference();
 
   /**
    * Returns the meta object for class '{@link com.cohesionforce.hla.dsl.omt.FieldName <em>Field Name</em>}'.
@@ -4288,12 +4357,20 @@ public interface OmtPackage extends EPackage
     EReference DIMENSION__NAME_NOTE = eINSTANCE.getDimension_NameNote();
 
     /**
-     * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Type</b></em>' reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute DIMENSION__TYPE = eINSTANCE.getDimension_Type();
+    EReference DIMENSION__TYPE = eINSTANCE.getDimension_Type();
+
+    /**
+     * The meta object literal for the '<em><b>Data Type</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DIMENSION__DATA_TYPE = eINSTANCE.getDimension_DataType();
 
     /**
      * The meta object literal for the '<em><b>Type Note</b></em>' containment reference feature.
@@ -4970,6 +5047,14 @@ public interface OmtPackage extends EPackage
     EClass DATA_TYPE = eINSTANCE.getDataType();
 
     /**
+     * The meta object literal for the '<em><b>Ref Type</b></em>' reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference DATA_TYPE__REF_TYPE = eINSTANCE.getDataType_RefType();
+
+    /**
      * The meta object literal for the '<em><b>Data Type</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -4984,6 +5069,16 @@ public interface OmtPackage extends EPackage
      * @generated
      */
     EReference DATA_TYPE__DATA_TYPE_NODE = eINSTANCE.getDataType_DataTypeNode();
+
+    /**
+     * The meta object literal for the '{@link com.cohesionforce.hla.dsl.omt.impl.TypeReferenceImpl <em>Type Reference</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see com.cohesionforce.hla.dsl.omt.impl.TypeReferenceImpl
+     * @see com.cohesionforce.hla.dsl.omt.impl.OmtPackageImpl#getTypeReference()
+     * @generated
+     */
+    EClass TYPE_REFERENCE = eINSTANCE.getTypeReference();
 
     /**
      * The meta object literal for the '{@link com.cohesionforce.hla.dsl.omt.impl.FieldNameImpl <em>Field Name</em>}' class.

@@ -945,8 +945,12 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cCLOSETerminalRuleCall_6 = (RuleCall)cGroup.eContents().get(6);
 		private final RuleCall cOPENTerminalRuleCall_7 = (RuleCall)cGroup.eContents().get(7);
 		private final Keyword cDimensionTypeKeyword_8 = (Keyword)cGroup.eContents().get(8);
-		private final Assignment cTypeAssignment_9 = (Assignment)cGroup.eContents().get(9);
-		private final RuleCall cTypeSTRINGTerminalRuleCall_9_0 = (RuleCall)cTypeAssignment_9.eContents().get(0);
+		private final Alternatives cAlternatives_9 = (Alternatives)cGroup.eContents().get(9);
+		private final Assignment cTypeAssignment_9_0 = (Assignment)cAlternatives_9.eContents().get(0);
+		private final CrossReference cTypeTypeReferenceCrossReference_9_0_0 = (CrossReference)cTypeAssignment_9_0.eContents().get(0);
+		private final RuleCall cTypeTypeReferenceSTRINGTerminalRuleCall_9_0_0_1 = (RuleCall)cTypeTypeReferenceCrossReference_9_0_0.eContents().get(1);
+		private final Assignment cDataTypeAssignment_9_1 = (Assignment)cAlternatives_9.eContents().get(1);
+		private final RuleCall cDataTypeBASE_DATA_TYPETerminalRuleCall_9_1_0 = (RuleCall)cDataTypeAssignment_9_1.eContents().get(0);
 		private final Assignment cTypeNoteAssignment_10 = (Assignment)cGroup.eContents().get(10);
 		private final RuleCall cTypeNoteNoteRefParserRuleCall_10_0 = (RuleCall)cTypeNoteAssignment_10.eContents().get(0);
 		private final RuleCall cCLOSETerminalRuleCall_11 = (RuleCall)cGroup.eContents().get(11);
@@ -971,15 +975,15 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//Dimension:
 		//	OPEN 'Dimension' OPEN 'Name' name=STRING nameNote=NoteRef? CLOSE
-		//	OPEN 'DimensionType' type=STRING typeNote=NoteRef? CLOSE
+		//	OPEN 'DimensionType' (type=[TypeReference|STRING] | dataType=BASE_DATA_TYPE) typeNote=NoteRef? CLOSE
 		//	domain=DimensionDomain (OPEN 'RangeSetUnits' units=STRING unitsNote=NoteRef? CLOSE)?
 		//	OPEN 'NormalizationFunction' function=STRING functionNote=NoteRef? CLOSE
 		//	CLOSE;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//OPEN 'Dimension' OPEN 'Name' name=STRING nameNote=NoteRef? CLOSE OPEN 'DimensionType' type=STRING typeNote=NoteRef?
-		//CLOSE domain=DimensionDomain (OPEN 'RangeSetUnits' units=STRING unitsNote=NoteRef? CLOSE)? OPEN 'NormalizationFunction'
-		//function=STRING functionNote=NoteRef? CLOSE CLOSE
+		//OPEN 'Dimension' OPEN 'Name' name=STRING nameNote=NoteRef? CLOSE OPEN 'DimensionType' (type=[TypeReference|STRING] |
+		//dataType=BASE_DATA_TYPE) typeNote=NoteRef? CLOSE domain=DimensionDomain (OPEN 'RangeSetUnits' units=STRING
+		//unitsNote=NoteRef? CLOSE)? OPEN 'NormalizationFunction' function=STRING functionNote=NoteRef? CLOSE CLOSE
 		public Group getGroup() { return cGroup; }
 		
 		//OPEN
@@ -1015,11 +1019,23 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		//'DimensionType'
 		public Keyword getDimensionTypeKeyword_8() { return cDimensionTypeKeyword_8; }
 		
-		//type=STRING
-		public Assignment getTypeAssignment_9() { return cTypeAssignment_9; }
+		//type=[TypeReference|STRING] | dataType=BASE_DATA_TYPE
+		public Alternatives getAlternatives_9() { return cAlternatives_9; }
+		
+		//type=[TypeReference|STRING]
+		public Assignment getTypeAssignment_9_0() { return cTypeAssignment_9_0; }
+		
+		//[TypeReference|STRING]
+		public CrossReference getTypeTypeReferenceCrossReference_9_0_0() { return cTypeTypeReferenceCrossReference_9_0_0; }
 		
 		//STRING
-		public RuleCall getTypeSTRINGTerminalRuleCall_9_0() { return cTypeSTRINGTerminalRuleCall_9_0; }
+		public RuleCall getTypeTypeReferenceSTRINGTerminalRuleCall_9_0_0_1() { return cTypeTypeReferenceSTRINGTerminalRuleCall_9_0_0_1; }
+		
+		//dataType=BASE_DATA_TYPE
+		public Assignment getDataTypeAssignment_9_1() { return cDataTypeAssignment_9_1; }
+		
+		//BASE_DATA_TYPE
+		public RuleCall getDataTypeBASE_DATA_TYPETerminalRuleCall_9_1_0() { return cDataTypeBASE_DATA_TYPETerminalRuleCall_9_1_0; }
 		
 		//typeNote=NoteRef?
 		public Assignment getTypeNoteAssignment_10() { return cTypeNoteAssignment_10; }
@@ -2373,32 +2389,48 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final RuleCall cOPENTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Keyword cDataTypeKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cDataTypeAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cDataTypeSTRINGTerminalRuleCall_2_0 = (RuleCall)cDataTypeAssignment_2.eContents().get(0);
+		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
+		private final Assignment cRefTypeAssignment_2_0 = (Assignment)cAlternatives_2.eContents().get(0);
+		private final CrossReference cRefTypeTypeReferenceCrossReference_2_0_0 = (CrossReference)cRefTypeAssignment_2_0.eContents().get(0);
+		private final RuleCall cRefTypeTypeReferenceSTRINGTerminalRuleCall_2_0_0_1 = (RuleCall)cRefTypeTypeReferenceCrossReference_2_0_0.eContents().get(1);
+		private final Assignment cDataTypeAssignment_2_1 = (Assignment)cAlternatives_2.eContents().get(1);
+		private final RuleCall cDataTypeBASE_DATA_TYPETerminalRuleCall_2_1_0 = (RuleCall)cDataTypeAssignment_2_1.eContents().get(0);
 		private final Assignment cDataTypeNodeAssignment_3 = (Assignment)cGroup.eContents().get(3);
 		private final RuleCall cDataTypeNodeNoteRefParserRuleCall_3_0 = (RuleCall)cDataTypeNodeAssignment_3.eContents().get(0);
 		private final RuleCall cCLOSETerminalRuleCall_4 = (RuleCall)cGroup.eContents().get(4);
 		
 		//DataType:
-		//	OPEN 'DataType' dataType=STRING dataTypeNode=NoteRef? CLOSE;
+		//	OPEN 'DataType' (refType=[TypeReference|STRING] | dataType=BASE_DATA_TYPE) dataTypeNode=NoteRef? CLOSE
+		//	//	OPEN 'DataType' dataType=STRING dataTypeNode=NoteRef? CLOSE
+		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		////	OPEN 'DataType' (refType=[ComplexDataType|STRING]| dataType=BASE_DATA_TYPE) dataTypeNode=NoteRef? CLOSE
-		//OPEN 'DataType' dataType=STRING dataTypeNode=NoteRef? CLOSE
+		//OPEN 'DataType' (refType=[TypeReference|STRING] | dataType=BASE_DATA_TYPE) dataTypeNode=NoteRef? CLOSE
 		public Group getGroup() { return cGroup; }
 		
-		////	OPEN 'DataType' (refType=[ComplexDataType|STRING]| dataType=BASE_DATA_TYPE) dataTypeNode=NoteRef? CLOSE
 		//OPEN
 		public RuleCall getOPENTerminalRuleCall_0() { return cOPENTerminalRuleCall_0; }
 		
 		//'DataType'
 		public Keyword getDataTypeKeyword_1() { return cDataTypeKeyword_1; }
 		
-		//dataType=STRING
-		public Assignment getDataTypeAssignment_2() { return cDataTypeAssignment_2; }
+		//refType=[TypeReference|STRING] | dataType=BASE_DATA_TYPE
+		public Alternatives getAlternatives_2() { return cAlternatives_2; }
+		
+		//refType=[TypeReference|STRING]
+		public Assignment getRefTypeAssignment_2_0() { return cRefTypeAssignment_2_0; }
+		
+		//[TypeReference|STRING]
+		public CrossReference getRefTypeTypeReferenceCrossReference_2_0_0() { return cRefTypeTypeReferenceCrossReference_2_0_0; }
 		
 		//STRING
-		public RuleCall getDataTypeSTRINGTerminalRuleCall_2_0() { return cDataTypeSTRINGTerminalRuleCall_2_0; }
+		public RuleCall getRefTypeTypeReferenceSTRINGTerminalRuleCall_2_0_0_1() { return cRefTypeTypeReferenceSTRINGTerminalRuleCall_2_0_0_1; }
+		
+		//dataType=BASE_DATA_TYPE
+		public Assignment getDataTypeAssignment_2_1() { return cDataTypeAssignment_2_1; }
+		
+		//BASE_DATA_TYPE
+		public RuleCall getDataTypeBASE_DATA_TYPETerminalRuleCall_2_1_0() { return cDataTypeBASE_DATA_TYPETerminalRuleCall_2_1_0; }
 		
 		//dataTypeNode=NoteRef?
 		public Assignment getDataTypeNodeAssignment_3() { return cDataTypeNodeAssignment_3; }
@@ -2409,22 +2441,41 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		//CLOSE
 		public RuleCall getCLOSETerminalRuleCall_4() { return cCLOSETerminalRuleCall_4; }
 	}
+	public class TypeReferenceElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.cohesionforce.hla.dsl.Omt.TypeReference");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final RuleCall cComplexDataTypeParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final RuleCall cEnumeratedDataTypeParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
+		
+		//TypeReference:
+		//	ComplexDataType | EnumeratedDataType;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//ComplexDataType | EnumeratedDataType
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//ComplexDataType
+		public RuleCall getComplexDataTypeParserRuleCall_0() { return cComplexDataTypeParserRuleCall_0; }
+		
+		//EnumeratedDataType
+		public RuleCall getEnumeratedDataTypeParserRuleCall_1() { return cEnumeratedDataTypeParserRuleCall_1; }
+	}
 	public class FieldNameElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.cohesionforce.hla.dsl.Omt.FieldName");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final RuleCall cOPENTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Keyword cFieldNameKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cNameAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cNameSTRINGTerminalRuleCall_2_0 = (RuleCall)cNameAssignment_2.eContents().get(0);
+		private final RuleCall cNameAnyStringParserRuleCall_2_0 = (RuleCall)cNameAssignment_2.eContents().get(0);
 		private final Assignment cFieldNameNoteAssignment_3 = (Assignment)cGroup.eContents().get(3);
 		private final RuleCall cFieldNameNoteNoteRefParserRuleCall_3_0 = (RuleCall)cFieldNameNoteAssignment_3.eContents().get(0);
 		private final RuleCall cCLOSETerminalRuleCall_4 = (RuleCall)cGroup.eContents().get(4);
 		
 		//FieldName:
-		//	OPEN 'FieldName' name=STRING fieldNameNote=NoteRef? CLOSE;
+		//	OPEN 'FieldName' name=AnyString fieldNameNote=NoteRef? CLOSE;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//OPEN 'FieldName' name=STRING fieldNameNote=NoteRef? CLOSE
+		//OPEN 'FieldName' name=AnyString fieldNameNote=NoteRef? CLOSE
 		public Group getGroup() { return cGroup; }
 		
 		//OPEN
@@ -2433,11 +2484,11 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		//'FieldName'
 		public Keyword getFieldNameKeyword_1() { return cFieldNameKeyword_1; }
 		
-		//name=STRING
+		//name=AnyString
 		public Assignment getNameAssignment_2() { return cNameAssignment_2; }
 		
-		//STRING
-		public RuleCall getNameSTRINGTerminalRuleCall_2_0() { return cNameSTRINGTerminalRuleCall_2_0; }
+		//AnyString
+		public RuleCall getNameAnyStringParserRuleCall_2_0() { return cNameAnyStringParserRuleCall_2_0; }
 		
 		//fieldNameNote=NoteRef?
 		public Assignment getFieldNameNoteAssignment_3() { return cFieldNameNoteAssignment_3; }
@@ -2454,16 +2505,16 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cOPENTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
 		private final Keyword cUnitsKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cUnitsAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cUnitsSTRINGTerminalRuleCall_2_0 = (RuleCall)cUnitsAssignment_2.eContents().get(0);
+		private final RuleCall cUnitsAnyStringParserRuleCall_2_0 = (RuleCall)cUnitsAssignment_2.eContents().get(0);
 		private final Assignment cUnitsNoteAssignment_3 = (Assignment)cGroup.eContents().get(3);
 		private final RuleCall cUnitsNoteNoteRefParserRuleCall_3_0 = (RuleCall)cUnitsNoteAssignment_3.eContents().get(0);
 		private final RuleCall cCLOSETerminalRuleCall_4 = (RuleCall)cGroup.eContents().get(4);
 		
 		//Units:
-		//	OPEN 'Units' units=STRING unitsNote=NoteRef? CLOSE;
+		//	OPEN 'Units' units=AnyString unitsNote=NoteRef? CLOSE;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//OPEN 'Units' units=STRING unitsNote=NoteRef? CLOSE
+		//OPEN 'Units' units=AnyString unitsNote=NoteRef? CLOSE
 		public Group getGroup() { return cGroup; }
 		
 		//OPEN
@@ -2472,11 +2523,11 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		//'Units'
 		public Keyword getUnitsKeyword_1() { return cUnitsKeyword_1; }
 		
-		//units=STRING
+		//units=AnyString
 		public Assignment getUnitsAssignment_2() { return cUnitsAssignment_2; }
 		
-		//STRING
-		public RuleCall getUnitsSTRINGTerminalRuleCall_2_0() { return cUnitsSTRINGTerminalRuleCall_2_0; }
+		//AnyString
+		public RuleCall getUnitsAnyStringParserRuleCall_2_0() { return cUnitsAnyStringParserRuleCall_2_0; }
 		
 		//unitsNote=NoteRef?
 		public Assignment getUnitsNoteAssignment_3() { return cUnitsNoteAssignment_3; }
@@ -3056,9 +3107,6 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
 		private final RuleCall cTEXTTerminalRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
 		
-		////terminal BASE_DATA_TYPE : '"' ('unsigned short' | 'short' | 'unsigned long' | 'long' | 'unsigned long
-		////	long' | 'long long' | 'double' | 'float' | 'boolean' | 'any' | 'string' |
-		////	'char' | 'octet') '"';
 		//AnyText:
 		//	ID | TEXT;
 		@Override public ParserRule getRule() { return rule; }
@@ -3071,6 +3119,25 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//TEXT
 		public RuleCall getTEXTTerminalRuleCall_1() { return cTEXTTerminalRuleCall_1; }
+	}
+	public class AnyStringElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "com.cohesionforce.hla.dsl.Omt.AnyString");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final RuleCall cSTRINGTerminalRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
+		private final RuleCall cBASE_DATA_TYPETerminalRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
+		
+		//AnyString:
+		//	STRING | BASE_DATA_TYPE;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//STRING | BASE_DATA_TYPE
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//STRING
+		public RuleCall getSTRINGTerminalRuleCall_0() { return cSTRINGTerminalRuleCall_0; }
+		
+		//BASE_DATA_TYPE
+		public RuleCall getBASE_DATA_TYPETerminalRuleCall_1() { return cBASE_DATA_TYPETerminalRuleCall_1; }
 	}
 	
 	
@@ -3105,6 +3172,7 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 	private final ResolutionElements pResolution;
 	private final PositionElements pPosition;
 	private final DataTypeElements pDataType;
+	private final TypeReferenceElements pTypeReference;
 	private final FieldNameElements pFieldName;
 	private final UnitsElements pUnits;
 	private final CardinalityElements pCardinality;
@@ -3117,6 +3185,8 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 	private final NoteElements pNote;
 	private final NoteRefElements pNoteRef;
 	private final AnyTextElements pAnyText;
+	private final AnyStringElements pAnyString;
+	private final TerminalRule tBASE_DATA_TYPE;
 	private final TerminalRule tOPEN;
 	private final TerminalRule tCLOSE;
 	private final TerminalRule tCOMMENT;
@@ -3165,6 +3235,7 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		this.pResolution = new ResolutionElements();
 		this.pPosition = new PositionElements();
 		this.pDataType = new DataTypeElements();
+		this.pTypeReference = new TypeReferenceElements();
 		this.pFieldName = new FieldNameElements();
 		this.pUnits = new UnitsElements();
 		this.pCardinality = new CardinalityElements();
@@ -3177,6 +3248,8 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		this.pNote = new NoteElements();
 		this.pNoteRef = new NoteRefElements();
 		this.pAnyText = new AnyTextElements();
+		this.pAnyString = new AnyStringElements();
+		this.tBASE_DATA_TYPE = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "com.cohesionforce.hla.dsl.Omt.BASE_DATA_TYPE");
 		this.tOPEN = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "com.cohesionforce.hla.dsl.Omt.OPEN");
 		this.tCLOSE = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "com.cohesionforce.hla.dsl.Omt.CLOSE");
 		this.tCOMMENT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "com.cohesionforce.hla.dsl.Omt.COMMENT");
@@ -3311,7 +3384,7 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 	
 	//Dimension:
 	//	OPEN 'Dimension' OPEN 'Name' name=STRING nameNote=NoteRef? CLOSE
-	//	OPEN 'DimensionType' type=STRING typeNote=NoteRef? CLOSE
+	//	OPEN 'DimensionType' (type=[TypeReference|STRING] | dataType=BASE_DATA_TYPE) typeNote=NoteRef? CLOSE
 	//	domain=DimensionDomain (OPEN 'RangeSetUnits' units=STRING unitsNote=NoteRef? CLOSE)?
 	//	OPEN 'NormalizationFunction' function=STRING functionNote=NoteRef? CLOSE
 	//	CLOSE;
@@ -3577,7 +3650,9 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//DataType:
-	//	OPEN 'DataType' dataType=STRING dataTypeNode=NoteRef? CLOSE;
+	//	OPEN 'DataType' (refType=[TypeReference|STRING] | dataType=BASE_DATA_TYPE) dataTypeNode=NoteRef? CLOSE
+	//	//	OPEN 'DataType' dataType=STRING dataTypeNode=NoteRef? CLOSE
+	//;
 	public DataTypeElements getDataTypeAccess() {
 		return pDataType;
 	}
@@ -3586,8 +3661,18 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		return getDataTypeAccess().getRule();
 	}
 	
+	//TypeReference:
+	//	ComplexDataType | EnumeratedDataType;
+	public TypeReferenceElements getTypeReferenceAccess() {
+		return pTypeReference;
+	}
+	
+	public ParserRule getTypeReferenceRule() {
+		return getTypeReferenceAccess().getRule();
+	}
+	
 	//FieldName:
-	//	OPEN 'FieldName' name=STRING fieldNameNote=NoteRef? CLOSE;
+	//	OPEN 'FieldName' name=AnyString fieldNameNote=NoteRef? CLOSE;
 	public FieldNameElements getFieldNameAccess() {
 		return pFieldName;
 	}
@@ -3597,7 +3682,7 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//Units:
-	//	OPEN 'Units' units=STRING unitsNote=NoteRef? CLOSE;
+	//	OPEN 'Units' units=AnyString unitsNote=NoteRef? CLOSE;
 	public UnitsElements getUnitsAccess() {
 		return pUnits;
 	}
@@ -3712,9 +3797,6 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 		return getNoteRefAccess().getRule();
 	}
 	
-	////terminal BASE_DATA_TYPE : '"' ('unsigned short' | 'short' | 'unsigned long' | 'long' | 'unsigned long
-	////	long' | 'long long' | 'double' | 'float' | 'boolean' | 'any' | 'string' |
-	////	'char' | 'octet') '"';
 	//AnyText:
 	//	ID | TEXT;
 	public AnyTextElements getAnyTextAccess() {
@@ -3723,6 +3805,23 @@ public class OmtGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getAnyTextRule() {
 		return getAnyTextAccess().getRule();
+	}
+	
+	//AnyString:
+	//	STRING | BASE_DATA_TYPE;
+	public AnyStringElements getAnyStringAccess() {
+		return pAnyString;
+	}
+	
+	public ParserRule getAnyStringRule() {
+		return getAnyStringAccess().getRule();
+	}
+	
+	//terminal BASE_DATA_TYPE:
+	//	'"' ('unsigned short' | 'short' | 'unsigned long' | 'long' | 'unsigned long long'
+	//	| 'long long' | 'double' | 'float' | 'boolean' | 'any' | 'string' | 'char' | 'octet') '"';
+	public TerminalRule getBASE_DATA_TYPERule() {
+		return tBASE_DATA_TYPE;
 	}
 	
 	//terminal OPEN:

@@ -24,7 +24,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface EnumeratedDataType extends OMTComponent
+public interface EnumeratedDataType extends OMTComponent, TypeReference
 {
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.

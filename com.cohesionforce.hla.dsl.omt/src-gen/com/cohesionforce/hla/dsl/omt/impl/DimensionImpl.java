@@ -7,6 +7,7 @@ import com.cohesionforce.hla.dsl.omt.Dimension;
 import com.cohesionforce.hla.dsl.omt.DimensionDomain;
 import com.cohesionforce.hla.dsl.omt.NoteRef;
 import com.cohesionforce.hla.dsl.omt.OmtPackage;
+import com.cohesionforce.hla.dsl.omt.TypeReference;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
@@ -28,6 +29,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *   <li>{@link com.cohesionforce.hla.dsl.omt.impl.DimensionImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.impl.DimensionImpl#getNameNote <em>Name Note</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.impl.DimensionImpl#getType <em>Type</em>}</li>
+ *   <li>{@link com.cohesionforce.hla.dsl.omt.impl.DimensionImpl#getDataType <em>Data Type</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.impl.DimensionImpl#getTypeNote <em>Type Note</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.impl.DimensionImpl#getDomain <em>Domain</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.impl.DimensionImpl#getUnits <em>Units</em>}</li>
@@ -71,24 +73,34 @@ public class DimensionImpl extends MinimalEObjectImpl.Container implements Dimen
   protected NoteRef nameNote;
 
   /**
-   * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+   * The cached value of the '{@link #getType() <em>Type</em>}' reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getType()
    * @generated
    * @ordered
    */
-  protected static final String TYPE_EDEFAULT = null;
+  protected TypeReference type;
 
   /**
-   * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+   * The default value of the '{@link #getDataType() <em>Data Type</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getType()
+   * @see #getDataType()
    * @generated
    * @ordered
    */
-  protected String type = TYPE_EDEFAULT;
+  protected static final String DATA_TYPE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getDataType() <em>Data Type</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDataType()
+   * @generated
+   * @ordered
+   */
+  protected String dataType = DATA_TYPE_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getTypeNote() <em>Type Note</em>}' containment reference.
@@ -267,7 +279,27 @@ public class DimensionImpl extends MinimalEObjectImpl.Container implements Dimen
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getType()
+  public TypeReference getType()
+  {
+    if (type != null && type.eIsProxy())
+    {
+      InternalEObject oldType = (InternalEObject)type;
+      type = (TypeReference)eResolveProxy(oldType);
+      if (type != oldType)
+      {
+        if (eNotificationRequired())
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, OmtPackage.DIMENSION__TYPE, oldType, type));
+      }
+    }
+    return type;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TypeReference basicGetType()
   {
     return type;
   }
@@ -277,12 +309,35 @@ public class DimensionImpl extends MinimalEObjectImpl.Container implements Dimen
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setType(String newType)
+  public void setType(TypeReference newType)
   {
-    String oldType = type;
+    TypeReference oldType = type;
     type = newType;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, OmtPackage.DIMENSION__TYPE, oldType, type));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getDataType()
+  {
+    return dataType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setDataType(String newDataType)
+  {
+    String oldDataType = dataType;
+    dataType = newDataType;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, OmtPackage.DIMENSION__DATA_TYPE, oldDataType, dataType));
   }
 
   /**
@@ -562,7 +617,10 @@ public class DimensionImpl extends MinimalEObjectImpl.Container implements Dimen
       case OmtPackage.DIMENSION__NAME_NOTE:
         return getNameNote();
       case OmtPackage.DIMENSION__TYPE:
-        return getType();
+        if (resolve) return getType();
+        return basicGetType();
+      case OmtPackage.DIMENSION__DATA_TYPE:
+        return getDataType();
       case OmtPackage.DIMENSION__TYPE_NOTE:
         return getTypeNote();
       case OmtPackage.DIMENSION__DOMAIN:
@@ -596,7 +654,10 @@ public class DimensionImpl extends MinimalEObjectImpl.Container implements Dimen
         setNameNote((NoteRef)newValue);
         return;
       case OmtPackage.DIMENSION__TYPE:
-        setType((String)newValue);
+        setType((TypeReference)newValue);
+        return;
+      case OmtPackage.DIMENSION__DATA_TYPE:
+        setDataType((String)newValue);
         return;
       case OmtPackage.DIMENSION__TYPE_NOTE:
         setTypeNote((NoteRef)newValue);
@@ -637,7 +698,10 @@ public class DimensionImpl extends MinimalEObjectImpl.Container implements Dimen
         setNameNote((NoteRef)null);
         return;
       case OmtPackage.DIMENSION__TYPE:
-        setType(TYPE_EDEFAULT);
+        setType((TypeReference)null);
+        return;
+      case OmtPackage.DIMENSION__DATA_TYPE:
+        setDataType(DATA_TYPE_EDEFAULT);
         return;
       case OmtPackage.DIMENSION__TYPE_NOTE:
         setTypeNote((NoteRef)null);
@@ -676,7 +740,9 @@ public class DimensionImpl extends MinimalEObjectImpl.Container implements Dimen
       case OmtPackage.DIMENSION__NAME_NOTE:
         return nameNote != null;
       case OmtPackage.DIMENSION__TYPE:
-        return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
+        return type != null;
+      case OmtPackage.DIMENSION__DATA_TYPE:
+        return DATA_TYPE_EDEFAULT == null ? dataType != null : !DATA_TYPE_EDEFAULT.equals(dataType);
       case OmtPackage.DIMENSION__TYPE_NOTE:
         return typeNote != null;
       case OmtPackage.DIMENSION__DOMAIN:
@@ -706,8 +772,8 @@ public class DimensionImpl extends MinimalEObjectImpl.Container implements Dimen
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (name: ");
     result.append(name);
-    result.append(", type: ");
-    result.append(type);
+    result.append(", dataType: ");
+    result.append(dataType);
     result.append(", units: ");
     result.append(units);
     result.append(", function: ");

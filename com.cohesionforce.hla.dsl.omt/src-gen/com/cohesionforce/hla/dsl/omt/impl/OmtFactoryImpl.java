@@ -37,6 +37,7 @@ import com.cohesionforce.hla.dsl.omt.RoutingSpace;
 import com.cohesionforce.hla.dsl.omt.SuperClass;
 import com.cohesionforce.hla.dsl.omt.SuperInteraction;
 import com.cohesionforce.hla.dsl.omt.TimeRepresentation;
+import com.cohesionforce.hla.dsl.omt.TypeReference;
 import com.cohesionforce.hla.dsl.omt.Units;
 
 import org.eclipse.emf.ecore.EClass;
@@ -123,6 +124,7 @@ public class OmtFactoryImpl extends EFactoryImpl implements OmtFactory
       case OmtPackage.RESOLUTION: return createResolution();
       case OmtPackage.POSITION: return createPosition();
       case OmtPackage.DATA_TYPE: return createDataType();
+      case OmtPackage.TYPE_REFERENCE: return createTypeReference();
       case OmtPackage.FIELD_NAME: return createFieldName();
       case OmtPackage.UNITS: return createUnits();
       case OmtPackage.CARDINALITY: return createCardinality();
@@ -400,6 +402,17 @@ public class OmtFactoryImpl extends EFactoryImpl implements OmtFactory
   {
     DataTypeImpl dataType = new DataTypeImpl();
     return dataType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TypeReference createTypeReference()
+  {
+    TypeReferenceImpl typeReference = new TypeReferenceImpl();
+    return typeReference;
   }
 
   /**

@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link com.cohesionforce.hla.dsl.omt.DataType#getRefType <em>Ref Type</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.DataType#getDataType <em>Data Type</em>}</li>
  *   <li>{@link com.cohesionforce.hla.dsl.omt.DataType#getDataTypeNode <em>Data Type Node</em>}</li>
  * </ul>
@@ -24,6 +25,32 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface DataType extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Ref Type</b></em>' reference.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Ref Type</em>' reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Ref Type</em>' reference.
+   * @see #setRefType(TypeReference)
+   * @see com.cohesionforce.hla.dsl.omt.OmtPackage#getDataType_RefType()
+   * @model
+   * @generated
+   */
+  TypeReference getRefType();
+
+  /**
+   * Sets the value of the '{@link com.cohesionforce.hla.dsl.omt.DataType#getRefType <em>Ref Type</em>}' reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Ref Type</em>' reference.
+   * @see #getRefType()
+   * @generated
+   */
+  void setRefType(TypeReference value);
+
   /**
    * Returns the value of the '<em><b>Data Type</b></em>' attribute.
    * <!-- begin-user-doc -->

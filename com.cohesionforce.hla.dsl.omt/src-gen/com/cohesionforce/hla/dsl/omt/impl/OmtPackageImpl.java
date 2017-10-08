@@ -37,6 +37,7 @@ import com.cohesionforce.hla.dsl.omt.RoutingSpace;
 import com.cohesionforce.hla.dsl.omt.SuperClass;
 import com.cohesionforce.hla.dsl.omt.SuperInteraction;
 import com.cohesionforce.hla.dsl.omt.TimeRepresentation;
+import com.cohesionforce.hla.dsl.omt.TypeReference;
 import com.cohesionforce.hla.dsl.omt.Units;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -221,6 +222,13 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
    * @generated
    */
   private EClass dataTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass typeReferenceEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -870,9 +878,19 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getDimension_Type()
+  public EReference getDimension_Type()
   {
-    return (EAttribute)dimensionEClass.getEStructuralFeatures().get(2);
+    return (EReference)dimensionEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getDimension_DataType()
+  {
+    return (EAttribute)dimensionEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -882,7 +900,7 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
    */
   public EReference getDimension_TypeNote()
   {
-    return (EReference)dimensionEClass.getEStructuralFeatures().get(3);
+    return (EReference)dimensionEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -892,7 +910,7 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
    */
   public EReference getDimension_Domain()
   {
-    return (EReference)dimensionEClass.getEStructuralFeatures().get(4);
+    return (EReference)dimensionEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -902,7 +920,7 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
    */
   public EAttribute getDimension_Units()
   {
-    return (EAttribute)dimensionEClass.getEStructuralFeatures().get(5);
+    return (EAttribute)dimensionEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -912,7 +930,7 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
    */
   public EReference getDimension_UnitsNote()
   {
-    return (EReference)dimensionEClass.getEStructuralFeatures().get(6);
+    return (EReference)dimensionEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -922,7 +940,7 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
    */
   public EAttribute getDimension_Function()
   {
-    return (EAttribute)dimensionEClass.getEStructuralFeatures().get(7);
+    return (EAttribute)dimensionEClass.getEStructuralFeatures().get(8);
   }
 
   /**
@@ -932,7 +950,7 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
    */
   public EReference getDimension_FunctionNote()
   {
-    return (EReference)dimensionEClass.getEStructuralFeatures().get(8);
+    return (EReference)dimensionEClass.getEStructuralFeatures().get(9);
   }
 
   /**
@@ -1680,9 +1698,19 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EReference getDataType_RefType()
+  {
+    return (EReference)dataTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EAttribute getDataType_DataType()
   {
-    return (EAttribute)dataTypeEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)dataTypeEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1692,7 +1720,17 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
    */
   public EReference getDataType_DataTypeNode()
   {
-    return (EReference)dataTypeEClass.getEStructuralFeatures().get(1);
+    return (EReference)dataTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getTypeReference()
+  {
+    return typeReferenceEClass;
   }
 
   /**
@@ -2172,7 +2210,8 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
     dimensionEClass = createEClass(DIMENSION);
     createEAttribute(dimensionEClass, DIMENSION__NAME);
     createEReference(dimensionEClass, DIMENSION__NAME_NOTE);
-    createEAttribute(dimensionEClass, DIMENSION__TYPE);
+    createEReference(dimensionEClass, DIMENSION__TYPE);
+    createEAttribute(dimensionEClass, DIMENSION__DATA_TYPE);
     createEReference(dimensionEClass, DIMENSION__TYPE_NOTE);
     createEReference(dimensionEClass, DIMENSION__DOMAIN);
     createEAttribute(dimensionEClass, DIMENSION__UNITS);
@@ -2270,8 +2309,11 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
     createEAttribute(positionEClass, POSITION__POSITION);
 
     dataTypeEClass = createEClass(DATA_TYPE);
+    createEReference(dataTypeEClass, DATA_TYPE__REF_TYPE);
     createEAttribute(dataTypeEClass, DATA_TYPE__DATA_TYPE);
     createEReference(dataTypeEClass, DATA_TYPE__DATA_TYPE_NODE);
+
+    typeReferenceEClass = createEClass(TYPE_REFERENCE);
 
     fieldNameEClass = createEClass(FIELD_NAME);
     createEAttribute(fieldNameEClass, FIELD_NAME__NAME);
@@ -2359,7 +2401,9 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
     superClassEClass.getESuperTypes().add(this.getClassComponent());
     attributeEClass.getESuperTypes().add(this.getClassComponent());
     enumeratedDataTypeEClass.getESuperTypes().add(this.getOMTComponent());
+    enumeratedDataTypeEClass.getESuperTypes().add(this.getTypeReference());
     complexDataTypeEClass.getESuperTypes().add(this.getOMTComponent());
+    complexDataTypeEClass.getESuperTypes().add(this.getTypeReference());
     interactionEClass.getESuperTypes().add(this.getOMTComponent());
     superInteractionEClass.getESuperTypes().add(this.getInteractionComponent());
     parameterEClass.getESuperTypes().add(this.getInteractionComponent());
@@ -2423,7 +2467,8 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
     initEClass(dimensionEClass, Dimension.class, "Dimension", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getDimension_Name(), ecorePackage.getEString(), "name", null, 0, 1, Dimension.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDimension_NameNote(), this.getNoteRef(), null, "nameNote", null, 0, 1, Dimension.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getDimension_Type(), ecorePackage.getEString(), "type", null, 0, 1, Dimension.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getDimension_Type(), this.getTypeReference(), null, "type", null, 0, 1, Dimension.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getDimension_DataType(), ecorePackage.getEString(), "dataType", null, 0, 1, Dimension.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDimension_TypeNote(), this.getNoteRef(), null, "typeNote", null, 0, 1, Dimension.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDimension_Domain(), this.getDimensionDomain(), null, "domain", null, 0, 1, Dimension.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getDimension_Units(), ecorePackage.getEString(), "units", null, 0, 1, Dimension.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -2521,8 +2566,11 @@ public class OmtPackageImpl extends EPackageImpl implements OmtPackage
     initEAttribute(getPosition_Position(), ecorePackage.getEString(), "position", null, 0, 1, Position.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(dataTypeEClass, DataType.class, "DataType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getDataType_RefType(), this.getTypeReference(), null, "refType", null, 0, 1, DataType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getDataType_DataType(), ecorePackage.getEString(), "dataType", null, 0, 1, DataType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDataType_DataTypeNode(), this.getNoteRef(), null, "dataTypeNode", null, 0, 1, DataType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(typeReferenceEClass, TypeReference.class, "TypeReference", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(fieldNameEClass, FieldName.class, "FieldName", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getFieldName_Name(), ecorePackage.getEString(), "name", null, 0, 1, FieldName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
