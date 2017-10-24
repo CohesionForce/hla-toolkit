@@ -40,16 +40,14 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//TimeRepresentation/maxNote"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//TimeRepresentation/initial"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//TimeRepresentation/initialNote"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//TimeRepresentation/dataType"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//TimeRepresentation/typeNote"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//TimeRepresentation/dataType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//TimeRepresentation/operators"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//TimeRepresentation/operatorsNote"/>
     </genClasses>
     <genClasses ecoreClass="Omt.ecore#//Lookahead">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Lookahead/units"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Lookahead/unitsNote"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Lookahead/dataType"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Lookahead/typeNote"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Lookahead/dataType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Lookahead/operator"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Lookahead/operatorNote"/>
     </genClasses>
@@ -84,17 +82,20 @@
     <genClasses ecoreClass="Omt.ecore#//DimensionSetMember">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//DimensionSetMember/value"/>
     </genClasses>
-    <genClasses ecoreClass="Omt.ecore#//Class">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Class/id"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Class/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Class/note"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Class/isMOMClass"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Class/description"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Class/components"/>
+    <genClasses ecoreClass="Omt.ecore#//AttributeClass">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//AttributeClass/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//AttributeClass/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//AttributeClass/note"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//AttributeClass/isMOMClass"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//AttributeClass/description"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//AttributeClass/components"/>
+    </genClasses>
+    <genClasses ecoreClass="Omt.ecore#//ClassId">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//ClassId/name"/>
     </genClasses>
     <genClasses ecoreClass="Omt.ecore#//ClassComponent"/>
     <genClasses ecoreClass="Omt.ecore#//SuperClass">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//SuperClass/superClass"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Omt.ecore#//SuperClass/super"/>
     </genClasses>
     <genClasses ecoreClass="Omt.ecore#//Attribute">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Attribute/name"/>
@@ -178,7 +179,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Cardinality/cardinalityNote"/>
     </genClasses>
     <genClasses ecoreClass="Omt.ecore#//Interaction">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Interaction/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Interaction/id"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Interaction/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Interaction/nameNote"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Interaction/type"/>
@@ -188,9 +189,12 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Omt.ecore#//Interaction/routingSpace"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Omt.ecore#//Interaction/components"/>
     </genClasses>
+    <genClasses ecoreClass="Omt.ecore#//InteractionId">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//InteractionId/name"/>
+    </genClasses>
     <genClasses ecoreClass="Omt.ecore#//InteractionComponent"/>
     <genClasses ecoreClass="Omt.ecore#//SuperInteraction">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//SuperInteraction/ID"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Omt.ecore#//SuperInteraction/super"/>
     </genClasses>
     <genClasses ecoreClass="Omt.ecore#//Parameter">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Omt.ecore#//Parameter/name"/>

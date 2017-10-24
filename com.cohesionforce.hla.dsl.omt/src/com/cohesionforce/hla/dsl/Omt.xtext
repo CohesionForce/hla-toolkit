@@ -40,7 +40,7 @@ TimeRepresentation:
 		OPEN 'Minimum' min=STRING minNote=NoteRef? CLOSE
 		OPEN 'Maximum' max=STRING maxNote=NoteRef? CLOSE
 		OPEN 'InitialValue' initial=STRING initialNote=NoteRef? CLOSE
-		OPEN 'DataType' dataType=STRING typeNote=NoteRef? CLOSE
+		dataType=DataType
 		(OPEN 'Operators' operators=STRING operatorsNote=NoteRef? CLOSE )?
 	CLOSE
 ;
@@ -48,7 +48,7 @@ TimeRepresentation:
 Lookahead:
 	OPEN 'Lookahead'
 		OPEN 'Units' units=STRING unitsNote=NoteRef? CLOSE
-		OPEN 'DataType' dataType=STRING typeNote=NoteRef? CLOSE
+		dataType=DataType
 		(OPEN 'AdditionOperator' operator=STRING operatorNote=NoteRef? CLOSE)?
 	CLOSE
 ;
@@ -58,7 +58,7 @@ MOD_Type:
 ;
 
 OMTComponent:
-	Class | EnumeratedDataType | ComplexDataType | RoutingSpace | Interaction | Note
+	AttributeClass | EnumeratedDataType | ComplexDataType | RoutingSpace | Interaction | Note
 ;
 
 RoutingSpace:
@@ -98,14 +98,18 @@ DimensionSetMember:
 	OPEN 'Member' value=STRING CLOSE
 ;
 
-Class:
-	OPEN 'Class' OPEN 'ID' id=INT CLOSE
+AttributeClass:
+	OPEN 'Class' OPEN 'ID' id=ClassId CLOSE
 		OPEN 'Name' name=STRING note=NoteRef? CLOSE
 		(OPEN 'MOMClass' isMOMClass=IsMOMClass CLOSE)?
 		OPEN 'PSCapabilities' PSCapabilities CLOSE
 		description=Description?
 		
 		components+=ClassComponent* CLOSE
+;
+
+ClassId:
+	name=INT_TEXT
 ;
 
 IsMOMClass:
@@ -119,7 +123,7 @@ ClassComponent:
 ;
 
 SuperClass:
-	OPEN 'SuperClass' superClass=INT CLOSE
+	OPEN 'SuperClass' super=[ClassId|INT_TEXT] CLOSE
 ;
 
 Attribute:
@@ -152,7 +156,7 @@ EnumeratedDataType:
 
 Enumeration:
 	OPEN 'Enumeration' OPEN 'Enumerator' literal=STRING enumeratorNote=NoteRef? CLOSE
-		OPEN 'Representation' value=INT representationNote=NoteRef? CLOSE 
+		OPEN 'Representation' value=INT_TEXT representationNote=NoteRef? CLOSE 
 	CLOSE
 ;
 
@@ -189,7 +193,6 @@ Position:
 ;
 DataType:
 	OPEN 'DataType' (refType=[TypeReference|STRING]| dataType=BASE_DATA_TYPE) dataTypeNode=NoteRef? CLOSE
-//	OPEN 'DataType' dataType=STRING dataTypeNode=NoteRef? CLOSE
 ;
 TypeReference:
 	ComplexDataType | EnumeratedDataType
@@ -205,7 +208,7 @@ Cardinality:
 ;
 
 Interaction:
-	OPEN 'Interaction' OPEN 'ID' id=INT CLOSE
+	OPEN 'Interaction' OPEN 'ID' id=InteractionId CLOSE
 		OPEN 'Name' name=STRING nameNote=NoteRef? CLOSE
 		OPEN 'ISRType' type=ISRType typeNote=NoteRef? CLOSE
 		(OPEN 'MOMInteraction' isMOMInteraction=('TRUE'|'FALSE') CLOSE)?
@@ -213,6 +216,10 @@ Interaction:
 		(OPEN 'RoutingSpace' routingSpace=[RoutingSpace|STRING] CLOSE)?
 		components+=InteractionComponent*
 	CLOSE
+;
+
+InteractionId:
+	name=INT_TEXT
 ;
 
 ISRType: 
@@ -223,7 +230,7 @@ InteractionComponent:
 ;
 
 SuperInteraction:
-	OPEN 'SuperInteraction' ID=INT CLOSE
+	OPEN 'SuperInteraction' super=[InteractionId|INT_TEXT] CLOSE
 ;
 
 Parameter:
@@ -244,13 +251,12 @@ Description:
 
 Note:
 	OPEN 'Note' 
-		OPEN 'NoteNumber' ID=INT CLOSE
+		OPEN 'NoteNumber' ID=INT_TEXT CLOSE
 		OPEN 'NoteText' text=STRING CLOSE
 	CLOSE
 ;
 
-
-NoteRef : '[' refs+=INT (',' refs+=INT)* ']';
+NoteRef : '[' refs+=INT_TEXT (',' refs+=INT_TEXT)* ']';
 
 AnyText:
 	ID | TEXT
@@ -267,7 +273,7 @@ terminal OPEN		: '(';
 terminal CLOSE		: ')';
 terminal COMMENT 	: ';;' !('\n'|'\r')* ('\r'? '\n')?;
 terminal ID  		: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
-terminal INT returns ecore::EInt: ('0'..'9')+;
+terminal INT_TEXT 	: ('0'..'9')+;
 
 terminal STRING	: 
 			'"' ( '\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\'|'"') )* '"' |

@@ -3,9 +3,18 @@
  */
 package com.cohesionforce.hla.dsl
 
+import com.cohesionforce.hla.dsl.naming.QualifiedNameProvider
 
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
 class OmtRuntimeModule extends AbstractOmtRuntimeModule {
+
+	override bindIQualifiedNameProvider() {
+		return QualifiedNameProvider;
+	}	
+	
+//    override public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
+//        return MyDslQNP.class;
+//    }
 }

@@ -3,6 +3,14 @@
  */
 package com.cohesionforce.hla.dsl.scoping
 
+import com.cohesionforce.hla.dsl.fom.AttributeClass
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EReference
+import org.eclipse.xtext.EcoreUtil2
+import com.cohesionforce.hla.dsl.fom.FomPackage
+import org.eclipse.xtext.scoping.Scopes
+import java.util.ArrayList
+import com.cohesionforce.hla.dsl.omt.OmtPackage
 
 /**
  * This class contains custom scoping description.
@@ -11,5 +19,25 @@ package com.cohesionforce.hla.dsl.scoping
  * on how and when to use it.
  */
 class FomScopeProvider extends AbstractFomScopeProvider {
+//	override getScope(EObject context, EReference reference) {
+//		if (context instanceof AttributeClass && reference == FomPackage.Literals.ATTRIBUTE_CLASS__NAME) {
+//			val classList = new ArrayList<EObject>
+//			val resourceSet = EcoreUtil2.getRootContainer(context).eResource.resourceSet
+//			resourceSet.resources.forEach [
+//				{
+//					it.allContents.forEach [
+//						{
+//							if (it instanceof com.cohesionforce.hla.dsl.omt.Class) {
+//								println("Found " + it.name)
+//								classList.add(it);
+//							}
+//						}
+//					]
+//				}
+//			]
+//			return Scopes.scopeFor(classList)
+//		}
+//		return super.getScope(context, reference);
+//	}
 
 }

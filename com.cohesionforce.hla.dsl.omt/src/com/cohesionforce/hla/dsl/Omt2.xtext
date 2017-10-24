@@ -14,20 +14,20 @@ HLAOMT_DIF_v1_3:
 
 ObjectModel:
 	OPEN 'ObjectModel' 
-		(OPEN 'Name' name=STRING CLOSE)
-		(OPEN 'VersionNumber' version=STRING CLOSE)
+		(OPEN 'Name' name=AnyString CLOSE)
+		(OPEN 'VersionNumber' version=AnyString CLOSE)
 		(OPEN 'Type' type=MOD_Type CLOSE)?
-		(OPEN 'Purpose' purpose=STRING CLOSE)?
-		(OPEN 'ApplicationDomain' domain=STRING CLOSE)?
-		(OPEN 'SponsorOrgName' sponsor=STRING CLOSE)?
-		(OPEN 'POCHonorificName' pocHonorific=STRING CLOSE)?
-		(OPEN 'POCFirstName' pocFirstName=STRING CLOSE)?
-		(OPEN 'POCLastName' pocLastName=STRING CLOSE)?
-		(OPEN 'POCOrgName' pocOrgName=STRING CLOSE)?
-		(OPEN 'POCPhone' pocPhone=STRING CLOSE)?
-		(OPEN 'POCEmail' pocEmail=STRING CLOSE)?
+		(OPEN 'Purpose' purpose=AnyString CLOSE)?
+		(OPEN 'ApplicationDomain' domain=AnyString CLOSE)?
+		(OPEN 'SponsorOrgName' sponsor=AnyString CLOSE)?
+		(OPEN 'POCHonorificName' pocHonorific=AnyString CLOSE)?
+		(OPEN 'POCFirstName' pocFirstName=AnyString CLOSE)?
+		(OPEN 'POCLastName' pocLastName=AnyString CLOSE)?
+		(OPEN 'POCOrgName' pocOrgName=AnyString CLOSE)?
+		(OPEN 'POCPhone' pocPhone=AnyString CLOSE)?
+		(OPEN 'POCEmail' pocEmail=AnyString CLOSE)?
 		(OPEN 'ModificationDate' modificationDate=TEXT CLOSE)?
-		(OPEN 'MOMVersion' momVersion=STRING CLOSE)?
+		(OPEN 'MOMVersion' momVersion=AnyString CLOSE)?
 		timeRepresentation=TimeRepresentation?
 		lookAhead=Lookahead?
 		omtComponents+=OMTComponent*
@@ -36,20 +36,20 @@ ObjectModel:
 
 TimeRepresentation:
 	OPEN 'TimeRepresentation'
-		OPEN 'Units' units=STRING unitsNote=NoteRef? CLOSE
-		OPEN 'Minimum' min=STRING minNote=NoteRef? CLOSE
-		OPEN 'Maximum' max=STRING maxNote=NoteRef? CLOSE
-		OPEN 'InitialValue' initial=STRING initialNote=NoteRef? CLOSE
-		dataType=DataType
-		(OPEN 'Operators' operators=STRING operatorsNote=NoteRef? CLOSE )?
+		OPEN 'Units' units=AnyString unitsNote=NoteRef? CLOSE
+		OPEN 'Minimum' min=AnyString minNote=NoteRef? CLOSE
+		OPEN 'Maximum' max=AnyString maxNote=NoteRef? CLOSE
+		OPEN 'InitialValue' initial=AnyString initialNote=NoteRef? CLOSE
+		OPEN 'DataType' (type=[TypeReference|STRING]|dataType=BASE_DATA_TYPE) typeNote=NoteRef? CLOSE
+		(OPEN 'Operators' operators=AnyString operatorsNote=NoteRef? CLOSE )?
 	CLOSE
 ;
 
 Lookahead:
 	OPEN 'Lookahead'
-		OPEN 'Units' units=STRING unitsNote=NoteRef? CLOSE
-		dataType=DataType
-		(OPEN 'AdditionOperator' operator=STRING operatorNote=NoteRef? CLOSE)?
+		OPEN 'Units' units=AnyString unitsNote=NoteRef? CLOSE
+		OPEN 'DataType' (type=[TypeReference|STRING]|dataType=BASE_DATA_TYPE) typeNote=NoteRef? CLOSE
+		(OPEN 'AdditionOperator' operator=AnyString operatorNote=NoteRef? CLOSE)?
 	CLOSE
 ;
 
@@ -58,21 +58,21 @@ MOD_Type:
 ;
 
 OMTComponent:
-	AttributeClass | EnumeratedDataType | ComplexDataType | RoutingSpace | Interaction | Note
+	Class | EnumeratedDataType | ComplexDataType | RoutingSpace | Interaction | Note
 ;
 
 RoutingSpace:
-	OPEN 'RoutingSpace' OPEN 'Name' name=STRING note=NoteRef? CLOSE
+	OPEN 'RoutingSpace' OPEN 'Name' name=AnyString note=NoteRef? CLOSE
 		dimensions+=Dimension*
 	CLOSE
 ;
 
 Dimension:
-	OPEN 'Dimension' OPEN 'Name' name=STRING nameNote=NoteRef? CLOSE
+	OPEN 'Dimension' OPEN 'Name' name=AnyString nameNote=NoteRef? CLOSE
 		OPEN 'DimensionType' (type=[TypeReference|STRING]|dataType=BASE_DATA_TYPE) typeNote=NoteRef? CLOSE
 		domain=DimensionDomain
-		( OPEN 'RangeSetUnits' units=STRING unitsNote=NoteRef? CLOSE )?
-		OPEN 'NormalizationFunction' function=STRING functionNote=NoteRef? CLOSE
+		( OPEN 'RangeSetUnits' units=AnyString unitsNote=NoteRef? CLOSE )?
+		OPEN 'NormalizationFunction' function=AnyString functionNote=NoteRef? CLOSE
 	CLOSE
 ;	
 
@@ -81,8 +81,8 @@ DimensionDomain:
 ;
 
 DimensionRange:
-	OPEN 'DimensionMinimum' minimum=STRING note=NoteRef? CLOSE
-	(OPEN 'DimensionMaximum' maximum=STRING CLOSE)?
+	OPEN 'DimensionMinimum' minimum=AnyString note=NoteRef? CLOSE
+	(OPEN 'DimensionMaximum' maximum=AnyString CLOSE)?
 	OPEN 'IntervalType' IntervalType CLOSE
 ;
 
@@ -95,12 +95,12 @@ DimensionSet:
 ;
 
 DimensionSetMember:
-	OPEN 'Member' value=STRING CLOSE
+	OPEN 'Member' value=AnyString CLOSE
 ;
 
-AttributeClass:
-	OPEN 'Class' OPEN 'ID' id=ClassId CLOSE
-		OPEN 'Name' name=STRING note=NoteRef? CLOSE
+Class:
+	OPEN 'Class' OPEN 'ID' classId=ClassId CLOSE
+		OPEN 'Name' name=AnyString note=NoteRef? CLOSE
 		(OPEN 'MOMClass' isMOMClass=IsMOMClass CLOSE)?
 		OPEN 'PSCapabilities' PSCapabilities CLOSE
 		description=Description?
@@ -123,45 +123,45 @@ ClassComponent:
 ;
 
 SuperClass:
-	OPEN 'SuperClass' super=[ClassId|INT_TEXT] CLOSE
+	OPEN 'SuperClass' superClass=INT_TEXT CLOSE
 ;
 
 Attribute:
-	OPEN 'Attribute' OPEN 'Name' name=STRING nameNote=NoteRef? CLOSE
+	OPEN 'Attribute' OPEN 'Name' name=AnyString nameNote=NoteRef? CLOSE
 		dataType=DataType?
 		cardinality=Cardinality?
 		units=Units?
 		resolution=Resolution?
 		accuracy=Accuracy?
 		accuracyCondition=AccuracyCondition?
-		(OPEN 'UpdateType' updateType=ATT_UpdateType updateTypeNote=NoteRef? CLOSE)?
-		(OPEN 'UpdateCondition' updateCondition=STRING updateConditionNote=NoteRef? CLOSE)?
-		(OPEN 'TransferAccept' transferAccept=ATT_TransferAccept transferAcceptNote=NoteRef? CLOSE)?
-		(OPEN 'UpdateReflect' updateReflect=ATT_UpdateReflect updateReflectNote=NoteRef? CLOSE)?
+		(OPEN 'UpdateType' updateType=UpdateType updateTypeNote=NoteRef? CLOSE)?
+		(OPEN 'UpdateCondition' updateCondition=AnyString updateConditionNote=NoteRef? CLOSE)?
+		(OPEN 'TransferAccept' transferAccept=TransferAccept transferAcceptNote=NoteRef? CLOSE)?
+		(OPEN 'UpdateReflect' updateReflect=UpdateReflect updateReflectNote=NoteRef? CLOSE)?
 		description=Description?
-		(OPEN 'RoutingSpace' routingSpace=STRING CLOSE)? //TODO - LINK
+		(OPEN 'RoutingSpace' routingSpace=AnyString CLOSE)? //TODO - LINK
  	CLOSE
 ;
 
-ATT_UpdateType: 'Static' | 'Periodic' | 'Conditional';
-ATT_TransferAccept: 'T' | 'A' | 'TA' | 'N';
-ATT_UpdateReflect: 'U' | 'R' | 'UR';
+UpdateType: 'Static' | 'Periodic' | 'Conditional';
+TransferAccept: 'T' | 'A' | 'TA' | 'N';
+UpdateReflect: 'U' | 'R' | 'UR';
 
 EnumeratedDataType:
-	OPEN 'EnumeratedDataType' OPEN 'Name' name=STRING note=NoteRef? CLOSE
+	OPEN 'EnumeratedDataType' OPEN 'Name' name=AnyString note=NoteRef? CLOSE
 		(OPEN 'MOMEnumeratedDataType'  isMOMEnumeratedDataType=('TRUE'|'FALSE') CLOSE)?
 		literals+=Enumeration+ 
 	CLOSE
 ;
 
 Enumeration:
-	OPEN 'Enumeration' OPEN 'Enumerator' literal=STRING enumeratorNote=NoteRef? CLOSE
+	OPEN 'Enumeration' OPEN 'Enumerator' literal=AnyString enumeratorNote=NoteRef? CLOSE
 		OPEN 'Representation' value=INT_TEXT representationNote=NoteRef? CLOSE 
 	CLOSE
 ;
 
 ComplexDataType: 
-	OPEN 'ComplexDataType' OPEN 'Name' name=STRING note=NoteRef? CLOSE
+	OPEN 'ComplexDataType' OPEN 'Name' name=AnyString note=NoteRef? CLOSE
 		(OPEN 'MOMComplexDataType' isMOMComplexDataType=('TRUE'|'FALSE') CLOSE)?
 		components+=ComplexComponent+
 	CLOSE
@@ -180,16 +180,16 @@ ComplexComponent:
 	CLOSE
 ;
 Accuracy:
-	OPEN 'Accuracy' accuracy=STRING accuracyNote=NoteRef? CLOSE
+	OPEN 'Accuracy' accuracy=AnyString accuracyNote=NoteRef? CLOSE
 ;
 AccuracyCondition:
-	OPEN 'AccuracyCondition' accuracyCondition=STRING accuracyConditionNote=NoteRef? CLOSE
+	OPEN 'AccuracyCondition' accuracyCondition=AnyString accuracyConditionNote=NoteRef? CLOSE
 ;
 Resolution:
-	OPEN 'Resolution' resolution=STRING resolutionNote=NoteRef? CLOSE
+	OPEN 'Resolution' resolution=AnyString resolutionNote=NoteRef? CLOSE
 ;
 Position:
-	OPEN 'Position' position=STRING CLOSE
+	OPEN 'Position' position=AnyString CLOSE
 ;
 DataType:
 	OPEN 'DataType' (refType=[TypeReference|STRING]| dataType=BASE_DATA_TYPE) dataTypeNode=NoteRef? CLOSE
@@ -204,12 +204,12 @@ Units:
 	OPEN 'Units' units=AnyString unitsNote=NoteRef? CLOSE
 ;
 Cardinality:
-	OPEN 'Cardinality' cardinality=STRING cardinalityNote=NoteRef? CLOSE
+	OPEN 'Cardinality' cardinality=AnyString cardinalityNote=NoteRef? CLOSE
 ;
 
 Interaction:
 	OPEN 'Interaction' OPEN 'ID' id=InteractionId CLOSE
-		OPEN 'Name' name=STRING nameNote=NoteRef? CLOSE
+		OPEN 'Name' name=AnyString nameNote=NoteRef? CLOSE
 		OPEN 'ISRType' type=ISRType typeNote=NoteRef? CLOSE
 		(OPEN 'MOMInteraction' isMOMInteraction=('TRUE'|'FALSE') CLOSE)?
 		description+=Description
@@ -234,7 +234,7 @@ SuperInteraction:
 ;
 
 Parameter:
-	OPEN 'Parameter' OPEN 'Name' name=STRING nameNote=NoteRef? CLOSE
+	OPEN 'Parameter' OPEN 'Name' name=AnyString nameNote=NoteRef? CLOSE
 		dataType=DataType?
 		cardinality=Cardinality?
 		units=Units?
@@ -246,15 +246,16 @@ Parameter:
 ;
 
 Description:
-	OPEN 'Description' description=STRING CLOSE
+	OPEN 'Description' description=AnyString CLOSE
 ;
 
 Note:
 	OPEN 'Note' 
-		OPEN 'NoteNumber' ID=INT_TEXT CLOSE
-		OPEN 'NoteText' text=STRING CLOSE
+		OPEN 'NoteNumber' name=INT_TEXT CLOSE
+		OPEN 'NoteText' text=AnyString CLOSE
 	CLOSE
 ;
+
 
 NoteRef : '[' refs+=INT_TEXT (',' refs+=INT_TEXT)* ']';
 
@@ -273,7 +274,9 @@ terminal OPEN		: '(';
 terminal CLOSE		: ')';
 terminal COMMENT 	: ';;' !('\n'|'\r')* ('\r'? '\n')?;
 terminal ID  		: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
-terminal INT_TEXT 	: ('0'..'9')+;
+terminal INT_TEXT	: ('0'..'9')+;
+terminal TEXT		: !(','|'['|']'|'"'|"'"|'('|')'|' '|'\t'|'\r'|'\n')+;
+//terminal INT returns ecore::EInt: ('0'..'9')+;
 
 terminal STRING	: 
 			'"' ( '\\' . /* 'b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\' */ | !('\\'|'"') )* '"' |
@@ -283,6 +286,5 @@ terminal ML_COMMENT	: '/*' -> '*/';
 terminal SL_COMMENT 	: '//' !('\n'|'\r')* ('\r'? '\n')?;
 
 terminal WS			: (' '|'\t'|'\r'|'\n')+;
-terminal TEXT		: !(','|'['|']'|'"'|"'"|'('|')'|' '|'\t'|'\r'|'\n')+;
 
 terminal ANY_OTHER: .;

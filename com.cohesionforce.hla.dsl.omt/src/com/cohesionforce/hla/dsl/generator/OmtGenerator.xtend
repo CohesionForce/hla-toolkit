@@ -16,6 +16,7 @@ import org.eclipse.xtext.generator.IGeneratorContext
 class OmtGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
+//		println(resource.allContents.size);
 //		fsa.generateFile('greetings.txt', 'People to greet: ' + 
 //			resource.allContents
 //				.filter(Greeting)

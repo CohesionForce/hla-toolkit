@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.xtext,
  org.antlr.runtime,
  org.eclipse.xtext.util,
  org.eclipse.xtend.lib,
- org.eclipse.emf.common
+ org.eclipse.emf.common,
+ com.cohesionforce.hla.dsl.omt;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.cohesionforce.hla.dsl.fom,
  com.cohesionforce.hla.dsl.validation,

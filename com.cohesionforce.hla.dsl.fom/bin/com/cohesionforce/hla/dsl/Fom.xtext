@@ -3,61 +3,78 @@ grammar com.cohesionforce.hla.dsl.Fom hidden(WS, ML_COMMENT, SL_COMMENT, COMMENT
 generate fom "http://www.cohesionforce.com/hla/dsl/Fom"
 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+import "http://www.cohesionforce.com/hla/dsl/Omt" as omt
 
 Fed:
-	'(' 'FED'
+	OPEN 'FED'
 		federation = Federation
 		version = FEDversion
-		'(' 'spaces' spaces+=Space* ')'
-		'(' 'objects' classes+=AttributeClass* ')'
-		'(' 'interactions' classes+=InteractionClass* ')'
-	')'
+		OPEN 'spaces' spaces+=Space* CLOSE
+		OPEN 'objects' 
+			OPEN 'class' 'ObjectRoot'
+				rootAttribute=Attribute
+				OPEN 'class' 'RTIprivate' CLOSE
+				classes+=AttributeClass*
+			CLOSE
+		CLOSE
+		OPEN 'interactions' 
+			OPEN 'class' 'InteractionRoot' properties=AttributeProperties
+				OPEN 'class' 'RTIprivate' properties=AttributeProperties CLOSE
+				classes+=InteractionClass*
+			CLOSE
+		CLOSE
+	CLOSE
 ;
 
 Federation:
-	'(' 'Federation' name=(ValidID|TEXT) ')'
+	OPEN 'Federation' name=(ValidID|TEXT) CLOSE
 ;
 
 FEDversion:
-	'(' 'FEDversion' version=TEXT ')'
+	OPEN 'FEDversion' version=TEXT CLOSE
 ;
 
 Space:
-	'(' 'space' name=ValidID
+	OPEN 'space' name=ValidID
 		dimensions+=Dimension* 
-	')'
+	CLOSE
 ;
 
 Dimension:
-	'(' 'dimension' name=ValidID ')'
+	OPEN 'dimension' name=ValidID CLOSE
 ;
 
 AttributeClass:
-	'(' 'class' name=ValidID 
+	OPEN 'class' ref=[omt::AttributeClass|ValidID]
 		attributes+=Attribute*
 		classes+=AttributeClass*
-	')'
+	CLOSE
 ;
 
 Attribute:
-	'(' 'attribute' name=ValidID transport=('reliable'|'best_effort') order=('timestamp'|'receive') space=[Space]? ')'
+	OPEN 'attribute' name=ValidID  properties=AttributeProperties CLOSE
 ;
 
+AttributeProperties:
+	transport=('reliable'|'best_effort') order=('timestamp'|'receive') space=[Space]?
+;
 InteractionClass:
-	'(' 'class' name=ValidID transport=('reliable'|'best_effort') order=('timestamp'|'receive') space=[Space]?
+	OPEN 'class' ref=[omt::Interaction|ValidID] properties=AttributeProperties
 		parameters+=Parameter*
 		classes+=InteractionClass*
-	')'
+	CLOSE
 ;
 
 Parameter:
-	'(' 'parameter' name=ValidID ')'
+	OPEN 'parameter' name=ValidID CLOSE
 ;
 
 ValidID:
 	ID | 'Federation' | 'class' | 'attribute' | 'dimension' | 'space'
 ;
 
+terminal OPEN		: '(';
+terminal CLOSE		: ')';
 terminal COMMENT 	: ';;' !('\n'|'\r')* ('\r'? '\n')?;
 terminal ID  		: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
 terminal INT returns ecore::EInt: ('0'..'9')+;

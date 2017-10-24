@@ -3,6 +3,15 @@
  */
 package com.cohesionforce.hla.dsl.scoping
 
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EReference
+import com.cohesionforce.hla.dsl.omt.InteractionId
+import com.cohesionforce.hla.dsl.omt.SuperInteraction
+import com.cohesionforce.hla.dsl.omt.OmtPackage
+import org.eclipse.xtext.EcoreUtil2
+import org.eclipse.xtext.scoping.Scopes
+import com.cohesionforce.hla.dsl.omt.SuperClass
+import com.cohesionforce.hla.dsl.omt.ClassId
 
 /**
  * This class contains custom scoping description.
@@ -11,5 +20,22 @@ package com.cohesionforce.hla.dsl.scoping
  * on how and when to use it.
  */
 class OmtScopeProvider extends AbstractOmtScopeProvider {
+
+	override getScope(EObject context, EReference reference) {
+		if(context instanceof SuperInteraction && reference == OmtPackage.Literals.SUPER_INTERACTION__SUPER)
+		{
+	        val rootElement = EcoreUtil2.getRootContainer(context)
+	        val candidates = EcoreUtil2.getAllContentsOfType(rootElement, InteractionId)
+	        // Create IEObjectDescriptions and puts them into an IScope instance
+	        return Scopes.scopeFor(candidates)
+		} else if(context instanceof SuperClass && reference == OmtPackage.Literals.SUPER_CLASS__SUPER)
+		{
+	        val rootElement = EcoreUtil2.getRootContainer(context)
+	        val candidates = EcoreUtil2.getAllContentsOfType(rootElement, ClassId)
+	        // Create IEObjectDescriptions and puts them into an IScope instance
+	        return Scopes.scopeFor(candidates)
+		}
+	    return super.getScope(context, reference);
+	}
 
 }

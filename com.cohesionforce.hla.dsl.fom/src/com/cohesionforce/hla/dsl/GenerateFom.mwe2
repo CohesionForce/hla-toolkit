@@ -25,6 +25,8 @@ Workflow {
 		}
 		language = StandardLanguage {
 			name = "com.cohesionforce.hla.dsl.Fom"
+			
+			referencedResource = "platform:/resource/com.cohesionforce.hla.dsl.omt/model/generated/Omt.genmodel"
 			fileExtensions = "fed"
 
 			serializer = {
