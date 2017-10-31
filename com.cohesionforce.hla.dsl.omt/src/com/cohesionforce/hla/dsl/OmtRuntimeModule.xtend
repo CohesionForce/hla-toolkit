@@ -4,6 +4,7 @@
 package com.cohesionforce.hla.dsl
 
 import com.cohesionforce.hla.dsl.naming.QualifiedNameProvider
+import com.cohesionforce.hla.dsl.conversion.OMTConverter
 
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
@@ -11,10 +12,11 @@ import com.cohesionforce.hla.dsl.naming.QualifiedNameProvider
 class OmtRuntimeModule extends AbstractOmtRuntimeModule {
 
 	override bindIQualifiedNameProvider() {
-		return QualifiedNameProvider;
+		return QualifiedNameProvider
 	}	
 	
-//    override public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
-//        return MyDslQNP.class;
-//    }
+	override bindIValueConverterService() {
+		return OMTConverter
+	}
+	
 }

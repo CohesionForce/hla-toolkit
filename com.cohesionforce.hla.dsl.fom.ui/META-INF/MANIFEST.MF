@@ -16,7 +16,11 @@ Require-Bundle: com.cohesionforce.hla.dsl.fom,
  org.eclipse.compare,
  org.eclipse.xtext.builder,
  org.eclipse.xtend.lib;resolution:=optional,
- org.eclipse.xtext.xbase.lib
+ org.eclipse.xtext.xbase.lib,
+ net.langleystudios.apache.avro;bundle-version="1.7.6",
+ org.eclipse.e4.core.di;bundle-version="1.6.0",
+ org.eclipse.e4.ui.services;bundle-version="1.2.100",
+ org.eclipse.e4.core.contexts;bundle-version="1.5.0"
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: com.cohesionforce.hla.dsl.ui.contentassist,

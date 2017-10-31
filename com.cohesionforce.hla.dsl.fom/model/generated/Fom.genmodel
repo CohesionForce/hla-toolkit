@@ -10,9 +10,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Fom.ecore#//Fed/federation"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Fom.ecore#//Fed/version"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Fom.ecore#//Fed/spaces"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Fom.ecore#//Fed/rootAttribute"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Fom.ecore#//Fed/classes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Fom.ecore#//Fed/rootAttribute"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Fom.ecore#//Fed/properties"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Fom.ecore#//Fed/classes"/>
     </genClasses>
     <genClasses ecoreClass="Fom.ecore#//Federation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Fom.ecore#//Federation/name"/>
@@ -33,7 +33,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Fom.ecore#//AttributeClass/classes"/>
     </genClasses>
     <genClasses ecoreClass="Fom.ecore#//Attribute">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Fom.ecore#//Attribute/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Fom.ecore#//Attribute/ref"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Fom.ecore#//Attribute/properties"/>
     </genClasses>
     <genClasses ecoreClass="Fom.ecore#//AttributeProperties">

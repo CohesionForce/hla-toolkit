@@ -137,6 +137,11 @@
 			description="Copy the qualified name for the selected element"
 			name="Copy Qualified Name">
 	</command>
+ <command
+       defaultHandler="com.cohesionforce.hla.dsl.ui.handler.GenerateJavaDIHandler"
+       id="com.cohesionforce.hla.command.generateJava"
+       name="Generate Java">
+ </command>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
 		<menuContribution
@@ -182,6 +187,28 @@
 				</visibleWhen>
 			</command>
 		</menuContribution>
+  <menuContribution
+        allPopups="false"
+        locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+     <command
+           commandId="com.cohesionforce.hla.command.generateJava"
+           label="Generate Java"
+           style="push">
+        <visibleWhen
+              checkEnabled="false">
+           <with
+                 variable="selection">
+              <iterate
+                    ifEmpty="false">
+                 <test
+                       property="org.eclipse.core.resources.extension"
+                       value="avsc">
+                 </test>
+              </iterate>
+           </with>
+        </visibleWhen>
+     </command>
+  </menuContribution>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
 		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">

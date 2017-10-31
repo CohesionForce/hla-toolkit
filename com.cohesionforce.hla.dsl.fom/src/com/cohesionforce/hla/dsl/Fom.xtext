@@ -12,7 +12,7 @@ Fed:
 		OPEN 'spaces' spaces+=Space* CLOSE
 		OPEN 'objects' 
 			OPEN 'class' 'ObjectRoot'
-				rootAttribute=Attribute
+				OPEN 'attribute' rootAttribute=ValidID properties=AttributeProperties CLOSE
 				OPEN 'class' 'RTIprivate' CLOSE
 				classes+=AttributeClass*
 			CLOSE
@@ -52,7 +52,7 @@ AttributeClass:
 ;
 
 Attribute:
-	OPEN 'attribute' name=ValidID  properties=AttributeProperties CLOSE
+	OPEN 'attribute' ref=[omt::Attribute|ValidID]  properties=AttributeProperties CLOSE
 ;
 
 AttributeProperties:

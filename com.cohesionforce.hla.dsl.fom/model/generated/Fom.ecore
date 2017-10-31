@@ -8,12 +8,11 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="spaces" upperBound="-1"
         eType="#//Space" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rootAttribute" eType="#//Attribute"
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootAttribute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" eType="#//AttributeProperties"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" eType="#//AttributeProperties"
-        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Federation">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -37,7 +36,7 @@
         eType="#//AttributeClass" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Attribute">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ref" eType="ecore:EClass platform:/resource/com.cohesionforce.hla.dsl.omt/model/generated/Omt.ecore#//Attribute"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="properties" eType="#//AttributeProperties"
         containment="true"/>
   </eClassifiers>
