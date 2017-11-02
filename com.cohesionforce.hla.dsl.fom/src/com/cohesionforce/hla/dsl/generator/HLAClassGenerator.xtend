@@ -1,11 +1,11 @@
 package com.cohesionforce.hla.dsl.generator
 
-import org.eclipse.xtext.generator.IFileSystemAccess2
 import com.cohesionforce.hla.dsl.fom.AttributeClass
-import com.cohesionforce.hla.dsl.fom.Attribute
-import com.cohesionforce.hla.dsl.omt.TypeReference
+import com.cohesionforce.hla.dsl.omt.Attribute
 import com.cohesionforce.hla.dsl.omt.ComplexDataType
 import com.cohesionforce.hla.dsl.omt.EnumeratedDataType
+import com.cohesionforce.hla.dsl.omt.TypeReference
+import org.eclipse.xtext.generator.IFileSystemAccess2
 
 class HLAClassGenerator {
 	
@@ -22,7 +22,9 @@ class HLAClassGenerator {
 			"com/cohesionforce/hla/classes/" + attributeClass.ref.name.replace("\"", "") + "Class.java", '''		
 			package com.cohesionforce.hla.classes;
 			
-			«attributeClass.ref.getImports»
+			import com.cohesionforce.hla.classes.avro.*;
+«««			FIXME - WHY IS THIS NOT BEING CALLED?
+«««			«attributeClass.ref.getImports»
 			
 			import hla.rti.ArrayIndexOutOfBounds;
 			import hla.rti.AttributeNotKnown;
@@ -35,7 +37,7 @@ class HLAClassGenerator {
 			import hla.rti.jlc.RtiFactory;
 			
 			public class «attributeClass.ref.name.replace("\"", "")»Class {
-				private final static String className = "«attributeClass.getClassName»"
+				private final static String className = "«attributeClass.getClassName»";
 				private static hla.rti.AttributeHandleSet «attributeSet»;
 				private static int classHandle;
 
@@ -67,9 +69,10 @@ class HLAClassGenerator {
 						throw new FederateInternalError(ex.toString());
 					}
 					double timeValue = ((rtis13.LogicalTimeDouble) time).value_;
-					return «attributeClass.ref.name.replace("\"", "").toFirstLower»;
+					return avroReturn;
 				}
-			}			
+				
+			}
 			''')
 	}
 	
@@ -78,10 +81,54 @@ class HLAClassGenerator {
 			«(attributeClass.eContainer as AttributeClass).generateReflectAttributes»
 		«ENDIF»
 		«FOR attribute: attributeClass.attributes»
-«««						if (handle == «attribute.getRef().name.toFirstLower»Attr) {
-							PositionVectorCDT temp = PositionVectorCDTClass.readPosition(attrs.getValue(attr), 0);
-							avroReturn.set«attribute.name»(temp);
-							continue;
+						if (handle == «attribute.ref.name.strip.toFirstLower»Attr) {
+						«IF attribute.ref.dataType.refType !== null»
+							«IF attribute.ref.dataType.refType instanceof EnumeratedDataType»
+							«(attribute.ref.dataType.refType as EnumeratedDataType).name.strip» temp = HLAClassConverter.read«(attribute.ref.dataType.refType as EnumeratedDataType).name.strip»(attrs.getValue(attr), 0);
+								avroReturn.set«attribute.ref.name.strip»(temp);
+								continue;
+							«ELSE»
+							«(attribute.ref.dataType.refType as ComplexDataType).name.strip» temp = HLAClassConverter.read«(attribute.ref.dataType.refType as ComplexDataType).name.strip»(attrs.getValue(attr), 0);
+								avroReturn.set«attribute.ref.name.strip»(temp);
+								continue;
+							«ENDIF»
+						«ELSE»
+								«IF attribute.ref.dataType.dataType.strip == "unsigned short"»
+								//TODO: How do we handle this type? "unsigned short"
+								continue;
+							«ELSEIF attribute.ref.dataType.dataType.strip == "short"»
+								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeShort(attrs.getValue(attr)));
+							«ELSEIF attribute.ref.dataType.dataType.strip == "unsigned long"»
+								//TODO: How do we handle this type? "unsigned long"
+								continue;
+							«ELSEIF attribute.ref.dataType.dataType.strip == "long"»
+								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeLong(attrs.getValue(attr)));
+							«ELSEIF attribute.ref.dataType.dataType.strip == "unsigned long long"»
+								//TODO: How do we handle this type? "unsigned long long"
+								continue;
+							«ELSEIF attribute.ref.dataType.dataType.strip == "long long"»
+								//TODO: How do we handle this type? "long long"
+								continue;
+							«ELSEIF attribute.ref.dataType.dataType.strip == "double"»
+								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeDouble(attrs.getValue(attr)));
+							«ELSEIF attribute.ref.dataType.dataType.strip == "float"»
+								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeFloat(attrs.getValue(attr)));
+							«ELSEIF attribute.ref.dataType.dataType.strip == "boolean"»
+								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeBoolean(attrs.getValue(attr)));
+							«ELSEIF attribute.ref.dataType.dataType.strip == "any"»
+								//TODO: How do we handle this type? "any"
+								continue;
+							«ELSEIF attribute.ref.dataType.dataType.strip == "string"»
+								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeString(attrs.getValue(attr)));
+							«ELSEIF attribute.ref.dataType.dataType.strip == "char"»
+								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeChar(attrs.getValue(attr)));
+							«ELSEIF attribute.ref.dataType.dataType.strip == "octet"»
+								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeByte(attrs.getValue(attr)));
+							«ELSE»
+								//TODO Handle type «attribute.ref.dataType.dataType»
+								continue;
+							«ENDIF»
+						«ENDIF»
 						}
 		«ENDFOR»
 	'''}
@@ -91,7 +138,7 @@ class HLAClassGenerator {
 			«(attributeClass.eContainer as AttributeClass).generateAttrDefinitions»
 		«ENDIF»
 		«FOR attribute: attributeClass.attributes»
-			private static int «attribute.ref.name.toFirstLower»Attr;
+			private static int «attribute.ref.name.strip.toFirstLower»Attr;
 		«ENDFOR»
 	'''}
 	
@@ -100,26 +147,30 @@ class HLAClassGenerator {
 			«(attributeClass.eContainer as AttributeClass).generateInitAttributes»
 		«ENDIF»
 		«FOR attribute: attributeClass.attributes»
-«««			«attribute.name.toFirstLower»Attr = rtiamb.getAttributeHandle("«attribute.name»", classHandle);
-«««			«attributeSet».add(«attribute.name.toFirstLower»Attr);
+			«attribute.ref.name.strip.toFirstLower»Attr = rtiamb.getAttributeHandle("«attribute.ref.name.strip»", classHandle);
+			«attributeSet».add(«attribute.ref.name.strip.toFirstLower»Attr);
 		«ENDFOR»
 	'''
 	}
 	
 	def CharSequence getClassName(AttributeClass attributeClass) {
-		var name = attributeClass.ref.name.replace("\"","")
+		var name = attributeClass.ref.name.strip
 		var classRef = attributeClass.eContainer
 		while(classRef instanceof AttributeClass) {
-			name = classRef.ref.name.replace("\"","")+"."+name
+			name = classRef.ref.name.strip+"."+name
 			classRef = (classRef as AttributeClass).eContainer
 		}
 		
 		return name
 	}
 	
+	def String strip(String string) {
+		return string.replace("\"","")
+	}
+	
 	def dispatch CharSequence getImports(com.cohesionforce.hla.dsl.omt.AttributeClass attributeClass) { '''
-		import com.cohesionforce.hla.classes.avro.«attributeClass.name.replace("\"","")»;
-		«FOR attribute: attributeClass.components.filter(com.cohesionforce.hla.dsl.omt.Attribute)»
+		import com.cohesionforce.hla.classes.avro.«attributeClass.name.strip»;
+		«FOR attribute: attributeClass.components.filter(Attribute)»
 		«IF attribute.dataType.refType !== null»
 			«attribute.dataType.refType.getImports»
 		«ENDIF»
@@ -129,9 +180,9 @@ class HLAClassGenerator {
 	
 	def dispatch CharSequence getImports(TypeReference typeRef) { '''
 		«IF typeRef instanceof ComplexDataType»
-			import com.cohesionforce.hla.classes.avro.«(typeRef as ComplexDataType).name.replace("\"","")»;
+			import com.cohesionforce.hla.classes.avro.«(typeRef as ComplexDataType).name.strip»;
 		«ELSE»
-			import com.cohesionforce.hla.classes.avro.«(typeRef as EnumeratedDataType).name.replace("\"","")»;
+			import com.cohesionforce.hla.classes.avro.«(typeRef as EnumeratedDataType).name.strip»;
 		«ENDIF»
 	'''}
 	
