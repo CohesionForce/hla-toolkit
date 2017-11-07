@@ -3,6 +3,10 @@
  */
 package com.cohesionforce.hla.dsl.validation
 
+import com.cohesionforce.hla.dsl.fom.AttributeClass
+import com.cohesionforce.hla.dsl.fom.FomPackage
+import java.util.ArrayList
+import org.eclipse.xtext.validation.Check
 
 /**
  * This class contains custom validation rules. 
@@ -10,16 +14,44 @@ package com.cohesionforce.hla.dsl.validation
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 class FomValidator extends AbstractFomValidator {
+
+	var names = new ArrayList<String>
+	var childNames = new ArrayList<String>
 	
-//	public static val INVALID_NAME = 'invalidName'
-//
-//	@Check
-//	def checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.name.charAt(0))) {
-//			warning('Name should start with a capital', 
-//					FomPackage.Literals.GREETING__NAME,
-//					INVALID_NAME)
-//		}
-//	}
+	public static val INVALID_NAME = 'invalidName'
+	public static val DUPLICATE_CHILD = 'duplicateChild'
+
+	@Check
+	def checkUniqueParameters(AttributeClass attributeClass) {
+		names.clear
+		attributeClass.attributes.forEach[{
+			if(it.ref !== null) {
+				if(names.contains(it.ref.name)) {
+					warning('Duplicate parameters with name: '+it.ref.name, 
+						FomPackage.Literals.ATTRIBUTE_CLASS__ATTRIBUTES,
+						INVALID_NAME
+					)
+				} else {
+					names.add(it.ref.name)
+				}
+			}
+		}]
+	}
 	
+	@Check
+	def checkUniqueChildClasses(AttributeClass attributeClass) {
+		childNames.clear
+		attributeClass.classes.forEach[{
+			if(it.ref !== null) {
+				if(childNames.contains(it.ref.name)) {
+					warning('Duplicate parameters with name: '+it.ref.name, 
+						FomPackage.Literals.ATTRIBUTE_CLASS__CLASSES,
+						DUPLICATE_CHILD
+					)
+				} else {
+					childNames.add(it.ref.name)
+				}
+			}
+		}]
+	}
 }

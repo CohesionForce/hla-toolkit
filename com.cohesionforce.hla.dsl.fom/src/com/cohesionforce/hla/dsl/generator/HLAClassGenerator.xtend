@@ -23,8 +23,7 @@ class HLAClassGenerator {
 			package com.cohesionforce.hla.classes;
 			
 			import com.cohesionforce.hla.classes.avro.*;
-«««			FIXME - WHY IS THIS NOT BEING CALLED?
-«««			«attributeClass.ref.getImports»
+			import com.cohesionforce.hla.enumerations.avro.*;
 			
 			import hla.rti.ArrayIndexOutOfBounds;
 			import hla.rti.AttributeNotKnown;
@@ -123,7 +122,7 @@ class HLAClassGenerator {
 							«ELSEIF attribute.ref.dataType.dataType.strip == "char"»
 								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeChar(attrs.getValue(attr)));
 							«ELSEIF attribute.ref.dataType.dataType.strip == "octet"»
-								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeByte(attrs.getValue(attr)));
+								avroReturn.set«attribute.ref.name.strip»((Integer)EncodingHelpers.decodeByte(attrs.getValue(attr)));
 							«ELSE»
 								//TODO Handle type «attribute.ref.dataType.dataType»
 								continue;

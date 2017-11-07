@@ -1,11 +1,9 @@
 package com.cohesionforce.hla.dsl.generator
 
-import com.cohesionforce.hla.dsl.omt.Attribute
 import com.cohesionforce.hla.dsl.omt.ComplexDataType
 import com.cohesionforce.hla.dsl.omt.EnumeratedDataType
 import com.cohesionforce.hla.dsl.omt.ObjectModel
 import org.eclipse.xtext.generator.IFileSystemAccess2
-import com.cohesionforce.hla.dsl.omt.AttributeClass
 
 class HLAClassConverterGenerator {
 	
@@ -19,24 +17,34 @@ class HLAClassConverterGenerator {
 			package com.cohesionforce.hla.classes;
 			
 			import com.cohesionforce.hla.classes.avro.*;
+			import com.cohesionforce.hla.enumerations.avro.*;
 			
 			public class HLAClassConverter {
 				
 				«FOR attributeClass: objectModel.omtComponents.filter(ComplexDataType)»
 				«attributeClass.generateReader»
 				«ENDFOR»
+				«FOR attributeClass: objectModel.omtComponents.filter(EnumeratedDataType)»
+				«attributeClass.generateReader»
+				«ENDFOR»
 			}
 			''')
 	}
 	
-	def CharSequence generateReader(ComplexDataType dataType) { '''
-		«IF dataType instanceof EnumeratedDataType»
-		public static «(dataType as EnumeratedDataType).name.strip» read«(dataType as EnumeratedDataType).name.strip»(byte[] bytes, int offset) {
+
+	def dispatch CharSequence generateReader(EnumeratedDataType dataType) { '''
+		public static «dataType.name.strip» read«dataType.name.strip»(byte[] bytes, int offset) {
+			«dataType.name.strip» avroReturn = «dataType.name.strip».values()[0];
+			return avroReturn;
 		}
-		«ELSEIF dataType instanceof ComplexDataType»
-		public static «(dataType as ComplexDataType).name.strip» read«(dataType as ComplexDataType).name.strip»(byte[] bytes, int offset) {
+	'''
+	}
+
+	def dispatch CharSequence generateReader(ComplexDataType dataType) { '''
+		public static «dataType.name.strip» read«dataType.name.strip»(byte[] bytes, int offset) {
+			«dataType.name.strip» avroReturn = new «dataType.name.strip»();
+			return avroReturn;
 		}
-		«ENDIF»
 	'''
 	}
 	

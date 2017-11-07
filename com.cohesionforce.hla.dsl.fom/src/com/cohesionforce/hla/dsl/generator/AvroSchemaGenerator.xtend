@@ -37,6 +37,7 @@ class AvroSchemaGenerator {
 	// List of Classes already visited for a given parent Class.
 	var List<ComplexDataType> dataTypes = new ArrayList()
 	var List<EnumeratedDataType> enumTypes = new ArrayList()
+	var List<Attribute> attributes = new ArrayList()
 
 	/**
 	 * Adds a class to the list of visited classes and returns
@@ -64,7 +65,9 @@ class AvroSchemaGenerator {
 
 	def generateSchema(ObjectModel objectModel, IFileSystemAccess2 fsa) {
 		objectModel.omtComponents.filter(Interaction).forEach[generateSchema(it, fsa)]
+		objectModel.omtComponents.filter(AttributeClass).forEach[generateSchema(it, fsa)]
 		objectModel.omtComponents.filter(ComplexDataType).forEach[generateSchema(it, fsa)]
+		objectModel.omtComponents.filter(EnumeratedDataType).forEach[generateSchema(it, fsa)]
 	}
 	
 	/**
@@ -87,40 +90,84 @@ class AvroSchemaGenerator {
 	/**
 	 * Generates an Avro Schema file for an InteractionClass.
 	 */
+	def generateSchema(EnumeratedDataType enumeratedType, IFileSystemAccess2 fsa) {
+		dataTypes.clear
+		enumTypes.clear
+		fsa.generateFile(
+			"com/cohesionforce/hla/schema/enumerations/" + enumeratedType.name.replace("\"", "") + ".avsc", '''
+			{"type":"enum","name":«enumeratedType.name»,"namespace":"com.cohesionforce.hla.enumerations.avro","symbols":[«FOR eLiteral : enumeratedType.literals SEPARATOR ","»«eLiteral.literal.sanitizeLiteral»«ENDFOR»]}
+			''')
+	}
+
+	/**
+	 * Generates an Avro Schema file for an InteractionClass.
+	 */
 	def generateSchema(ComplexDataType dataType, IFileSystemAccess2 fsa) {
 
 		dataTypes.clear
 		enumTypes.clear
+		attributes.clear
+		
 		fsa.generateFile(
 			"com/cohesionforce/hla/schema/classes/" + dataType.name.replace("\"", "") + ".avsc", '''
 				{"type":"record","name":«dataType.name»,"namespace":"com.cohesionforce.hla.classes.avro","fields":[
-					«FOR attribute : dataType.components SEPARATOR ","»
+					«FOR attribute : attributes SEPARATOR ","»
 						«attribute.generateReference»
 					«ENDFOR»
 				]}
 			''')
 	}
 
+	/**
+	 * Generates an Avro Schema file for an InteractionClass.
+	 */
+	def generateSchema(AttributeClass attributeClass, IFileSystemAccess2 fsa) {
+
+		dataTypes.clear
+		enumTypes.clear
+		attributes.clear
+		
+		attributeClass.buildAttributeList
+		
+		fsa.generateFile(
+			"com/cohesionforce/hla/schema/classes/" + attributeClass.name.replace("\"", "") + ".avsc", '''
+				{"type":"record","name":«attributeClass.name»,"namespace":"com.cohesionforce.hla.classes.avro","fields":[
+					«FOR attribute : attributes SEPARATOR ","»
+						«attribute.generateReference»
+					«ENDFOR»
+				]}
+			''')
+	}
+	
+	def void buildAttributeList(AttributeClass attributeClass)
+	{
+		attributeClass.components.filter(SuperClass).forEach[it.super.handleSuper]
+		attributeClass.components.filter(Attribute).forEach[attributes.add(it)]
+	}
+	
+	def void buildAttributeList(ComplexDataType dataType)
+	{
+		dataType.components.filter(SuperClass).forEach[it.super.handleSuper]
+		dataType.components.filter(Attribute).forEach[attributes.add(it)]
+	}
+	
+
 	def dispatch CharSequence generateReference(SuperInteraction superInteraction) {
 		superInteraction.super.handleSuper
 	}
 
-	def dispatch CharSequence generateReference(SuperClass superClass) {
-		superClass.super.handleSuper
-	}
-	
-	def dispatch CharSequence handleSuper(InteractionId id) { '''
+	def CharSequence handleSuper(InteractionId id) { '''
+		«IF (id.eContainer as Interaction).components.filter(Parameter).size > 0»
 		«FOR attribute:  (id.eContainer as Interaction).components SEPARATOR ","»
 			«attribute.generateReference»
-		«ENDFOR»
+		«ENDFOR»,
+		«ENDIF»
 		'''
 	}
 
-	def dispatch CharSequence handleSuper(ClassId id) { '''
-		«FOR attribute:  (id.eContainer as AttributeClass).components SEPARATOR ","»
-			«attribute.generateReference»
-		«ENDFOR»
-		'''
+	def void handleSuper(ClassId id) {
+		(id.eContainer as AttributeClass).components.filter(SuperClass).forEach[it.super.handleSuper]
+		(id.eContainer as AttributeClass).components.filter(Attribute).forEach[attributes.add(it)]
 	}
 	
 	/**
@@ -140,7 +187,7 @@ class AvroSchemaGenerator {
 					«IF addEnum(parameter.dataType.refType as EnumeratedDataType)»
 						{"name":«parameter.name»,"type":["null",«parameter.dataType.refType.generateRecord»]}
 					«ELSE»
-						{"name":«parameter.name»,"type":["null",«parameter.dataType.refType.getName»]}
+						{"name":«parameter.name»,"type":["null","com.cohesionforce.hla.enumerations.avro.«parameter.dataType.refType.getName.strip»"]}
 					«ENDIF»
 				«ENDIF»
 			«ELSE»
@@ -166,7 +213,7 @@ class AvroSchemaGenerator {
 					«IF addEnum(attribute.dataType.refType as EnumeratedDataType)»
 						{"name":«attribute.name»,"type":["null",«attribute.dataType.refType.generateRecord»]}
 					«ELSE»
-						{"name":«attribute.name»,"type":["null",«attribute.dataType.refType.getName»]}
+						{"name":«attribute.name»,"type":["null","com.cohesionforce.hla.enumerations.avro.«attribute.dataType.refType.getName.strip»"]}
 					«ENDIF»
 				«ENDIF»
 			«ELSE»
@@ -231,7 +278,7 @@ class AvroSchemaGenerator {
 	 */
 	def generateEnum(EnumeratedDataType eEnum) {
 		'''
-			{"type":"enum","name":«eEnum.name»,"symbols":[«FOR eLiteral : eEnum.literals SEPARATOR ","»«eLiteral.literal.sanitizeLiteral»«ENDFOR»]}
+			{"type":"enum","name":«eEnum.name»,"namespace":"com.cohesionforce.hla.enumerations.avro","symbols":[«FOR eLiteral : eEnum.literals SEPARATOR ","»«eLiteral.literal.sanitizeLiteral»«ENDFOR»]}
 		'''
 	}
 
@@ -264,7 +311,11 @@ class AvroSchemaGenerator {
 	 * Returns the avro type for a given type.
 	 */
 	def sanitizeLiteral(String type) {
-		return type.replace("-", "_")
+		return type.replace("-", "_").replace("<","_LT_").replace(">","_GT_").replace("&","_AND_").replace("/","_")
+	}
+
+	def String strip(String string) {
+		return string.replace("\"","")
 	}
 
 }

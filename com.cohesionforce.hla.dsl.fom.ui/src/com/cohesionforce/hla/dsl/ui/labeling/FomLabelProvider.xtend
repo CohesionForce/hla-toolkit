@@ -3,9 +3,11 @@
  */
 package com.cohesionforce.hla.dsl.ui.labeling
 
+import com.cohesionforce.hla.dsl.fom.AttributeClass
 import com.google.inject.Inject
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider
+import com.cohesionforce.hla.dsl.fom.Attribute
 
 /**
  * Provides labels for EObjects.
@@ -20,12 +22,34 @@ class FomLabelProvider extends DefaultEObjectLabelProvider {
 	}
 
 	// Labels and icons can be computed like this:
+	def text(AttributeClass attributeClass) {
+		'[Class] ' +
+			if(attributeClass.ref !== null )
+				attributeClass.ref.representation
+			else 'Undefined'
+	}
 	
-//	def text(Greeting ele) {
-//		'A greeting to ' + ele.name
-//	}
-//
-//	def image(Greeting ele) {
-//		'Greeting.gif'
-//	}
+	def text(Attribute attribute) {
+		'[Attribute] ' +
+			if(attribute.ref !== null) 
+				attribute.ref.representation
+			else 'Undefined'
+	}
+	
+	def representation(com.cohesionforce.hla.dsl.omt.Attribute attribute) {
+		attribute.name.strip
+	}
+	
+	def representation(com.cohesionforce.hla.dsl.omt.AttributeClass attributeClass) {
+		attributeClass.name.strip
+	}
+	
+	override protected handleTextError(Object[] params, Throwable e) {
+		println(e)
+		super.handleTextError(params, e)
+	}
+	
+	def strip(String string) {
+		string.replace("\"", "")
+	}
 }
