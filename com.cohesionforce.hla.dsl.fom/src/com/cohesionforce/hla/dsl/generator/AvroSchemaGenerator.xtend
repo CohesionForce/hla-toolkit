@@ -106,13 +106,13 @@ class AvroSchemaGenerator {
 
 		dataTypes.clear
 		enumTypes.clear
-		attributes.clear
+		dataTypes.add(dataType)
 		
 		fsa.generateFile(
-			"com/cohesionforce/hla/schema/classes/" + dataType.name.replace("\"", "") + ".avsc", '''
+			"com/cohesionforce/hla/schema/classes/" + dataType.name.strip + ".avsc", '''
 				{"type":"record","name":«dataType.name»,"namespace":"com.cohesionforce.hla.classes.avro","fields":[
-					«FOR attribute : attributes SEPARATOR ","»
-						«attribute.generateReference»
+					«FOR component : dataType.components SEPARATOR ","»
+						«component.generateReference»
 					«ENDFOR»
 				]}
 			''')
@@ -143,12 +143,6 @@ class AvroSchemaGenerator {
 	{
 		attributeClass.components.filter(SuperClass).forEach[it.super.handleSuper]
 		attributeClass.components.filter(Attribute).forEach[attributes.add(it)]
-	}
-	
-	def void buildAttributeList(ComplexDataType dataType)
-	{
-		dataType.components.filter(SuperClass).forEach[it.super.handleSuper]
-		dataType.components.filter(Attribute).forEach[attributes.add(it)]
 	}
 	
 

@@ -92,7 +92,7 @@ class HLAClassGenerator {
 								continue;
 							«ENDIF»
 						«ELSE»
-								«IF attribute.ref.dataType.dataType.strip == "unsigned short"»
+							«IF attribute.ref.dataType.dataType.strip == "unsigned short"»
 								//TODO: How do we handle this type? "unsigned short"
 								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "short"»
@@ -122,7 +122,7 @@ class HLAClassGenerator {
 							«ELSEIF attribute.ref.dataType.dataType.strip == "char"»
 								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeChar(attrs.getValue(attr)));
 							«ELSEIF attribute.ref.dataType.dataType.strip == "octet"»
-								avroReturn.set«attribute.ref.name.strip»((Integer)EncodingHelpers.decodeByte(attrs.getValue(attr)));
+								avroReturn.set«attribute.ref.name.strip»(Integer.valueOf(EncodingHelpers.decodeByte(attrs.getValue(attr))));
 							«ELSE»
 								//TODO Handle type «attribute.ref.dataType.dataType»
 								continue;
