@@ -83,46 +83,56 @@ class HLAClassGenerator {
 						if (handle == «attribute.ref.name.strip.toFirstLower»Attr) {
 						«IF attribute.ref.dataType.refType !== null»
 							«IF attribute.ref.dataType.refType instanceof EnumeratedDataType»
-							«(attribute.ref.dataType.refType as EnumeratedDataType).name.strip» temp = HLAClassConverter.read«(attribute.ref.dataType.refType as EnumeratedDataType).name.strip»(attrs.getValue(attr), 0);
+							«(attribute.ref.dataType.refType as EnumeratedDataType).name.strip» temp = «(attribute.ref.dataType.refType as EnumeratedDataType).name.strip».values()[0];
+								HLAClassConverter.fill«(attribute.ref.dataType.refType as EnumeratedDataType).name.strip»(attrs.getValue(attr), temp, 0);
 								avroReturn.set«attribute.ref.name.strip»(temp);
 								continue;
 							«ELSE»
-							«(attribute.ref.dataType.refType as ComplexDataType).name.strip» temp = HLAClassConverter.read«(attribute.ref.dataType.refType as ComplexDataType).name.strip»(attrs.getValue(attr), 0);
+							«(attribute.ref.dataType.refType as ComplexDataType).name.strip» temp = new «(attribute.ref.dataType.refType as ComplexDataType).name.strip»(); 
+								HLAClassConverter.fill«(attribute.ref.dataType.refType as ComplexDataType).name.strip»(attrs.getValue(attr), temp, 0);
 								avroReturn.set«attribute.ref.name.strip»(temp);
 								continue;
 							«ENDIF»
 						«ELSE»
 							«IF attribute.ref.dataType.dataType.strip == "unsigned short"»
-								//TODO: How do we handle this type? "unsigned short"
+								avroReturn.set«attribute.ref.name.strip»(Integer.valueOf(EncodingHelpers.decodeShort(attrs.getValue(attr))));
 								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "short"»
-								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeShort(attrs.getValue(attr)));
+								avroReturn.set«attribute.ref.name.strip»(Integer.valueOf(EncodingHelpers.decodeShort(attrs.getValue(attr))));
+								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "unsigned long"»
-								//TODO: How do we handle this type? "unsigned long"
+								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeInt(attrs.getValue(attr)));
 								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "long"»
-								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeLong(attrs.getValue(attr)));
+								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeInt(attrs.getValue(attr)));
+								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "unsigned long long"»
-								//TODO: How do we handle this type? "unsigned long long"
+								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeLong(attrs.getValue(attr)));
 								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "long long"»
-								//TODO: How do we handle this type? "long long"
+								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeLong(attrs.getValue(attr)));
 								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "double"»
 								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeDouble(attrs.getValue(attr)));
+								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "float"»
 								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeFloat(attrs.getValue(attr)));
+								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "boolean"»
 								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeBoolean(attrs.getValue(attr)));
+								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "any"»
 								//TODO: How do we handle this type? "any"
 								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "string"»
 								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeString(attrs.getValue(attr)));
+								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "char"»
-								avroReturn.set«attribute.ref.name.strip»(EncodingHelpers.decodeChar(attrs.getValue(attr)));
+								avroReturn.set«attribute.ref.name.strip»(Integer.valueOf(EncodingHelpers.decodeChar(attrs.getValue(attr))));
+								continue;
 							«ELSEIF attribute.ref.dataType.dataType.strip == "octet"»
 								avroReturn.set«attribute.ref.name.strip»(Integer.valueOf(EncodingHelpers.decodeByte(attrs.getValue(attr))));
+								continue;
 							«ELSE»
 								//TODO Handle type «attribute.ref.dataType.dataType»
 								continue;

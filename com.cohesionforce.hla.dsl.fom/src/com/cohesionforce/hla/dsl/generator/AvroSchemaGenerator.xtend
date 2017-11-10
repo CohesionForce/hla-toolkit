@@ -282,21 +282,20 @@ class AvroSchemaGenerator {
 	def printAvroType(String type) {
 
 		switch type.replace("\"", "") {
-			case "int": return "int"
+			case "unsigned short": return "int"
 			case "short": return "int"
-			case "octet": return "int"
-			case "long": return "long"
+			case "unsigned long": return "int"
+			case "long": return "int"
+			case "unsigned long long": return "long"
+			case "long long": return "long"
 			case "double": return "double"
 			case "float": return "float"
-			case "string": return "string"
 			case "boolean": return "boolean"
-			case "EDate": return "string"
+			
+			case "string": return "string"
 			case "char": return "int"
-			case "EByte": return "int"
-			case "unsigned short": return "int"
-			case "UByte": return "int"
-			case "unsigned int": return "long"
-			case "unsigned long": return "long"
+			case "octet": return "int"
+			
 			default: return type
 		}
 	}

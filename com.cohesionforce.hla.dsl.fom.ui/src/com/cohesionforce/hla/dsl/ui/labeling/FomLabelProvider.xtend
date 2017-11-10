@@ -37,15 +37,19 @@ class FomLabelProvider extends DefaultEObjectLabelProvider {
 	}
 	
 	def representation(com.cohesionforce.hla.dsl.omt.Attribute attribute) {
-		attribute.name.strip
+		if(attribute.name !== null)
+			attribute.name.strip
+		else 'Unresolved'
 	}
 	
 	def representation(com.cohesionforce.hla.dsl.omt.AttributeClass attributeClass) {
-		attributeClass.name.strip
+		if(attributeClass.name !== null)
+			attributeClass.name.strip
+		else 'Unresolved'
 	}
 	
 	override protected handleTextError(Object[] params, Throwable e) {
-		println(e)
+		println(e.message)
 		super.handleTextError(params, e)
 	}
 	
