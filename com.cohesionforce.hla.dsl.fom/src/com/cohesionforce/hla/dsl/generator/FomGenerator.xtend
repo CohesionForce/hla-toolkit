@@ -26,6 +26,7 @@ import com.cohesionforce.hla.dsl.fom.Fed
 class FomGenerator extends AbstractGenerator {
 
 	HLAClassGenerator classGenerator = new HLAClassGenerator
+	HLAClassMapGenerator mapGenerator = new HLAClassMapGenerator
 	HLAClassConverterGenerator converterGenerator = new HLAClassConverterGenerator
 	AvroSchemaGenerator schemaGenerator = new AvroSchemaGenerator
 	KafkaScriptGenerator scriptGenerator = new KafkaScriptGenerator
@@ -37,6 +38,7 @@ class FomGenerator extends AbstractGenerator {
 				classGenerator.generateClass(it, fsa)
 			}
 		]
+		mapGenerator.generateMap(resource, fsa)
 		resource.resourceSet.allContents.filter(ObjectModel).forEach[ {
 			schemaGenerator.generateSchema(it, fsa)
 			converterGenerator.generateClass(it, fsa)

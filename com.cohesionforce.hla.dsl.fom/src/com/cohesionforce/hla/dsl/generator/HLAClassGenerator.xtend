@@ -16,12 +16,14 @@ class HLAClassGenerator {
 	 */
 	def generateClass(AttributeClass attributeClass, IFileSystemAccess2 fsa) {
 		
-		attributeSet = attributeClass.ref.name.replace("\"", "").toFirstLower + "Attributes"
+		attributeSet = attributeClass.ref.name.strip.toFirstLower + "Attributes"
 		
 		fsa.generateFile(
-			"com/cohesionforce/hla/classes/" + attributeClass.ref.name.replace("\"", "") + "Class.java", '''		
+			"com/cohesionforce/hla/classes/" + attributeClass.ref.name.strip + "Class.java", '''		
 			package com.cohesionforce.hla.classes;
 			
+			import com.cohesionforce.hla.AvroWrapper;
+			import com.cohesionforce.hla.HLAClassConverter;
 			import com.cohesionforce.hla.classes.avro.*;
 			import com.cohesionforce.hla.enumerations.avro.*;
 			
@@ -35,27 +37,28 @@ class HLAClassGenerator {
 			import hla.rti.jlc.EncodingHelpers;
 			import hla.rti.jlc.RtiFactory;
 			
-			public class «attributeClass.ref.name.replace("\"", "")»Class {
-				private final static String className = "«attributeClass.getClassName»";
-				private static hla.rti.AttributeHandleSet «attributeSet»;
-				private static int classHandle;
+			public class «attributeClass.ref.name.strip»Class extends AvroWrapper<«attributeClass.ref.name.strip»> {
 
 				// Attribute Handles
 				«attributeClass.generateAttrDefinitions»
 				
-				public static int init(RtiFactory factory, RTIambassador rtiamb) throws RTIexception {
+				public int init(RtiFactory factory, RTIambassador rtiamb) throws RTIexception {
+					className = "«attributeClass.getClassName»";
 					classHandle = rtiamb.getObjectClassHandle(className);
-					«attributeSet» = factory.createAttributeHandleSet();
+					attrHandleSet = factory.createAttributeHandleSet();
 					
 					«attributeClass.generateInitAttributes»
 					
+					rtiamb.subscribeObjectClassAttributes(classHandle, attrHandleSet);
+					rtiamb.publishObjectClass(classHandle, attrHandleSet);
+		
 					return classHandle;
 				}
 			
-				public static «attributeClass.ref.name.replace("\"", "")» reflect(final ReflectedAttributes attrs, final LogicalTime time)
+				public «attributeClass.ref.name.strip» reflect(final ReflectedAttributes attrs, final LogicalTime time)
 						throws AttributeNotKnown, FederateInternalError {
 							
-					«attributeClass.ref.name.replace("\"", "")» avroReturn = new «attributeClass.ref.name.replace("\"", "")»();
+					«attributeClass.ref.name.strip» avroReturn = new «attributeClass.ref.name.strip»();
 					final int num_attrs = attrs.size();
 					
 					try {
@@ -147,7 +150,7 @@ class HLAClassGenerator {
 			«(attributeClass.eContainer as AttributeClass).generateAttrDefinitions»
 		«ENDIF»
 		«FOR attribute: attributeClass.attributes»
-			private static int «attribute.ref.name.strip.toFirstLower»Attr;
+			private int «attribute.ref.name.strip.toFirstLower»Attr;
 		«ENDFOR»
 	'''}
 	
@@ -157,7 +160,7 @@ class HLAClassGenerator {
 		«ENDIF»
 		«FOR attribute: attributeClass.attributes»
 			«attribute.ref.name.strip.toFirstLower»Attr = rtiamb.getAttributeHandle("«attribute.ref.name.strip»", classHandle);
-			«attributeSet».add(«attribute.ref.name.strip.toFirstLower»Attr);
+			attrHandleSet.add(«attribute.ref.name.strip.toFirstLower»Attr);
 		«ENDFOR»
 	'''
 	}

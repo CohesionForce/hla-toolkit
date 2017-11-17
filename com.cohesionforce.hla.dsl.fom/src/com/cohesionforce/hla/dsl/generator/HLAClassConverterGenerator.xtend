@@ -4,6 +4,7 @@ import com.cohesionforce.hla.dsl.omt.ComplexDataType
 import com.cohesionforce.hla.dsl.omt.EnumeratedDataType
 import com.cohesionforce.hla.dsl.omt.ObjectModel
 import org.eclipse.xtext.generator.IFileSystemAccess2
+import org.apache.commons.lang.WordUtils
 
 class HLAClassConverterGenerator {
 	
@@ -12,15 +13,33 @@ class HLAClassConverterGenerator {
 	 */
 	def generateClass(ObjectModel objectModel, IFileSystemAccess2 fsa) {
 		
+		generateTemplateClass(fsa)
+		
 		fsa.generateFile(
-			"com/cohesionforce/hla/classes/HLAClassConverter.java", '''		
-			package com.cohesionforce.hla.classes;
+			"com/cohesionforce/hla/HLAClassConverter.java", '''		
+			package com.cohesionforce.hla;
 			
 			import com.cohesionforce.hla.classes.avro.*;
 			import com.cohesionforce.hla.enumerations.avro.*;
 			import hla.rti.jlc.EncodingHelpers;
 			
+			import java.util.Arrays;
+			
 			public class HLAClassConverter {
+				
+				public static String readString(byte[] bytes, int offset) {
+					int strlen = -1;
+					for(int i = offset; i < bytes.length; i++) {
+						if(bytes[i] == '\0') {
+							strlen = offset + i;
+							break;
+						}
+					}
+					if(strlen >=0) {
+						return new String(Arrays.copyOfRange(bytes, offset, offset+strlen));
+					}
+					return new String(Arrays.copyOfRange(bytes, offset, bytes.length - offset));
+				}
 				
 				«FOR attributeClass: objectModel.omtComponents.filter(ComplexDataType)»
 				«attributeClass.generateFiller»
@@ -32,11 +51,51 @@ class HLAClassConverterGenerator {
 			''')
 	}
 	
+	def generateTemplateClass(IFileSystemAccess2 fsa) {
+		fsa.generateFile(
+			"com/cohesionforce/hla/AvroWrapper.java", '''
+				package com.cohesionforce.hla;
+				
+				import hla.rti.AttributeNotKnown;
+				import hla.rti.FederateInternalError;
+				import hla.rti.LogicalTime;
+				import hla.rti.RTIambassador;
+				import hla.rti.RTIexception;
+				import hla.rti.ReflectedAttributes;
+				import hla.rti.jlc.RtiFactory;
+				
+				public abstract class AvroWrapper<T> {
+					public abstract int init(RtiFactory factory, RTIambassador rtiamb) throws RTIexception;
+					public abstract T reflect(final ReflectedAttributes attrs, final LogicalTime time)
+							throws AttributeNotKnown, FederateInternalError;
+					protected int classHandle;
+					protected hla.rti.AttributeHandleSet attrHandleSet;
+					protected String className;
+					
+					public int getClassHandle() {
+						return classHandle;
+					}
+					
+					public String getClassName() {
+						return className;
+					}
+				}
+			''')
+	}
+	
 
 	def dispatch CharSequence generateFiller(EnumeratedDataType dataType) { '''
 		public static int fill«dataType.name.strip»(byte[] bytes, «dataType.name.strip» avro, int offset) {
-			int value = 0;
-			value = EncodingHelpers.decodeInt(bytes, offset);
+			«IF dataType.name.strip.endsWith("8")»
+			int value = EncodingHelpers.decodeByte(bytes, offset);
+			int count = 1;
+			«ELSEIF dataType.name.strip.endsWith("16")»
+			int value = EncodingHelpers.decodeShort(bytes, offset);
+			int count = 2;
+			«ELSE»
+			int value = EncodingHelpers.decodeInt(bytes, offset);
+			int count = 4;
+			«ENDIF»
 			switch(value) {
 				«FOR literal: dataType.literals»
 				case «literal.value»: 
@@ -44,7 +103,7 @@ class HLAClassConverterGenerator {
 					break;
 				«ENDFOR»
 			}
-			return 4;
+			return count;
 		}
 	'''
 	}
@@ -94,7 +153,7 @@ class HLAClassConverterGenerator {
 					«ELSEIF component.dataType.dataType.strip == "any"»
 						//TODO: How do we handle this type? "any"
 					«ELSEIF component.dataType.dataType.strip == "string"»
-						String «component.fieldName.name.strip»String = EncodingHelpers.decodeString(bytes, offset + bytesRead); 
+						String «component.fieldName.name.strip»String = readString(bytes, offset + bytesRead); 
 						avro.set«component.fieldName.name.methodName»(«component.fieldName.name.strip»String);
 						bytesRead += «component.fieldName.name.strip»String.length();
 					«ELSEIF component.dataType.dataType.strip == "char"»
@@ -118,10 +177,14 @@ class HLAClassConverterGenerator {
 	}
 	
 	def String methodName(String string) {
-		if(string.length == 1) {
-			return string.toUpperCase
+		// Convert from _ to camel case
+		var test = string.strip
+		if(test.contains("_")) {
+			test = WordUtils.capitalizeFully(test, "_".toCharArray)
 		}
-		return string.replace("\"","").replace("_","").toFirstUpper
+		test = test.replace("_","")
+		test = test.toFirstUpper
+   		return test
 	}
 
 	def String literalValue(String string) {
