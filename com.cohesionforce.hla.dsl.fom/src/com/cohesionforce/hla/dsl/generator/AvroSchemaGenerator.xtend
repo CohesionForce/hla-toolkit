@@ -26,6 +26,7 @@ import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import com.cohesionforce.hla.dsl.omt.ObjectModel
+import com.cohesionforce.hla.dsl.fom.InteractionClass
 
 /**
  * Generates code from your model files on save.
@@ -38,7 +39,8 @@ class AvroSchemaGenerator {
 	var List<ComplexDataType> dataTypes = new ArrayList()
 	var List<EnumeratedDataType> enumTypes = new ArrayList()
 	var List<Attribute> attributes = new ArrayList()
-
+	var List<Parameter> parameters = new ArrayList()
+	
 	/**
 	 * Adds a class to the list of visited classes and returns
 	 * true if the class did NOT exist in the list.
@@ -52,8 +54,8 @@ class AvroSchemaGenerator {
 	}
 
 	/**
-	 * Adds a class to the list of visited classes and returns
-	 * true if the class did NOT exist in the list.
+	 * Adds an enum to the list of visited enums and returns
+	 * true if the enum did NOT exist in the list.
 	 */
 	def boolean addEnum(EnumeratedDataType type) {
 		if (enumTypes.contains(type)) {
@@ -71,16 +73,20 @@ class AvroSchemaGenerator {
 	}
 	
 	/**
-	 * Generates an Avro Schema file for an InteractionClass.
+	 * Generates an Avro Schema file for an Interaction.
 	 */
 	def generateSchema(Interaction interaction, IFileSystemAccess2 fsa) {
 
 		dataTypes.clear
 		enumTypes.clear
+		parameters.clear
+		
+		interaction.buildAttributeList
+		
 		fsa.generateFile(
 			"com/cohesionforce/hla/schema/interactions/" + interaction.name.replace("\"", "") + ".avsc", '''
 				{"type":"record","name":«interaction.name»,"namespace":"com.cohesionforce.hla.interactions.avro","fields":[
-					«FOR parameter : interaction.components SEPARATOR ","»
+					«FOR parameter : parameters SEPARATOR ","»
 						«parameter.generateReference»
 					«ENDFOR»
 				]}
@@ -88,7 +94,7 @@ class AvroSchemaGenerator {
 	}
 
 	/**
-	 * Generates an Avro Schema file for an InteractionClass.
+	 * Generates an Avro Schema file for an EnumeratedDataType.
 	 */
 	def generateSchema(EnumeratedDataType enumeratedType, IFileSystemAccess2 fsa) {
 		dataTypes.clear
@@ -100,7 +106,7 @@ class AvroSchemaGenerator {
 	}
 
 	/**
-	 * Generates an Avro Schema file for an InteractionClass.
+	 * Generates an Avro Schema file for a ComplexDataType.
 	 */
 	def generateSchema(ComplexDataType dataType, IFileSystemAccess2 fsa) {
 
@@ -119,7 +125,7 @@ class AvroSchemaGenerator {
 	}
 
 	/**
-	 * Generates an Avro Schema file for an InteractionClass.
+	 * Generates an Avro Schema file for an AttributeClass.
 	 */
 	def generateSchema(AttributeClass attributeClass, IFileSystemAccess2 fsa) {
 
@@ -132,11 +138,19 @@ class AvroSchemaGenerator {
 		fsa.generateFile(
 			"com/cohesionforce/hla/schema/classes/" + attributeClass.name.replace("\"", "") + ".avsc", '''
 				{"type":"record","name":«attributeClass.name»,"namespace":"com.cohesionforce.hla.classes.avro","fields":[
+					{"name":"simTime","type":["null","double"]},
+					{"name":"receiveTime","type":["null","long"]}«IF attributes.length > 0»,«ENDIF»
 					«FOR attribute : attributes SEPARATOR ","»
 						«attribute.generateReference»
 					«ENDFOR»
 				]}
 			''')
+	}
+	
+	def void buildAttributeList(Interaction interaction)
+	{
+		interaction.components.filter(SuperInteraction).forEach[it.super.handleSuper]
+		interaction.components.filter(Parameter).forEach[parameters.add(it)]
 	}
 	
 	def void buildAttributeList(AttributeClass attributeClass)
@@ -145,18 +159,9 @@ class AvroSchemaGenerator {
 		attributeClass.components.filter(Attribute).forEach[attributes.add(it)]
 	}
 	
-
-	def dispatch CharSequence generateReference(SuperInteraction superInteraction) {
-		superInteraction.super.handleSuper
-	}
-
-	def CharSequence handleSuper(InteractionId id) { '''
-		«IF (id.eContainer as Interaction).components.filter(Parameter).size > 0»
-		«FOR attribute:  (id.eContainer as Interaction).components SEPARATOR ","»
-			«attribute.generateReference»
-		«ENDFOR»,
-		«ENDIF»
-		'''
+	def void handleSuper(InteractionId id) {
+		(id.eContainer as Interaction).components.filter(SuperInteraction).forEach[it.super.handleSuper]
+		(id.eContainer as Interaction).components.filter(Parameter).forEach[parameters.add(it)]
 	}
 
 	def void handleSuper(ClassId id) {

@@ -20,6 +20,7 @@ class HLAClassMapGenerator {
 			
 			import com.cohesionforce.hla.classes.*;
 			import com.cohesionforce.hla.classes.avro.*;
+			import com.cohesionforce.hla.classes.avro.Package;
 			
 			import hla.rti.RTIambassador;
 			import hla.rti.RTIexception;
@@ -29,10 +30,12 @@ class HLAClassMapGenerator {
 				
 				private Map<Integer, AvroWrapper<?>> classMap = new HashMap<>();
 				private Map<Integer, LogWriter<?>> writerMap = new HashMap<>();
+				private Map<Integer, KafkaWriter<?>> kafkaMap = new HashMap<>();
 				
 				public void buildClassMap(RtiFactory factory, RTIambassador rtiamb, ThreadGroup threadGroup) {
 					AvroWrapper<?> wrapper = null;
 					LogWriter<?> writer = null;
+					KafkaWriter<?> kafka = null;
 					int classHandle = 0;
 					
 					«FOR fed: resource.contents.filter(Fed)»
@@ -53,7 +56,14 @@ class HLAClassMapGenerator {
 				public LogWriter<?> getWriter(int index) {
 					return writerMap.get(index);
 				}
+
+				public KafkaWriter<?> getKafka(int index) {
+					return kafkaMap.get(index);
+				}
 			
+				public Collection<KafkaWriter<?>> getKafkas() {
+					return kafkaMap.values();
+				}			
 			}
 			''')
 	}
@@ -65,6 +75,8 @@ class HLAClassMapGenerator {
 			classMap.put(classHandle, wrapper);
 			writer = new LogWriter<«attributeClass.ref.name.strip»>(threadGroup, "log/«attributeClass.ref.name.strip».avro", «attributeClass.ref.name.strip».getClassSchema());
 			writerMap.put(classHandle, writer);
+			kafka = new KafkaWriter<«attributeClass.ref.name.strip»>(threadGroup, "«attributeClass.ref.name.strip»", «attributeClass.ref.name.strip».getClassSchema());
+			kafkaMap.put(classHandle, kafka);
 		} catch(RTIexception e) {
 			e.printStackTrace();
 		}

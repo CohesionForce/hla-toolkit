@@ -32,9 +32,11 @@ import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.services.IServiceConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,6 +77,9 @@ public class GenerateJavaHandler {
 					java.net.URI fileURI = selectedDirectory.getLocationURI();
 					File locationFile = new File(fileURI);
 
+					boolean success = true;
+					int countSuccess = 0;
+					int countFailure = 0;
 					// Now get through the list of selected resources
 					for (IResource selectedResource : selectedResources) {
 						
@@ -97,8 +102,14 @@ public class GenerateJavaHandler {
 											File schemaFile = new File(
 													schemaURI);
 
-											generateCode(schemaFile,
+											int rvalue = generateCode(schemaFile,
 													locationFile);
+											if(rvalue < 0) {
+												success = false;
+												countFailure++;
+											} else {
+												countSuccess++;
+											}
 
 										}
 									}
@@ -117,11 +128,25 @@ public class GenerateJavaHandler {
 										.getLocationURI();
 								File schemaFile = new File(schemaURI);
 
-								generateCode(schemaFile, locationFile);
+								int rvalue = generateCode(schemaFile, locationFile);
+								if(rvalue < 0) {
+									success = false;
+									countFailure++;
+								} else {
+									countSuccess++;
+								}
 
 							}
 						}
 					}
+					if(success) {
+						MessageDialog.openInformation(Display.getDefault().getActiveShell(), "Code Generation Complete", 
+								"Successfully generated "+countSuccess+" classes");
+					} else {
+						MessageDialog.openError(Display.getDefault().getActiveShell(), "Code Generation Complete", 
+								"Successfully generated "+countSuccess+" classes\n"+"Problem generating "+countFailure+" classes");
+					}
+					
 				}
 			}
 		}

@@ -55,7 +55,7 @@ class HLAClassGenerator {
 					return classHandle;
 				}
 			
-				public «attributeClass.ref.name.strip» reflect(final ReflectedAttributes attrs, final LogicalTime time)
+				public «attributeClass.ref.name.strip» reflect(final ReflectedAttributes attrs, final LogicalTime time, long receiveTime)
 						throws AttributeNotKnown, FederateInternalError {
 							
 					«attributeClass.ref.name.strip» avroReturn = new «attributeClass.ref.name.strip»();
@@ -71,6 +71,8 @@ class HLAClassGenerator {
 						throw new FederateInternalError(ex.toString());
 					}
 					double timeValue = ((rtis13.LogicalTimeDouble) time).value_;
+					avroReturn.setSimTime(timeValue);
+					avroReturn.setReceiveTime(receiveTime);
 					return avroReturn;
 				}
 				

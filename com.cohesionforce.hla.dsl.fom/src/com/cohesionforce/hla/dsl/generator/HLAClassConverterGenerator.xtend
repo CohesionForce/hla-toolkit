@@ -66,7 +66,7 @@ class HLAClassConverterGenerator {
 				
 				public abstract class AvroWrapper<T> {
 					public abstract int init(RtiFactory factory, RTIambassador rtiamb) throws RTIexception;
-					public abstract T reflect(final ReflectedAttributes attrs, final LogicalTime time)
+					public abstract T reflect(final ReflectedAttributes attrs, final LogicalTime time, long receiveTime)
 							throws AttributeNotKnown, FederateInternalError;
 					protected int classHandle;
 					protected hla.rti.AttributeHandleSet attrHandleSet;
