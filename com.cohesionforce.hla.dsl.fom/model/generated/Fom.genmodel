@@ -48,7 +48,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Fom.ecore#//InteractionClass/classes"/>
     </genClasses>
     <genClasses ecoreClass="Fom.ecore#//Parameter">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Fom.ecore#//Parameter/name"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference Fom.ecore#//Parameter/ref"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
