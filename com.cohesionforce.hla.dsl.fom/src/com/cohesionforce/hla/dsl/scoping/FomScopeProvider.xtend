@@ -11,6 +11,8 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.EReference
 import org.eclipse.xtext.scoping.IScope
 import org.eclipse.xtext.scoping.Scopes
+import com.cohesionforce.hla.dsl.fom.Parameter
+import com.cohesionforce.hla.dsl.fom.InteractionClass
 
 /**
  * This class contains custom scoping description.
@@ -28,6 +30,14 @@ class FomScopeProvider extends AbstractFomScopeProvider {
 			if(container !== null && container.ref instanceof com.cohesionforce.hla.dsl.omt.AttributeClass) {
 				var refClass = container.ref
 				var candidates = refClass.components.filter(com.cohesionforce.hla.dsl.omt.Attribute)
+				var catchScopes = Scopes.scopeFor(candidates, qnp, IScope.NULLSCOPE)
+				return catchScopes
+			}
+		} else if (context instanceof Parameter && reference == FomPackage.Literals.PARAMETER__REF) {
+			var container = (context.eContainer as InteractionClass)
+			if(container !== null && container.ref instanceof com.cohesionforce.hla.dsl.omt.Interaction) {
+				var refClass = container.ref
+				var candidates = refClass.components.filter(com.cohesionforce.hla.dsl.omt.Parameter)
 				var catchScopes = Scopes.scopeFor(candidates, qnp, IScope.NULLSCOPE)
 				return catchScopes
 			}

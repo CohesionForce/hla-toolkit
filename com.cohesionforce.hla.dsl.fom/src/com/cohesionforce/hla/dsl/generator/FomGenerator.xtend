@@ -17,6 +17,7 @@ import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
 import com.cohesionforce.hla.dsl.fom.Fed
+import com.cohesionforce.hla.dsl.fom.InteractionClass
 
 /**
  * Generates code from your model files on save.
@@ -30,12 +31,18 @@ class FomGenerator extends AbstractGenerator {
 	HLAClassConverterGenerator converterGenerator = new HLAClassConverterGenerator
 	AvroSchemaGenerator schemaGenerator = new AvroSchemaGenerator
 	KafkaScriptGenerator scriptGenerator = new KafkaScriptGenerator
+	HLAInteractionGenerator interactionGenerator = new HLAInteractionGenerator
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		resource.allContents.filter(Fed).forEach [scriptGenerator.generateTopicScript(it, fsa)]
 		resource.allContents.filter(AttributeClass).forEach [
 			{
 				classGenerator.generateClass(it, fsa)
+			}
+		]
+		resource.allContents.filter(InteractionClass).forEach [
+			{
+				interactionGenerator.generateClass(it, fsa)
 			}
 		]
 		mapGenerator.generateMap(resource, fsa)
