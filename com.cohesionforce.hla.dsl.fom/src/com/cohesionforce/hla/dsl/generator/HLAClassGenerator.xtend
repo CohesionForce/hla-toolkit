@@ -22,10 +22,11 @@ class HLAClassGenerator {
 			"com/cohesionforce/hla/classes/" + attributeClass.ref.name.strip + "Class.java", '''		
 			package com.cohesionforce.hla.classes;
 			
-			import com.cohesionforce.hla.AvroWrapper;
+			import com.cohesionforce.hla.AvroClassWrapper;
 			import com.cohesionforce.hla.HLAClassConverter;
 			import com.cohesionforce.hla.classes.avro.*;
 			import com.cohesionforce.hla.enumerations.avro.*;
+			import com.cohesionforce.hla.types.avro.*;
 			
 			import hla.rti.ArrayIndexOutOfBounds;
 			import hla.rti.AttributeNotKnown;
@@ -37,7 +38,7 @@ class HLAClassGenerator {
 			import hla.rti.jlc.EncodingHelpers;
 			import hla.rti.jlc.RtiFactory;
 			
-			public class «attributeClass.ref.name.strip»Class extends AvroWrapper<«attributeClass.ref.name.strip»> {
+			public class «attributeClass.ref.name.strip»Class extends AvroClassWrapper<«attributeClass.ref.name.strip»> {
 
 				// Attribute Handles
 				«attributeClass.generateAttrDefinitions»

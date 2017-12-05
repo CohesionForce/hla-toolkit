@@ -20,6 +20,7 @@ class HLAClassConverterGenerator {
 			package com.cohesionforce.hla;
 			
 			import com.cohesionforce.hla.classes.avro.*;
+			import com.cohesionforce.hla.types.avro.*;
 			import com.cohesionforce.hla.enumerations.avro.*;
 			import hla.rti.jlc.EncodingHelpers;
 			

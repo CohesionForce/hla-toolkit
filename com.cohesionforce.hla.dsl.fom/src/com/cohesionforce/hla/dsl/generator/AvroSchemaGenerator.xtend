@@ -26,7 +26,6 @@ import java.util.ArrayList
 import java.util.List
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import com.cohesionforce.hla.dsl.omt.ObjectModel
-import com.cohesionforce.hla.dsl.fom.InteractionClass
 
 /**
  * Generates code from your model files on save.
@@ -86,6 +85,7 @@ class AvroSchemaGenerator {
 		fsa.generateFile(
 			"com/cohesionforce/hla/schema/interactions/" + interaction.name.replace("\"", "") + ".avsc", '''
 				{"type":"record","name":«interaction.name»,"namespace":"com.cohesionforce.hla.interactions.avro","fields":[
+					{"name":"receiveTime","type":["null","long"]}«IF parameters.length > 0»,«ENDIF»
 					«FOR parameter : parameters SEPARATOR ","»
 						«parameter.generateReference»
 					«ENDFOR»
@@ -115,8 +115,8 @@ class AvroSchemaGenerator {
 		dataTypes.add(dataType)
 		
 		fsa.generateFile(
-			"com/cohesionforce/hla/schema/classes/" + dataType.name.strip + ".avsc", '''
-				{"type":"record","name":«dataType.name»,"namespace":"com.cohesionforce.hla.classes.avro","fields":[
+			"com/cohesionforce/hla/schema/types/" + dataType.name.strip + ".avsc", '''
+				{"type":"record","name":«dataType.name»,"namespace":"com.cohesionforce.hla.types.avro","fields":[
 					«FOR component : dataType.components SEPARATOR ","»
 						«component.generateReference»
 					«ENDFOR»
@@ -180,7 +180,7 @@ class AvroSchemaGenerator {
 					«IF addType(parameter.dataType.refType as ComplexDataType)»
 						{"name":«parameter.name»,"type":["null",«parameter.dataType.refType.generateRecord»]}
 					«ELSE»
-						{"name":«parameter.name»,"type":["null",«parameter.dataType.refType.getName»]}
+						{"name":«parameter.name»,"type":["null","com.cohesionforce.hla.types.avro.«parameter.dataType.refType.getName.strip»"]}
 					«ENDIF»
 				«ELSEIF parameter.dataType.refType instanceof EnumeratedDataType»
 					«IF addEnum(parameter.dataType.refType as EnumeratedDataType)»
@@ -206,7 +206,7 @@ class AvroSchemaGenerator {
 					«IF addType(attribute.dataType.refType as ComplexDataType)»
 						{"name":«attribute.name»,"type":["null",«attribute.dataType.refType.generateRecord»]}
 					«ELSE»
-						{"name":«attribute.name»,"type":["null",«attribute.dataType.refType.getName»]}
+						{"name":«attribute.name»,"type":["null","com.cohesionforce.hla.types.avro.«attribute.dataType.refType.getName.strip»"]}
 					«ENDIF»
 				«ELSEIF attribute.dataType.refType instanceof EnumeratedDataType»
 					«IF addEnum(attribute.dataType.refType as EnumeratedDataType)»
@@ -261,7 +261,7 @@ class AvroSchemaGenerator {
 	def generateRecord(TypeReference typeRef) {
 		'''
 			«IF typeRef instanceof ComplexDataType»
-				{"type":"record","name":«typeRef.getName»,"fields":[
+				{"type":"record","name":«typeRef.getName»,"namespace":"com.cohesionforce.hla.types.avro","fields":[
 					«FOR component : (typeRef as ComplexDataType).components SEPARATOR ","»
 						«component.generateReference»
 					«ENDFOR»]}

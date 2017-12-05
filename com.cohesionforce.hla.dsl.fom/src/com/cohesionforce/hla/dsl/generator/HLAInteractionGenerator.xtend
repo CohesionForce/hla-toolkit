@@ -1,13 +1,14 @@
 package com.cohesionforce.hla.dsl.generator
 
 import com.cohesionforce.hla.dsl.fom.AttributeClass
-import com.cohesionforce.hla.dsl.omt.Attribute
+import com.cohesionforce.hla.dsl.fom.InteractionClass
 import com.cohesionforce.hla.dsl.omt.ComplexDataType
 import com.cohesionforce.hla.dsl.omt.EnumeratedDataType
+import com.cohesionforce.hla.dsl.omt.Interaction
+import com.cohesionforce.hla.dsl.omt.Parameter
 import com.cohesionforce.hla.dsl.omt.TypeReference
 import org.eclipse.xtext.generator.IFileSystemAccess2
-import com.cohesionforce.hla.dsl.fom.InteractionClass
-import com.cohesionforce.hla.dsl.omt.Parameter
+import org.apache.commons.lang.WordUtils
 
 class HLAInteractionGenerator {
 	
@@ -21,59 +22,58 @@ class HLAInteractionGenerator {
 		attributeSet = interactionClass.ref.name.strip.toFirstLower + "Attributes"
 		
 		fsa.generateFile(
-			"com/cohesionforce/hla/interactions/" + interactionClass.ref.name.strip + "Class.java", '''		
+			"com/cohesionforce/hla/interactions/" + interactionClass.ref.name.strip + "Interaction.java", '''		
 			package com.cohesionforce.hla.interactions;
 			
-			import com.cohesionforce.hla.AvroWrapper;
+			import com.cohesionforce.hla.AvroInteractionWrapper;
 			import com.cohesionforce.hla.HLAClassConverter;
 			import com.cohesionforce.hla.interactions.avro.*;
 			import com.cohesionforce.hla.enumerations.avro.*;
+			import com.cohesionforce.hla.types.avro.*;
 			
 			import hla.rti.ArrayIndexOutOfBounds;
 			import hla.rti.AttributeNotKnown;
 			import hla.rti.FederateInternalError;
-			import hla.rti.LogicalTime;
+			import hla.rti.InteractionParameterNotKnown;
+			import hla.rti.ReceivedInteraction;
 			import hla.rti.RTIambassador;
 			import hla.rti.RTIexception;
 			import hla.rti.ReflectedAttributes;
 			import hla.rti.jlc.EncodingHelpers;
 			import hla.rti.jlc.RtiFactory;
 			
-			public class «interactionClass.ref.name.strip»Class extends AvroWrapper<«interactionClass.ref.name.strip»> {
+			public class «interactionClass.ref.name.strip»Interaction extends AvroInteractionWrapper<«interactionClass.ref.name.strip»> {
 
 				// Attribute Handles
 				«interactionClass.generateAttrDefinitions»
 				
-				public int init(RtiFactory factory, RTIambassador rtiamb) throws RTIexception {
-					className = "«interactionClass.getClassName»";
-					classHandle = rtiamb.getObjectClassHandle(className);
-					attrHandleSet = factory.createAttributeHandleSet();
+				public int init(RTIambassador rtiamb) throws RTIexception {
+					interactionName = "«interactionClass.getClassName»";
+					interactionHandle = rtiamb.getInteractionClassHandle(interactionName);
 					
 					«interactionClass.generateInitAttributes»
 					
-					rtiamb.subscribeObjectClassAttributes(classHandle, attrHandleSet);
-					rtiamb.publishObjectClass(classHandle, attrHandleSet);
+					rtiamb.subscribeInteractionClass(interactionHandle);
+					rtiamb.publishInteractionClass(interactionHandle);
 		
-					return classHandle;
+					return interactionHandle;
 				}
 			
-				public «interactionClass.ref.name.strip» reflect(final ReflectedAttributes attrs, final LogicalTime time, long receiveTime)
-						throws AttributeNotKnown, FederateInternalError {
+				public «interactionClass.ref.name.strip» receive(final int interactionClass, final ReceivedInteraction theInteraction,
+							final byte[] userSuppliedTag, long receiveTime) throws FederateInternalError, InteractionParameterNotKnown {
 							
 					«interactionClass.ref.name.strip» avroReturn = new «interactionClass.ref.name.strip»();
-					final int num_attrs = attrs.size();
+					final int num_params = theInteraction.size();
 					
 					try {
-						for (int attr = 0; attr < num_attrs; ++attr) {
-							final int handle = attrs.getAttributeHandle(attr);
+						for (int param = 0; param < num_params; ++param) {
+							final int handle = theInteraction.getParameterHandle(param);
 							«interactionClass.generateReflectAttributes»
-							throw new AttributeNotKnown("handle is " + handle);
+							throw new InteractionParameterNotKnown("handle is " + handle);
 						}
 					} catch (final ArrayIndexOutOfBounds ex) {
 						throw new FederateInternalError(ex.toString());
 					}
-					double timeValue = ((rtis13.LogicalTimeDouble) time).value_;
-					avroReturn.setSimTime(timeValue);
 					avroReturn.setReceiveTime(receiveTime);
 					return avroReturn;
 				}
@@ -87,58 +87,58 @@ class HLAInteractionGenerator {
 			«(interactionClass.eContainer as InteractionClass).generateReflectAttributes»
 		«ENDIF»
 		«FOR parameter: interactionClass.parameters»
-						if (handle == «parameter.ref.name.strip.toFirstLower»Attr) {
+						if (handle == «parameter.ref.name.strip.toFirstLower»Param) {
 						«IF parameter.ref.dataType.refType !== null»
 							«IF parameter.ref.dataType.refType instanceof EnumeratedDataType»
 							«(parameter.ref.dataType.refType as EnumeratedDataType).name.strip» temp = «(parameter.ref.dataType.refType as EnumeratedDataType).name.strip».values()[0];
-								HLAClassConverter.fill«(parameter.ref.dataType.refType as EnumeratedDataType).name.strip»(attrs.getValue(attr), temp, 0);
-								avroReturn.set«parameter.ref.name.strip»(temp);
+								HLAClassConverter.fill«(parameter.ref.dataType.refType as EnumeratedDataType).name.strip»(theInteraction.getValue(param), temp, 0);
+								avroReturn.set«parameter.ref.name.methodName»(temp);
 								continue;
 							«ELSE»
 							«(parameter.ref.dataType.refType as ComplexDataType).name.strip» temp = new «(parameter.ref.dataType.refType as ComplexDataType).name.strip»(); 
-								HLAClassConverter.fill«(parameter.ref.dataType.refType as ComplexDataType).name.strip»(attrs.getValue(attr), temp, 0);
-								avroReturn.set«parameter.ref.name.strip»(temp);
+								HLAClassConverter.fill«(parameter.ref.dataType.refType as ComplexDataType).name.strip»(theInteraction.getValue(param), temp, 0);
+								avroReturn.set«parameter.ref.name.methodName»(temp);
 								continue;
 							«ENDIF»
 						«ELSE»
 							«IF parameter.ref.dataType.dataType.strip == "unsigned short"»
-								avroReturn.set«parameter.ref.name.strip»(Integer.valueOf(EncodingHelpers.decodeShort(attrs.getValue(attr))));
+								avroReturn.set«parameter.ref.name.methodName»(Integer.valueOf(EncodingHelpers.decodeShort(theInteraction.getValue(param))));
 								continue;
 							«ELSEIF parameter.ref.dataType.dataType.strip == "short"»
-								avroReturn.set«parameter.ref.name.strip»(Integer.valueOf(EncodingHelpers.decodeShort(attrs.getValue(attr))));
+								avroReturn.set«parameter.ref.name.methodName»(Integer.valueOf(EncodingHelpers.decodeShort(theInteraction.getValue(param))));
 								continue;
 							«ELSEIF parameter.ref.dataType.dataType.strip == "unsigned long"»
-								avroReturn.set«parameter.ref.name.strip»(EncodingHelpers.decodeInt(attrs.getValue(attr)));
+								avroReturn.set«parameter.ref.name.methodName»(EncodingHelpers.decodeInt(theInteraction.getValue(param)));
 								continue;
 							«ELSEIF parameter.ref.dataType.dataType.strip == "long"»
-								avroReturn.set«parameter.ref.name.strip»(EncodingHelpers.decodeInt(attrs.getValue(attr)));
+								avroReturn.set«parameter.ref.name.methodName»(EncodingHelpers.decodeInt(theInteraction.getValue(param)));
 								continue;
 							«ELSEIF parameter.ref.dataType.dataType.strip == "unsigned long long"»
-								avroReturn.set«parameter.ref.name.strip»(EncodingHelpers.decodeLong(attrs.getValue(attr)));
+								avroReturn.set«parameter.ref.name.methodName»(EncodingHelpers.decodeLong(theInteraction.getValue(param)));
 								continue;
 							«ELSEIF parameter.ref.dataType.dataType.strip == "long long"»
-								avroReturn.set«parameter.ref.name.strip»(EncodingHelpers.decodeLong(attrs.getValue(attr)));
+								avroReturn.set«parameter.ref.name.methodName»(EncodingHelpers.decodeLong(theInteraction.getValue(param)));
 								continue;
 							«ELSEIF parameter.ref.dataType.dataType.strip == "double"»
-								avroReturn.set«parameter.ref.name.strip»(EncodingHelpers.decodeDouble(attrs.getValue(attr)));
+								avroReturn.set«parameter.ref.name.methodName»(EncodingHelpers.decodeDouble(theInteraction.getValue(param)));
 								continue;
 							«ELSEIF parameter.ref.dataType.dataType.strip == "float"»
-								avroReturn.set«parameter.ref.name.strip»(EncodingHelpers.decodeFloat(attrs.getValue(attr)));
+								avroReturn.set«parameter.ref.name.methodName»(EncodingHelpers.decodeFloat(theInteraction.getValue(param)));
 								continue;
 							«ELSEIF parameter.ref.dataType.dataType.strip == "boolean"»
-								avroReturn.set«parameter.ref.name.strip»(EncodingHelpers.decodeBoolean(attrs.getValue(attr)));
+								avroReturn.set«parameter.ref.name.methodName»(EncodingHelpers.decodeBoolean(theInteraction.getValue(param)));
 								continue;
 							«ELSEIF parameter.ref.dataType.dataType.strip == "any"»
 								//TODO: How do we handle this type? "any"
 								continue;
 							«ELSEIF parameter.ref.dataType.dataType.strip == "string"»
-								avroReturn.set«parameter.ref.name.strip»(EncodingHelpers.decodeString(attrs.getValue(attr)));
+								avroReturn.set«parameter.ref.name.methodName»(EncodingHelpers.decodeString(theInteraction.getValue(param)));
 								continue;
 							«ELSEIF parameter.ref.dataType.dataType.strip == "char"»
-								avroReturn.set«parameter.ref.name.strip»(Integer.valueOf(EncodingHelpers.decodeChar(attrs.getValue(attr))));
+								avroReturn.set«parameter.ref.name.methodName»(Integer.valueOf(EncodingHelpers.decodeChar(theInteraction.getValue(param))));
 								continue;
 							«ELSEIF parameter.ref.dataType.dataType.strip == "octet"»
-								avroReturn.set«parameter.ref.name.strip»(Integer.valueOf(EncodingHelpers.decodeByte(attrs.getValue(attr))));
+								avroReturn.set«parameter.ref.name.methodName»(Integer.valueOf(EncodingHelpers.decodeByte(theInteraction.getValue(param))));
 								continue;
 							«ELSE»
 								//TODO Handle type «parameter.ref.dataType.dataType»
@@ -154,7 +154,7 @@ class HLAInteractionGenerator {
 			«(interactionClass.eContainer as InteractionClass).generateAttrDefinitions»
 		«ENDIF»
 		«FOR parameter: interactionClass.parameters»
-			private int «parameter.ref.name.strip.toFirstLower»Attr;
+			private int «parameter.ref.name.strip.toFirstLower»Param;
 		«ENDFOR»
 	'''}
 	
@@ -163,8 +163,7 @@ class HLAInteractionGenerator {
 			«(interactionClass.eContainer as InteractionClass).generateInitAttributes»
 		«ENDIF»
 		«FOR parameter: interactionClass.parameters»
-			«parameter.ref.name.strip.toFirstLower»Attr = rtiamb.getAttributeHandle("«parameter.ref.name.strip»", classHandle);
-			attrHandleSet.add(«parameter.ref.name.strip.toFirstLower»Attr);
+			«parameter.ref.name.strip.toFirstLower»Param = rtiamb.getParameterHandle("«parameter.ref.name.strip»", interactionHandle);
 		«ENDFOR»
 	'''
 	}
@@ -184,7 +183,7 @@ class HLAInteractionGenerator {
 		return string.replace("\"","")
 	}
 	
-	def dispatch CharSequence getImports(com.cohesionforce.hla.dsl.omt.Interaction interactionClass) { '''
+	def dispatch CharSequence getImports(Interaction interactionClass) { '''
 		import com.cohesionforce.hla.interactions.avro.«interactionClass.name.strip»;
 		«FOR attribute: interactionClass.components.filter(Parameter)»
 		«IF attribute.dataType.refType !== null»
@@ -196,10 +195,21 @@ class HLAInteractionGenerator {
 	
 	def dispatch CharSequence getImports(TypeReference typeRef) { '''
 		«IF typeRef instanceof ComplexDataType»
-			import com.cohesionforce.hla.classes.avro.«(typeRef as ComplexDataType).name.strip»;
+			import com.cohesionforce.hla.interactions.avro.«(typeRef as ComplexDataType).name.strip»;
 		«ELSE»
-			import com.cohesionforce.hla.classes.avro.«(typeRef as EnumeratedDataType).name.strip»;
+			import com.cohesionforce.hla.enumerations.avro.«(typeRef as EnumeratedDataType).name.strip»;
 		«ENDIF»
 	'''}
+	
+	def String methodName(String string) {
+		// Convert from _ to camel case
+		var test = string.strip
+		if(test.contains("_")) {
+			test = WordUtils.capitalize(test, "_".toCharArray)
+		}
+		test = test.replace("_","")
+		test = test.toFirstUpper
+   		return test
+	}
 	
 }
