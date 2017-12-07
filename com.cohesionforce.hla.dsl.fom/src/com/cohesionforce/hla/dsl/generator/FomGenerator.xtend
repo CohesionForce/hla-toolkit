@@ -28,6 +28,7 @@ class FomGenerator extends AbstractGenerator {
 
 	HLAClassGenerator classGenerator = new HLAClassGenerator
 	HLAClassMapGenerator mapGenerator = new HLAClassMapGenerator
+	HLAInteractionMapGenerator intMapGenerator = new HLAInteractionMapGenerator
 	HLAClassConverterGenerator converterGenerator = new HLAClassConverterGenerator
 	AvroSchemaGenerator schemaGenerator = new AvroSchemaGenerator
 	KafkaScriptGenerator scriptGenerator = new KafkaScriptGenerator
@@ -46,6 +47,7 @@ class FomGenerator extends AbstractGenerator {
 			}
 		]
 		mapGenerator.generateMap(resource, fsa)
+		intMapGenerator.generateMap(resource, fsa)
 		resource.resourceSet.allContents.filter(ObjectModel).forEach[ {
 			schemaGenerator.generateSchema(it, fsa)
 			converterGenerator.generateClass(it, fsa)

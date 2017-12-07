@@ -59,7 +59,7 @@ class HLAInteractionGenerator {
 					return interactionHandle;
 				}
 			
-				public «interactionClass.ref.name.strip» receive(final int interactionClass, final ReceivedInteraction theInteraction,
+				public «interactionClass.ref.name.strip» receive(final ReceivedInteraction theInteraction,
 							final byte[] userSuppliedTag, long receiveTime) throws FederateInternalError, InteractionParameterNotKnown {
 							
 					«interactionClass.ref.name.strip» avroReturn = new «interactionClass.ref.name.strip»();
@@ -168,12 +168,12 @@ class HLAInteractionGenerator {
 	'''
 	}
 	
-	def CharSequence getClassName(InteractionClass attributeClass) {
-		var name = attributeClass.ref.name.strip
-		var classRef = attributeClass.eContainer
-		while(classRef instanceof AttributeClass) {
+	def CharSequence getClassName(InteractionClass interactionClass) {
+		var name = interactionClass.ref.name.strip
+		var classRef = interactionClass.eContainer
+		while(classRef instanceof InteractionClass) {
 			name = classRef.ref.name.strip+"."+name
-			classRef = (classRef as AttributeClass).eContainer
+			classRef = (classRef as InteractionClass).eContainer
 		}
 		
 		return name
