@@ -86,16 +86,14 @@ class HLAClassConverterGenerator {
 	
 
 	def dispatch CharSequence generateFiller(EnumeratedDataType dataType) { '''
-		public static int fill«dataType.name.strip»(byte[] bytes, «dataType.name.strip» avro, int offset) {
+		public static «dataType.name.strip» get«dataType.name.strip»(byte[] bytes, int offset) {
+			«dataType.name.strip» avro = «dataType.name.strip».values()[0];
 			«IF dataType.name.strip.endsWith("8")»
 			int value = EncodingHelpers.decodeByte(bytes, offset);
-			int count = 1;
 			«ELSEIF dataType.name.strip.endsWith("16")»
 			int value = EncodingHelpers.decodeShort(bytes, offset);
-			int count = 2;
 			«ELSE»
 			int value = EncodingHelpers.decodeInt(bytes, offset);
-			int count = 4;
 			«ENDIF»
 			switch(value) {
 				«FOR literal: dataType.literals»
@@ -104,7 +102,7 @@ class HLAClassConverterGenerator {
 					break;
 				«ENDFOR»
 			}
-			return count;
+			return avro;
 		}
 	'''
 	}
@@ -115,9 +113,16 @@ class HLAClassConverterGenerator {
 			«FOR component: dataType.components»
 				«IF component.dataType.refType !== null»
 					«IF component.dataType.refType instanceof EnumeratedDataType»
-						«(component.dataType.refType as EnumeratedDataType).name.strip» «component.fieldName.name.strip»Avro = «(component.dataType.refType as EnumeratedDataType).name.strip».values()[0];
-						bytesRead += HLAClassConverter.fill«(component.dataType.refType as EnumeratedDataType).name.strip»(bytes, «component.fieldName.name.strip»Avro, offset + bytesRead);
+						«(component.dataType.refType as EnumeratedDataType).name.strip» «component.fieldName.name.strip»Avro = 
+							HLAClassConverter.get«(component.dataType.refType as EnumeratedDataType).name.strip»(bytes, offset + bytesRead);
 						avro.set«component.fieldName.name.methodName»(«component.fieldName.name.strip»Avro);
+						«IF(component.dataType.refType as EnumeratedDataType).name.strip.endsWith("8")»
+						bytesRead += 1;
+						«ELSEIF (component.dataType.refType as EnumeratedDataType).name.strip.endsWith("16")»
+						bytesRead += 2;
+						«ELSE»
+						bytesRead += 4;
+						«ENDIF»
 					«ELSE»
 						«(component.dataType.refType as ComplexDataType).name.strip» «component.fieldName.name.strip»Avro = new «(component.dataType.refType as ComplexDataType).name.strip»();
 						bytesRead += HLAClassConverter.fill«(component.dataType.refType as ComplexDataType).name.strip»(bytes, «component.fieldName.name.strip»Avro, offset + bytesRead);

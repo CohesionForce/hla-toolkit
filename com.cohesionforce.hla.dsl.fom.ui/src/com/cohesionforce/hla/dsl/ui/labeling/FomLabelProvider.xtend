@@ -4,10 +4,12 @@
 package com.cohesionforce.hla.dsl.ui.labeling
 
 import com.cohesionforce.hla.dsl.fom.AttributeClass
+import com.cohesionforce.hla.dsl.fom.InteractionClass
 import com.google.inject.Inject
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider
 import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider
 import com.cohesionforce.hla.dsl.fom.Attribute
+import com.cohesionforce.hla.dsl.fom.Parameter
 
 /**
  * Provides labels for EObjects.
@@ -33,6 +35,21 @@ class FomLabelProvider extends DefaultEObjectLabelProvider {
 		'[Attribute] ' +
 			if(attribute.ref !== null) 
 				attribute.ref.representation
+			else 'Undefined'
+	}
+	
+	// Labels and icons can be computed like this:
+	def text(InteractionClass interactionClass) {
+		'[Interaction] ' +
+			if(interactionClass.ref !== null )
+				interactionClass.ref.name
+			else 'Undefined'
+	}
+	
+	def text(Parameter param) {
+		'[Parameter] ' +
+			if(param.ref !== null) 
+				param.ref.name
 			else 'Undefined'
 	}
 	

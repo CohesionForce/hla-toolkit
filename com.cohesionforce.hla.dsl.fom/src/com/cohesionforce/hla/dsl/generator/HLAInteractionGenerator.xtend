@@ -53,8 +53,8 @@ class HLAInteractionGenerator {
 					
 					«interactionClass.generateInitAttributes»
 					
-					rtiamb.subscribeInteractionClass(interactionHandle);
 					rtiamb.publishInteractionClass(interactionHandle);
+					rtiamb.subscribeInteractionClass(interactionHandle);
 		
 					return interactionHandle;
 				}
@@ -90,8 +90,7 @@ class HLAInteractionGenerator {
 						if (handle == «parameter.ref.name.strip.toFirstLower»Param) {
 						«IF parameter.ref.dataType.refType !== null»
 							«IF parameter.ref.dataType.refType instanceof EnumeratedDataType»
-							«(parameter.ref.dataType.refType as EnumeratedDataType).name.strip» temp = «(parameter.ref.dataType.refType as EnumeratedDataType).name.strip».values()[0];
-								HLAClassConverter.fill«(parameter.ref.dataType.refType as EnumeratedDataType).name.strip»(theInteraction.getValue(param), temp, 0);
+								«(parameter.ref.dataType.refType as EnumeratedDataType).name.strip» temp = HLAClassConverter.get«(parameter.ref.dataType.refType as EnumeratedDataType).name.strip»(theInteraction.getValue(param), 0);
 								avroReturn.set«parameter.ref.name.methodName»(temp);
 								continue;
 							«ELSE»

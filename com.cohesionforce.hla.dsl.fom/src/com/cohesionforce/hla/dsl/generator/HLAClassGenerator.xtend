@@ -89,8 +89,7 @@ class HLAClassGenerator {
 						if (handle == «attribute.ref.name.strip.toFirstLower»Attr) {
 						«IF attribute.ref.dataType.refType !== null»
 							«IF attribute.ref.dataType.refType instanceof EnumeratedDataType»
-							«(attribute.ref.dataType.refType as EnumeratedDataType).name.strip» temp = «(attribute.ref.dataType.refType as EnumeratedDataType).name.strip».values()[0];
-								HLAClassConverter.fill«(attribute.ref.dataType.refType as EnumeratedDataType).name.strip»(attrs.getValue(attr), temp, 0);
+								«(attribute.ref.dataType.refType as EnumeratedDataType).name.strip» temp = HLAClassConverter.get«(attribute.ref.dataType.refType as EnumeratedDataType).name.strip»(attrs.getValue(attr), 0);
 								avroReturn.set«attribute.ref.name.strip»(temp);
 								continue;
 							«ELSE»
