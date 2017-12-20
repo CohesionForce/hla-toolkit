@@ -13,6 +13,8 @@ import org.eclipse.xtext.scoping.IScope
 import org.eclipse.xtext.scoping.Scopes
 import com.cohesionforce.hla.dsl.fom.Parameter
 import com.cohesionforce.hla.dsl.fom.InteractionClass
+import java.util.ArrayList
+import java.util.List
 
 /**
  * This class contains custom scoping description.
@@ -28,21 +30,74 @@ class FomScopeProvider extends AbstractFomScopeProvider {
 		if (context instanceof Attribute && reference == FomPackage.Literals.ATTRIBUTE__REF) {
 			var container = (context.eContainer as AttributeClass)
 			if(container !== null && container.ref instanceof com.cohesionforce.hla.dsl.omt.AttributeClass) {
+				var list = new ArrayList<com.cohesionforce.hla.dsl.omt.Attribute>()
 				var refClass = container.ref
 				var candidates = refClass.components.filter(com.cohesionforce.hla.dsl.omt.Attribute)
-				var catchScopes = Scopes.scopeFor(candidates, qnp, IScope.NULLSCOPE)
+				list.addAll(candidates)
+				
+				// Also need to add the attributes available from superclasses
+				var supers = refClass.components.filter(com.cohesionforce.hla.dsl.omt.SuperClass)
+				for(sClass : supers) {
+					list.addAll(getAttributes(sClass))
+				}
+				
+				// Create scopes for the attributes and return
+				var catchScopes = Scopes.scopeFor(list, qnp, IScope.NULLSCOPE)
 				return catchScopes
 			}
 		} else if (context instanceof Parameter && reference == FomPackage.Literals.PARAMETER__REF) {
 			var container = (context.eContainer as InteractionClass)
 			if(container !== null && container.ref instanceof com.cohesionforce.hla.dsl.omt.Interaction) {
+				var list = new ArrayList<com.cohesionforce.hla.dsl.omt.Parameter>()
 				var refClass = container.ref
 				var candidates = refClass.components.filter(com.cohesionforce.hla.dsl.omt.Parameter)
-				var catchScopes = Scopes.scopeFor(candidates, qnp, IScope.NULLSCOPE)
+				list.addAll(candidates)
+				
+				// Also need to add the parameters available from super interactions
+				var supers = refClass.components.filter(com.cohesionforce.hla.dsl.omt.SuperInteraction)
+				for(sInteraction: supers) {
+					list.addAll(getParameters(sInteraction))
+				}
+				
+				// Create scopes for the parameters and return
+				var catchScopes = Scopes.scopeFor(list, qnp, IScope.NULLSCOPE)
 				return catchScopes
 			}
 		}
 		return super.getScope(context, reference);
 	}
 	
+	def List<com.cohesionforce.hla.dsl.omt.Attribute> getAttributes(com.cohesionforce.hla.dsl.omt.SuperClass sClass) {
+		var rvalue = new ArrayList<com.cohesionforce.hla.dsl.omt.Attribute>()
+		if(sClass === null) {
+			return rvalue
+		}
+		var classID = sClass.super
+		if(classID.eContainer instanceof com.cohesionforce.hla.dsl.omt.AttributeClass) {
+			var superClass = classID.eContainer as com.cohesionforce.hla.dsl.omt.AttributeClass
+			rvalue.addAll(superClass.components.filter(com.cohesionforce.hla.dsl.omt.Attribute))
+			var supers = superClass.components.filter(com.cohesionforce.hla.dsl.omt.SuperClass)
+			for(supersuper : supers) {
+				rvalue.addAll(getAttributes(supersuper))
+			}
+		}
+		return rvalue
+	}
+	
+	def List<com.cohesionforce.hla.dsl.omt.Parameter> getParameters(com.cohesionforce.hla.dsl.omt.SuperInteraction superInteraction) {
+		var rvalue = new ArrayList<com.cohesionforce.hla.dsl.omt.Parameter>()
+		if(superInteraction === null) {
+			return rvalue
+		}
+		var classID = superInteraction.super
+		if(classID.eContainer instanceof com.cohesionforce.hla.dsl.omt.Interaction) {
+			var superClass = classID.eContainer as com.cohesionforce.hla.dsl.omt.Interaction
+			rvalue.addAll(superClass.components.filter(com.cohesionforce.hla.dsl.omt.Parameter))
+			var supers = superClass.components.filter(com.cohesionforce.hla.dsl.omt.SuperInteraction)
+			for(supersuper : supers) {
+				rvalue.addAll(getParameters(supersuper))
+			}
+		}
+		return rvalue
+	}
 }

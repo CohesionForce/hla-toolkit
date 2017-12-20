@@ -21,13 +21,16 @@ class FomValidator extends AbstractFomValidator {
 	public static val INVALID_NAME = 'invalidName'
 	public static val DUPLICATE_CHILD = 'duplicateChild'
 
+	/*
+	 * Check to make sure that the same attribute is not used more than once in an attribute class
+	 */
 	@Check
 	def checkUniqueParameters(AttributeClass attributeClass) {
 		names.clear
 		attributeClass.attributes.forEach[{
-			if(it.ref !== null) {
+			if(it.ref !== null && it.ref.name !== null) {
 				if(names.contains(it.ref.name)) {
-					warning('Duplicate parameters with name: '+it.ref.name, 
+					error('Duplicate parameters with name: '+it.ref.name, 
 						FomPackage.Literals.ATTRIBUTE_CLASS__ATTRIBUTES,
 						INVALID_NAME
 					)
@@ -38,13 +41,16 @@ class FomValidator extends AbstractFomValidator {
 		}]
 	}
 	
+	/*
+	 * Make sure that child classes of an Attribute class have unique names
+	 */
 	@Check
 	def checkUniqueChildClasses(AttributeClass attributeClass) {
 		childNames.clear
 		attributeClass.classes.forEach[{
 			if(it.ref !== null) {
 				if(childNames.contains(it.ref.name)) {
-					warning('Duplicate parameters with name: '+it.ref.name, 
+					error('Duplicate parameters with name: '+it.ref.name, 
 						FomPackage.Literals.ATTRIBUTE_CLASS__CLASSES,
 						DUPLICATE_CHILD
 					)
@@ -54,4 +60,6 @@ class FomValidator extends AbstractFomValidator {
 			}
 		}]
 	}
+	
+	
 }

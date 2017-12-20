@@ -3,23 +3,90 @@
  */
 package com.cohesionforce.hla.dsl.validation
 
+import org.eclipse.xtext.validation.Check
+import com.cohesionforce.hla.dsl.omt.OmtPackage
+import com.cohesionforce.hla.dsl.omt.AttributeClass
+import org.eclipse.xtext.resource.IResourceDescriptions
+import com.google.inject.Inject
+import org.eclipse.emf.ecore.util.EcoreUtil
+import java.util.ArrayList
+import org.eclipse.xtext.resource.IReferenceDescription
+import com.cohesionforce.hla.dsl.omt.Attribute
+import com.cohesionforce.hla.dsl.omt.EnumeratedDataType
 
 /**
  * This class contains custom validation rules. 
- *
+ * 
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 class OmtValidator extends AbstractOmtValidator {
-	
-//	public static val INVALID_NAME = 'invalidName'
-//
-//	@Check
-//	def checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.name.charAt(0))) {
-//			warning('Name should start with a capital', 
-//					OmtPackage.Literals.GREETING__NAME,
-//					INVALID_NAME)
-//		}
-//	}
-	
+
+	public static val UNUSED = 'unused'
+
+	@Inject IResourceDescriptions index;
+
+	@Check
+	def checkAttributeClassReferences(AttributeClass attrClass) {
+		val uri = EcoreUtil.getURI(attrClass);
+		val list = new ArrayList<IReferenceDescription>()
+		index.allResourceDescriptions.forEach [
+			{
+				it.referenceDescriptions.forEach [
+					{
+						if (it.targetEObjectUri.equals(uri)) {
+							list.add(it)
+						}
+					}
+				]
+			}
+		]
+		if (list.empty) {
+			warning('Attribute Class is not used', attrClass, OmtPackage.Literals.ATTRIBUTE_CLASS__NAME,
+				com.cohesionforce.hla.dsl.validation.OmtValidator.UNUSED)
+		}
+	}
+
+	@Check
+	def checkAttributeReferences(Attribute attribute) {
+		val uri = EcoreUtil.getURI(attribute);
+		val list = new ArrayList<IReferenceDescription>()
+		index.allResourceDescriptions.forEach [
+			{
+				it.referenceDescriptions.forEach [
+					{
+						if (it.targetEObjectUri.equals(uri)) {
+							list.add(it)
+						}
+					}
+				]
+			}
+		]
+		if (list.empty) {
+			warning('Attribute Class is not used', attribute, OmtPackage.Literals.ATTRIBUTE__NAME,
+				com.cohesionforce.hla.dsl.validation.OmtValidator.UNUSED)
+		}
+	}
+
+	@Check
+	def checkEnumerationReferences(EnumeratedDataType enumType) {
+		val uri = EcoreUtil.getURI(enumType);
+		val list = new ArrayList<IReferenceDescription>()
+		index.allResourceDescriptions.forEach [
+			{
+				it.referenceDescriptions.forEach [
+					{
+						if (it.targetEObjectUri.equals(uri)) {
+							list.add(it)
+						}
+					}
+				]
+			}
+		]
+		if (list.empty) {
+			warning('Attribute Class is not used', enumType, OmtPackage.Literals.ENUMERATED_DATA_TYPE__NAME,
+				com.cohesionforce.hla.dsl.validation.OmtValidator.UNUSED)
+		}
+	}
+
 }
+	
